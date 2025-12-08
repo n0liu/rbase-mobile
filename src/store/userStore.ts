@@ -1,9 +1,15 @@
 import { create } from 'zustand';
 
+interface User {
+  id: number;
+  name: string;
+  [key: string]: unknown; // 允许其他动态属性
+}
+
 interface UserState {
-  user: any | null;
+  user: User | null;
   token: string | null;
-  setUser: (user: any) => void;
+  setUser: (user: User) => void;
   setToken: (token: string) => void;
   logout: () => void;
 }
