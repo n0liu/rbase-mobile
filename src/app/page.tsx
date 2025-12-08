@@ -1,66 +1,69 @@
-import Image from "next/image";
-import styles from "./page.module.css";
+'use client';
+
+import { Button, List, Card, NavBar, Space, Toast } from 'antd-mobile';
+import { useUserStore } from '@/store/userStore';
 
 export default function Home() {
+  const { user, setUser } = useUserStore();
+
+  const handleLogin = () => {
+    setUser({ name: '测试用户', id: 1 });
+    Toast.show({
+      content: '登录成功！',
+      icon: 'success',
+    });
+  };
+
   return (
-    <div className={styles.page}>
-      <main className={styles.main}>
-        <Image
-          className={styles.logo}
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className={styles.intro}>
-          <h1>To get started, edit the page.tsx file.</h1>
-          <p>
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
-        </div>
-        <div className={styles.ctas}>
-          <a
-            className={styles.primary}
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className={styles.logo}
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className={styles.secondary}
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
-        </div>
-      </main>
+    <div style={{ minHeight: '100vh', backgroundColor: '#f5f5f5' }}>
+      <NavBar back={null}>rbase-mobile 示例</NavBar>
+
+      <div style={{ padding: '16px' }}>
+        <Card title="欢迎使用" style={{ marginBottom: '16px' }}>
+          <p>这是一个基于 Next.js 16 + Ant Design Mobile 的移动端项目</p>
+          <p>当前用户：{user ? user.name : '未登录'}</p>
+        </Card>
+
+        <Card title="功能演示" style={{ marginBottom: '16px' }}>
+          <Space direction="vertical" block>
+            <Button color="primary" block onClick={handleLogin}>
+              登录（Zustand 状态管理）
+            </Button>
+            <Button block>普通按钮</Button>
+            <Button color="success" block>成功按钮</Button>
+            <Button color="warning" block>警告按钮</Button>
+            <Button color="danger" block>危险按钮</Button>
+          </Space>
+        </Card>
+
+        <Card title="列表组件">
+          <List>
+            <List.Item prefix="📱" onClick={() => Toast.show('点击了移动端优化')}>
+              移动端优化
+            </List.Item>
+            <List.Item prefix="🎨" onClick={() => Toast.show('点击了主题定制')}>
+              主题定制
+            </List.Item>
+            <List.Item prefix="⚡" onClick={() => Toast.show('点击了快速开发')}>
+              快速开发
+            </List.Item>
+            <List.Item prefix="🔧" onClick={() => Toast.show('点击了工具集成')}>
+              工具集成
+            </List.Item>
+          </List>
+        </Card>
+
+        <Card title="技术栈" style={{ marginTop: '16px' }}>
+          <List>
+            <List.Item>Next.js 16</List.Item>
+            <List.Item>React 19</List.Item>
+            <List.Item>Ant Design Mobile 5</List.Item>
+            <List.Item>TypeScript 5</List.Item>
+            <List.Item>Zustand（状态管理）</List.Item>
+            <List.Item>Axios（HTTP 请求）</List.Item>
+          </List>
+        </Card>
+      </div>
     </div>
   );
 }
