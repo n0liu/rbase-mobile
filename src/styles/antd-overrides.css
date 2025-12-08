@@ -1,0 +1,83 @@
+/**
+ * Ant Design Mobile 组件样式覆盖
+ * 只包含组件特定的样式覆盖，不包含 CSS 变量定义
+ * CSS 变量由 theme/index.ts 中的 tokens 动态生成
+ */
+
+/* ==================== 组件样式增强 ==================== */
+
+/* 按钮 */
+.adm-button {
+  font-weight: 500;
+  transition: all 0.25s ease-in-out;
+}
+
+.adm-button:active {
+  transform: scale(0.98);
+}
+
+/* 列表 */
+.adm-list-item {
+  transition: background-color 0.25s ease-in-out;
+}
+
+.adm-list-item:active {
+  background-color: var(--adm-color-fill-content);
+}
+
+/* 卡片 */
+.adm-card {
+  box-shadow: var(--adm-shadow-md);
+  transition: box-shadow 0.25s ease-in-out;
+}
+
+.adm-card:hover {
+  box-shadow: var(--adm-shadow-lg);
+}
+
+/* 输入框 */
+.adm-input,
+.adm-text-area {
+  font-size: var(--adm-font-size-main);
+}
+
+/* 导航栏 */
+.adm-nav-bar {
+  backdrop-filter: blur(8px);
+}
+
+/* ==================== 特殊效果 ==================== */
+
+/* 滚动条样式 */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--adm-color-fill-content);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--adm-color-weak);
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--adm-color-text-secondary);
+}
+
+/* 选中文本样式 */
+::selection {
+  background-color: var(--adm-color-primary);
+  color: white;
+}
+
+/* ==================== 响应式调整 ==================== */
+
+/* 平板端组件调整 */
+@media (min-width: 768px) {
+  .adm-button {
+    font-size: var(--adm-font-size-main);
+  }
+}

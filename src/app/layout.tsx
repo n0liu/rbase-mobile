@@ -3,8 +3,11 @@
 import { ConfigProvider, unstableSetRender } from 'antd-mobile';
 import { createRoot } from 'react-dom/client';
 import type { Root } from 'react-dom/client';
-import { mobileTheme } from '@/theme';
+import { getThemeConfig } from '@/theme';
+import { ThemeProvider, useTheme } from '@/contexts/ThemeContext';
+import { useResponsive } from '@/hooks/useResponsive';
 import "./globals.css";
+import "@/styles/antd-overrides.css"; // 引入 antd 样式覆盖
 import { useEffect } from 'react';
 
 // React 19 兼容性配置（官方方案）
@@ -20,11 +23,14 @@ unstableSetRender((node, container) => {
   };
 });
 
-export default function RootLayout({
-  children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
+// 内部组件：应用主题配置
+function AppContent({ children }: { children: React.ReactNode }) {
+  const { resolvedTheme } = useTheme();
+  const { deviceType } = useResponsive();
+
+  // 根据主题和设备类型生成配置
+  const themeConfig = getThemeConfig(resolvedTheme, deviceType);
+
   useEffect(() => {
     if (process.env.NODE_ENV === 'development') {
       import('vconsole').then(({ default: VConsole }) => {
@@ -33,16 +39,46 @@ export default function RootLayout({
     }
   }, []);
 
+  // 动态注入 CSS 变量到 :root
+  useEffect(() => {
+    const root = document.documentElement;
+    Object.entries(themeConfig).forEach(([key, value]) => {
+      root.style.setProperty(key, value);
+    });
+  }, [themeConfig]);
+
+  return (
+    <ConfigProvider>
+      {children}
+    </ConfigProvider>
+  );
+}
+
+export default function RootLayout({
+  children,
+}: Readonly<{
+  children: React.ReactNode;
+}>) {
+  // 生成默认的 CSS 变量（light + mobile），用于服务端渲染和初始加载
+  const defaultThemeConfig = getThemeConfig('light', 'mobile');
+  const cssVariablesString = Object.entries(defaultThemeConfig)
+    .map(([key, value]) => `${key}: ${value};`)
+    .join('\n    ');
+
   return (
     <html lang="zh-CN">
       <head>
         <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
         <title>rbase-mobile</title>
+        {/* 内联 CSS 变量，避免字体闪烁 */}
+        <style dangerouslySetInnerHTML={{
+          __html: `:root {\n    ${cssVariablesString}\n  }`
+        }} />
       </head>
       <body>
-        <ConfigProvider {...mobileTheme}>
-          {children}
-        </ConfigProvider>
+        <ThemeProvider>
+          <AppContent>{children}</AppContent>
+        </ThemeProvider>
       </body>
     </html>
   );

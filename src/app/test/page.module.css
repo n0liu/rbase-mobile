@@ -1,0 +1,92 @@
+.container {
+  min-height: 100vh;
+  background-color: var(--adm-color-background);
+}
+
+.content {
+  padding: 16px;
+  padding-bottom: 32px;
+}
+
+.card {
+  margin-bottom: 16px;
+}
+
+.buttonGroup {
+  margin-top: 16px;
+}
+
+/* 颜色网格 */
+.colorGrid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+}
+
+.colorItem {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+
+.colorBox {
+  width: 100%;
+  height: 60px;
+  border-radius: var(--adm-radius-m);
+  border: 1px solid var(--adm-color-border);
+}
+
+.colorLabel {
+  font-size: var(--adm-font-size-3);
+  color: var(--adm-color-text-secondary);
+  text-align: center;
+}
+
+/* 字体大小展示 */
+.fontSizes {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  color: var(--adm-color-text);
+}
+
+.fontSizes > div {
+  padding: 8px;
+  background-color: var(--adm-color-fill-content);
+  border-radius: var(--adm-radius-s);
+}
+
+/* CSS 变量列表 */
+.variableList {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  font-size: var(--adm-font-size-3);
+  color: var(--adm-color-text-secondary);
+}
+
+.variableList code {
+  color: var(--adm-color-primary);
+  background-color: var(--adm-color-fill-content);
+  padding: 2px 6px;
+  border-radius: var(--adm-radius-s);
+  font-family: monospace;
+}
+
+/* 平板适配 */
+@media (min-width: 768px) {
+  .content {
+    padding: 24px;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  .colorGrid {
+    gap: 16px;
+  }
+
+  .colorBox {
+    height: 80px;
+  }
+}

@@ -1,67 +1,102 @@
 'use client';
 
-import { Button, List, Card, NavBar, Space, Toast } from 'antd-mobile';
-import { useUserStore } from '@/store/userStore';
+import { Button, Card, NavBar, List, Tag, Space } from 'antd-mobile';
+import { useRouter } from 'next/navigation';
+import { useTheme } from '@/contexts/ThemeContext';
+import { useResponsive } from '@/hooks/useResponsive';
+import { useState, useEffect } from 'react';
 
 export default function Home() {
-  const { user, setUser } = useUserStore();
+  const router = useRouter();
+  const { mode, resolvedTheme, isDark } = useTheme();
+  const { deviceType, width, height, isMobile, isTablet, isDesktop } = useResponsive();
 
-  const handleLogin = () => {
-    setUser({ name: '测试用户', id: 1 });
-    Toast.show({
-      content: '登录成功！',
-      icon: 'success',
-    });
-  };
+  // 标记是否已在客户端挂载（避免 Hydration 错误）
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    setMounted(true);
+  }, []);
 
   return (
-    <div style={{ minHeight: '100vh', backgroundColor: '#f5f5f5' }}>
-      <NavBar back={null}>rbase-mobile 示例</NavBar>
+    <div style={{ minHeight: '100vh', backgroundColor: 'var(--adm-color-background)' }}>
+      <NavBar back={null}>移动端组件库</NavBar>
 
       <div style={{ padding: '16px' }}>
-        <Card title="欢迎使用" style={{ marginBottom: '16px' }}>
-          <p>这是一个基于 Next.js 16 + Ant Design Mobile 的移动端项目</p>
-          <p>当前用户：{user ? user.name : '未登录'}</p>
+        {/* 欢迎卡片 */}
+        <Card title="🎉 欢迎使用" style={{ marginBottom: '16px' }}>
+          <p>这是一个基于 Next.js 16 + Ant Design Mobile 5 的移动端组件库</p>
+          <p>支持手机、平板响应式设计，内置暗黑模式和完整的设计令牌系统</p>
         </Card>
 
-        <Card title="功能演示" style={{ marginBottom: '16px' }}>
-          <Space direction="vertical" block>
-            <Button color="primary" block onClick={handleLogin}>
-              登录（Zustand 状态管理）
-            </Button>
-            <Button block>普通按钮</Button>
-            <Button color="success" block>成功按钮</Button>
-            <Button color="warning" block>警告按钮</Button>
-            <Button color="danger" block>危险按钮</Button>
-          </Space>
-        </Card>
-
-        <Card title="列表组件">
+        {/* 当前状态 */}
+        <Card title="📊 当前状态" style={{ marginBottom: '16px' }}>
           <List>
-            <List.Item prefix="📱" onClick={() => Toast.show('点击了移动端优化')}>
-              移动端优化
+            <List.Item extra={deviceType}>设备类型</List.Item>
+            <List.Item extra={mounted ? `${width} x ${height}px` : '加载中...'}>
+              屏幕尺寸
             </List.Item>
-            <List.Item prefix="🎨" onClick={() => Toast.show('点击了主题定制')}>
-              主题定制
+            <List.Item>
+              设备标签
+              <Space style={{ marginLeft: 8 }}>
+                {mounted && isMobile && <Tag color="primary">手机</Tag>}
+                {mounted && isTablet && <Tag color="success">平板</Tag>}
+                {mounted && isDesktop && <Tag color="warning">桌面</Tag>}
+              </Space>
             </List.Item>
-            <List.Item prefix="⚡" onClick={() => Toast.show('点击了快速开发')}>
-              快速开发
-            </List.Item>
-            <List.Item prefix="🔧" onClick={() => Toast.show('点击了工具集成')}>
-              工具集成
-            </List.Item>
+            <List.Item extra={mounted ? mode : '加载中...'}>主题模式</List.Item>
+            <List.Item extra={mounted ? resolvedTheme : '加载中...'}>实际主题</List.Item>
+            <List.Item extra={mounted ? (isDark ? '是' : '否') : '加载中...'}>暗黑模式</List.Item>
           </List>
         </Card>
 
-        <Card title="技术栈" style={{ marginTop: '16px' }}>
+        {/* 已完成功能 */}
+        <Card title="✅ 已完成功能" style={{ marginBottom: '16px' }}>
           <List>
-            <List.Item>Next.js 16</List.Item>
-            <List.Item>React 19</List.Item>
-            <List.Item>Ant Design Mobile 5</List.Item>
+            <List.Item prefix="🎨">完整的设计令牌系统（颜色、字体、间距等）</List.Item>
+            <List.Item prefix="🌓">主题切换（亮色/暗色/跟随系统）</List.Item>
+            <List.Item prefix="📱">响应式设计（手机/平板/桌面）</List.Item>
+            <List.Item prefix="🔄">横竖屏自适应</List.Item>
+            <List.Item prefix="📐">px 到 vw 自动转换</List.Item>
+            <List.Item prefix="🎯">Ant Design Mobile 样式覆盖</List.Item>
+            <List.Item prefix="💾">单一数据源（所有样式来自 tokens）</List.Item>
+          </List>
+        </Card>
+
+        {/* 技术栈 */}
+        <Card title="🛠️ 技术栈" style={{ marginBottom: '16px' }}>
+          <List>
+            <List.Item>Next.js 16 + React 19</List.Item>
+            <List.Item>Ant Design Mobile 5.41.1</List.Item>
             <List.Item>TypeScript 5</List.Item>
-            <List.Item>Zustand（状态管理）</List.Item>
-            <List.Item>Axios（HTTP 请求）</List.Item>
+            <List.Item>设计令牌系统</List.Item>
+            <List.Item>CSS Variables 动态注入</List.Item>
+            <List.Item>postcss-px-to-viewport</List.Item>
+            <List.Item>Context API + Zustand</List.Item>
           </List>
+        </Card>
+
+        {/* 操作按钮 */}
+        <Card title="🚀 开始测试" style={{ marginBottom: '16px' }}>
+          <Space direction="vertical" block>
+            <Button
+              color="primary"
+              size="large"
+              block
+              onClick={() => router.push('/test')}
+            >
+              进入测试页面
+            </Button>
+            <p style={{
+              fontSize: 'var(--adm-font-size-3)',
+              color: 'var(--adm-color-text-secondary)',
+              textAlign: 'center',
+              marginTop: '8px'
+            }}>
+              在测试页面中可以查看所有设计令牌、切换主题、测试响应式行为
+            </p>
+          </Space>
         </Card>
       </div>
     </div>
