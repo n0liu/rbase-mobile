@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { Tag, Popup, Tabs } from 'antd-mobile';
+import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import {
   RightOutline,
@@ -13,7 +14,6 @@ import {
   LinkOutline,
   EyeOutline,
   ContentOutline,
-  EditSOutline,
   SendOutline,
   AppstoreOutline,
   SetOutline,
@@ -24,7 +24,8 @@ import {
   TransportQRcodeOutline,
   TeamOutline,
   GlobalOutline,
-  UnorderedListOutline
+  UnorderedListOutline,
+  AddOutline
 } from 'antd-mobile-icons';
 import styles from './page.module.css';
 
@@ -152,6 +153,115 @@ export default function ArticleV2Page() {
     },
     contributors: ["白细胞战神_007", "PaperSlayer_张", "医学僧不是和尚", "爱吃烧烤的Dr_Li"]
   };
+
+  // 分类菜单数据
+  const categoryMenus = [
+    { id: 'probiotics', label: '益生菌', count: 8162, active: true },
+    { id: 'lbp', label: '药品/LBP', count: 450 },
+    { id: 'prebiotics', label: '益生元/纤维', count: 980 },
+    { id: 'postbiotics', label: '后生元', count: 230 },
+    { id: 'synbiotics', label: '合生制剂', count: 410 },
+    { id: 'fermented', label: '发酵食品', count: 760 },
+    { id: 'patent', label: '专利', count: 5721 },
+    { id: 'product', label: '产品', count: 1500 },
+  ];
+
+  // 文献列表数据
+  const [activeListTab, setActiveListTab] = useState<'literature' | 'patent'>('literature');
+  const articleList = [
+    {
+      id: 1,
+      day: '15',
+      month: '10',
+      journal: 'Gut Microbes',
+      impactFactor: '12.2',
+      titleCn: 'Bifidobacterium longum BB536 对改善老年人肠道健康和免疫功能的随机对照试验',
+      titleEn: 'A Randomized, Controlled Trial of Bifidobacterium longum BB536 for Improving Gut Health and Immune Function in the Elderly',
+      type: 'Article',
+      date: '2025-10-15',
+      authors: [
+        { name: 'Jun-Yao Xu', isCorresponding: false },
+        { name: '陈欢', isCorresponding: false },
+        { name: 'Yao-Yu Yu', isCorresponding: false },
+        { name: '郑军华', isCorresponding: true },
+        { name: '刘尽尧', isCorresponding: true },
+        { name: '翟炜', isCorresponding: true },
+      ],
+      keywords: ['益生菌', '长双歧杆菌BB536'],
+    },
+    {
+      id: 2,
+      day: '08',
+      month: '10',
+      journal: 'Microbiome',
+      impactFactor: '16.6',
+      titleCn: '菊粉型益生元对调节肥胖个体肠道菌群结构和代谢产物的宏基因组学研究',
+      titleEn: 'Metagenomic analysis reveals the effects of inulin-type prebiotics on gut microbial structure and metabolites in obese individuals and something...',
+      type: 'Article',
+      date: '2025-10-08',
+      authors: [
+        { name: '汪芳宏', isCorresponding: false },
+        { name: '蓝灿辉', isCorresponding: true },
+        { name: '张和平', isCorresponding: true },
+        { name: '朱书', isCorresponding: true },
+        { name: '张发明', isCorresponding: true },
+      ],
+      keywords: ['益生元', '菊粉'],
+    },
+    {
+      id: 3,
+      day: '29',
+      month: '09',
+      journal: 'Nature Communications',
+      impactFactor: '17.7',
+      titleCn: '鼠李糖乳杆菌GG通过调节肠-脑轴缓解小鼠焦虑样行为',
+      titleEn: 'Lactobacillus rhamnosus GG alleviates anxiety-like behavior in mice by modulating the gut-brain axis',
+      type: 'Article',
+      date: '2025-09-29',
+      authors: [
+        { name: 'Bradley G Fitzgerald', isCorresponding: false },
+        { name: 'Matthew T Sorbara', isCorresponding: true },
+      ],
+      keywords: ['精神益生菌', 'LGG'],
+    },
+    {
+      id: 4,
+      day: '15',
+      month: '09',
+      journal: 'The ISME Journal',
+      impactFactor: '11.0',
+      titleCn: '母乳低聚糖 (HMOs) 对婴儿早期肠道菌群定植的选择性塑造作用',
+      titleEn: 'Selective shaping of the infant gut microbiome by human milk oligosaccharides (HMOs)',
+      type: 'Commentary',
+      date: '2025-09-15',
+      authors: [
+        { name: 'Xianyun Gao', isCorresponding: false },
+        { name: 'Yiyu Jin', isCorresponding: false },
+        { name: 'Mengyao Liu', isCorresponding: false },
+        { name: '陈海冰', isCorresponding: true },
+        { name: '叶海峰', isCorresponding: true },
+        { name: '管宁子', isCorresponding: true },
+      ],
+      keywords: ['益生元', 'HMOs'],
+    },
+    {
+      id: 5,
+      day: '01',
+      month: '09',
+      journal: 'Cell Host & Microbe',
+      impactFactor: '30.3',
+      titleCn: '活体生物药 (LBP) 在炎症性肠病 (IBD) 治疗中的应用与挑战',
+      titleEn: 'Applications and challenges of live biotherapeutic products (LBPs) in the treatment of inflammatory bowel disease (IBD)',
+      type: 'Review',
+      date: '2025-09-01',
+      authors: [
+        { name: 'Siqi Hua', isCorresponding: false },
+        { name: '朱波', isCorresponding: true },
+        { name: '华子春', isCorresponding: true },
+      ],
+      keywords: ['LBP', 'IBD'],
+    },
+  ];
 
   // 菜单配置
   const menuItems: MenuItem[] = [
@@ -524,163 +634,106 @@ export default function ArticleV2Page() {
           <div className={styles.menuSection}>
             <div className={styles.menuScroll}>
               <div className={styles.menuGrid}>
-                {menuItems.slice(0, 5).map((item) => (
-                  <div key={item.id} className={styles.menuItem} onClick={() => openDrawer(item)}>
-                    <div className={styles.menuIcon}>{item.icon}</div>
+                {categoryMenus.slice(0, 4).map((item) => (
+                  <div
+                    key={item.id}
+                    className={`${styles.menuItem} ${item.active ? styles.menuItemActive : ''}`}
+                  >
+                    <AddOutline className={styles.menuIcon} fontSize={20} />
                     <span className={styles.menuLabel}>{item.label}</span>
+                    <span className={styles.menuCount}>({item.count})</span>
                   </div>
                 ))}
               </div>
               <div className={styles.menuGrid}>
-                {menuItems.slice(5, 10).map((item) => (
-                  <div key={item.id} className={styles.menuItem} onClick={() => openDrawer(item)}>
-                    <div className={styles.menuIcon}>{item.icon}</div>
+                {categoryMenus.slice(4, 8).map((item) => (
+                  <div
+                    key={item.id}
+                    className={`${styles.menuItem} ${item.active ? styles.menuItemActive : ''}`}
+                  >
+                    <AddOutline className={styles.menuIcon} fontSize={20} />
                     <span className={styles.menuLabel}>{item.label}</span>
+                    <span className={styles.menuCount}>({item.count})</span>
                   </div>
                 ))}
               </div>
             </div>
           </div>
 
-          {/* 主要作者 - 圆形头像横向滚动 */}
-          <div className={styles.section}>
-            <div className={styles.sectionHeader}>
-              <span className={styles.sectionTitle}>主要作者</span>
-              <span className={styles.sectionMore}>全部 <RightOutline fontSize={12} /></span>
-            </div>
-            <div className={styles.authorScroll}>
-              {article.authors.map((author, index) => (
-                <div key={index} className={styles.authorItem}>
-                  <div className={styles.authorAvatar} style={{ backgroundColor: author.color }}>
-                    {author.initial}
-                  </div>
-                  <span className={styles.authorName}>
-                    {author.name}
-                    {author.isCorresponding && <span className={styles.corrMark}>*</span>}
-                  </span>
+          {/* 文献列表区域 */}
+          <div className={styles.listSection}>
+            {/* Tab 栏 */}
+            <div className={styles.listTabBar}>
+              <div className={styles.listTabs}>
+                <div
+                  className={`${styles.listTab} ${activeListTab === 'literature' ? styles.listTabActive : ''}`}
+                  onClick={() => setActiveListTab('literature')}
+                >
+                  文献 (12,409)
                 </div>
-              ))}
-            </div>
-          </div>
-
-          {/* 文章标题区域 + AI要点总结 合并为一个卡片 */}
-          <div className={styles.articleCard}>
-            {/* 顶部期刊信息 */}
-            <div className={styles.articleTop}>
-              <div className={styles.articleTopLeft}>
-                <span className={styles.journalName}>{article.journal}</span>
-                <span className={styles.articleType}>{article.type}</span>
+                <div
+                  className={`${styles.listTab} ${activeListTab === 'patent' ? styles.listTabActive : ''}`}
+                  onClick={() => setActiveListTab('patent')}
+                >
+                  专利 (5,721)
+                </div>
+                <div className={styles.refreshBtn}>
+                  <Image src="/icons/refresh-circle.svg" alt="刷新" width={18} height={18} />
+                </div>
               </div>
-              <Tag color="primary" fill="outline" className={styles.ifTag}>IF: {article.impactFactor}</Tag>
-            </div>
-
-            {/* 中文标题 */}
-            <h1 className={styles.articleTitleCn}>{article.titleCn}</h1>
-
-            {/* 英文标题 */}
-            <p className={styles.articleTitleEn}>{article.titleEn}</p>
-
-            {/* 作者和DOI信息 */}
-            <div className={styles.articleInfo}>
-              <div className={styles.articleAuthors}>
-                <TeamOutline className={styles.authorIcon} />
-                <span>{article.authors.slice(0, 2).map(a => a.name).join(', ')}, ...</span>
-              </div>
-              <div className={styles.articleDoi}>
-                <span className={styles.doiText}>{article.doi}</span>
-                <span className={styles.dateText}>{article.publishDate}</span>
+              <div className={styles.sortBtn}>
+                发表时间
+                <Image src="/icons/arrow-down.svg" alt="排序" width={12} height={12} />
               </div>
             </div>
 
-            {/* AI要点总结 */}
-            <div className={styles.aiSection}>
-              {article.aiSummary.map((item, index) => (
-                <div key={index} className={styles.aiItem}>
-                  <div className={styles.aiIcon}>
-                    {index === 0 && <SetOutline />}
-                    {index === 1 && <CheckCircleOutline />}
-                    {index === 2 && <GlobalOutline />}
-                    {index === 3 && <BillOutline />}
-                    {index === 4 && <TagOutline />}
-                    {index === 5 && <TeamOutline />}
+            {/* 文献卡片列表 */}
+            <div className={styles.articleList}>
+              {articleList.map((item) => (
+                <div key={item.id} className={styles.articleItem}>
+                  <div className={styles.articleDate}>
+                    <span className={styles.articleDay}>{item.day}</span>
+                    <span className={styles.articleMonth}>{item.month}</span>
                   </div>
-                  <div className={styles.aiItemContent}>
-                    <div className={styles.aiItemTitle}>{item.title}</div>
-                    <div className={styles.aiItemText}>{item.content}</div>
+                  <div className={styles.articleMain}>
+                    <div className={styles.articleHeader}>
+                      <span className={`${styles.articleType} ${item.type === 'Review' ? styles.typeReview : item.type === 'Commentary' ? styles.typeCommentary : ''}`}>
+                        {item.type}
+                      </span>
+                      <span className={styles.headerSeparator}>›</span>
+                      <span className={styles.articleJournal}>{item.journal}</span>
+                      <span className={styles.articleIF}>[IF:{item.impactFactor}]</span>
+                      <div className={styles.articleMore}>
+                        <Image src="/icons/ellipsis.svg" alt="更多" width={16} height={16} />
+                      </div>
+                    </div>
+                    <h3 className={styles.articleTitleCn}>{item.titleCn}</h3>
+                    <p className={styles.articleTitleEn}>{item.titleEn}</p>
+                    <div className={styles.articleAuthors}>
+                      {item.authors.map((author, idx) => (
+                        <span key={idx} className={styles.authorItem}>
+                          {author.name}
+                          {author.isCorresponding && (
+                            <Image src="/icons/mail.svg" alt="通讯作者" width={8} height={8} className={styles.mailIcon} />
+                          )}
+                          {idx < item.authors.length - 1 && ' | '}
+                        </span>
+                      ))}
+                    </div>
+                    <div className={styles.articleBottom}>
+                      <div className={styles.articleKeywords}>
+                        {item.keywords.map((kw, idx) => (
+                          <Tag key={idx} color="primary" fill="outline" className={styles.keywordTag}>{kw}</Tag>
+                        ))}
+                      </div>
+                      <span className={styles.articleDate2}>{item.date}</span>
+                    </div>
                   </div>
                 </div>
               ))}
             </div>
           </div>
 
-          {/* AI一键解读 */}
-          <div className={styles.section}>
-            <div className={styles.sectionHeader}>
-              <span className={styles.sectionTitle}>AI一键解读</span>
-            </div>
-            <div className={styles.aiInterpretGrid}>
-              {article.aiInterpretation.map((item) => (
-                <div key={item.key} className={styles.aiInterpretItem} onClick={() => openAiPopup(item)}>
-                  {item.label}
-                </div>
-              ))}
-            </div>
-          </div>
-
-          {/* 相关文章 */}
-          <div className={styles.section}>
-            <div className={styles.sectionHeader}>
-              <span className={styles.sectionTitle}>相关文章</span>
-              <span className={styles.sectionMore}>更多 <RightOutline fontSize={12} /></span>
-            </div>
-            <div className={styles.relatedList}>
-              {article.relatedArticles.map((item, index) => (
-                <div key={index} className={styles.relatedItem}>
-                  <div className={styles.relatedMeta}>
-                    <Tag color={item.type === 'Review' ? 'primary' : item.type === 'News & Views' ? 'warning' : 'default'} fill="outline">
-                      {item.type}
-                    </Tag>
-                    <span className={styles.relatedJournal}>{item.journal} [IF:{item.impact}]</span>
-                  </div>
-                  <div className={styles.relatedTitle}>{item.titleCn}</div>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          {/* 相关链接 */}
-          <div className={styles.section}>
-            <div className={styles.sectionHeader}>
-              <span className={styles.sectionTitle}>相关链接</span>
-              <span className={styles.sectionMore}>更多 <RightOutline fontSize={12} /></span>
-            </div>
-            <div className={styles.linksGrid}>
-              {article.links.map((link, index) => (
-                <div key={index} className={styles.linkCard}>
-                  <div className={styles.linkIconWrapper}>
-                    {renderLinkIcon(link.icon, link.iconColor)}
-                    {link.tag && <Tag color="success" className={styles.linkBadge}>{link.tag}</Tag>}
-                  </div>
-                  <span className={styles.linkLabel}>{link.label}</span>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          {/* 相关机构 */}
-          <div className={styles.section}>
-            <div className={styles.sectionHeader}>
-              <span className={styles.sectionTitle}>相关机构</span>
-            </div>
-            <div className={styles.institutionsGrid}>
-              {article.institutions.map((inst, index) => (
-                <div key={index} className={styles.institutionCard}>
-                  <div className={styles.institutionAbbr}>{inst.abbr}</div>
-                  <div className={styles.institutionName}>{inst.name}</div>
-                </div>
-              ))}
-            </div>
-          </div>
         </div>
       </div>
 
