@@ -18,7 +18,7 @@ export default function Home() {
   }, []);
 
   return (
-    <div style={{ minHeight: '100vh', backgroundColor: 'var(--adm-color-background)' }}>
+    <div style={{ minHeight: '100vh', backgroundColor: 'var(--rbase-color-background)' }}>
       <NavBar back={null}>移动端组件库</NavBar>
 
       <div style={{ padding: '16px' }}>
@@ -81,8 +81,8 @@ export default function Home() {
               进入测试页面
             </Button>
             <p style={{
-              fontSize: 'var(--adm-font-size-3)',
-              color: 'var(--adm-color-text-secondary)',
+              fontSize: 'var(--rbase-font-size-caption)',
+              color: 'var(--rbase-color-text-secondary)',
               textAlign: 'center',
               marginTop: '8px'
             }}>

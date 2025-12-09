@@ -1,6 +1,6 @@
 .container {
   min-height: 100vh;
-  background-color: var(--adm-color-background);
+  background-color: var(--rbase-color-background);
 }
 
 .content {
@@ -14,15 +14,15 @@
 }
 
 .title {
-  font-size: var(--adm-font-size-10);
+  font-size: var(--rbase-font-size-h2);
   font-weight: 700;
-  color: var(--adm-color-text);
+  color: var(--rbase-color-text-primary);
   margin: 0 0 8px 0;
 }
 
 .subtitle {
-  font-size: var(--adm-font-size-5);
-  color: var(--adm-color-text-secondary);
+  font-size: var(--rbase-font-size-body);
+  color: var(--rbase-color-text-secondary);
   margin: 0;
 }
 
@@ -31,14 +31,14 @@
 }
 
 .sectionDescription {
-  font-size: var(--adm-font-size-3);
-  color: var(--adm-color-text-secondary);
-  line-height: var(--adm-line-height-relaxed);
+  font-size: var(--rbase-font-size-caption);
+  color: var(--rbase-color-text-secondary);
+  line-height: var(--rbase-line-height-relaxed);
   margin-bottom: 12px;
   padding: 8px 12px;
-  background-color: var(--adm-color-fill-content);
-  border-radius: var(--adm-radius-s);
-  border-left: 3px solid var(--adm-color-primary);
+  background-color: var(--rbase-color-background-tertiary);
+  border-radius: var(--rbase-radius-sm);
+  border-left: 3px solid var(--rbase-color-primary);
 }
 
 /* 颜色系统样式 */
@@ -55,9 +55,9 @@
   align-items: center;
   gap: 10px;
   padding: 10px;
-  background-color: var(--adm-color-box);
-  border: 1px solid var(--adm-color-border);
-  border-radius: var(--adm-radius-m);
+  background-color: var(--rbase-color-background-secondary);
+  border: 1px solid var(--rbase-color-border);
+  border-radius: var(--rbase-radius-md);
   cursor: pointer;
   transition: all 0.2s;
   min-width: 0;
@@ -65,16 +65,16 @@
 
 .colorCard:active {
   transform: scale(0.98);
-  background-color: var(--adm-color-fill-content);
+  background-color: var(--rbase-color-background-tertiary);
 }
 
 .colorSwatch {
   width: 40px;
   height: 40px;
-  border-radius: var(--adm-radius-s);
-  border: 1px solid var(--adm-color-border);
+  border-radius: var(--rbase-radius-sm);
+  border: 1px solid var(--rbase-color-border);
   flex-shrink: 0;
-  box-shadow: var(--adm-shadow-sm);
+  box-shadow: var(--rbase-shadow-sm);
 }
 
 .colorInfo {
@@ -83,24 +83,24 @@
 }
 
 .colorName {
-  font-size: var(--adm-font-size-4);
+  font-size: var(--rbase-font-size-caption);
   font-weight: 500;
-  color: var(--adm-color-text);
+  color: var(--rbase-color-text-primary);
   margin-bottom: 2px;
   word-break: break-word;
   overflow-wrap: break-word;
 }
 
 .colorValue {
-  font-size: var(--adm-font-size-2);
-  color: var(--adm-color-text-secondary);
-  font-family: var(--adm-font-family);
+  font-size: var(--rbase-font-size-overline);
+  color: var(--rbase-color-text-secondary);
+  font-family: var(--rbase-font-family);
   word-break: break-all;
 }
 
 .colorDescription {
-  font-size: var(--adm-font-size-2);
-  color: var(--adm-color-weak);
+  font-size: var(--rbase-font-size-overline);
+  color: var(--rbase-color-text-tertiary);
   margin-top: 2px;
   word-break: break-word;
   overflow-wrap: break-word;
@@ -110,9 +110,9 @@
 .fontExample {
   position: relative;
   padding: 12px;
-  background-color: var(--adm-color-box);
-  border: 1px solid var(--adm-color-border);
-  border-radius: var(--adm-radius-m);
+  background-color: var(--rbase-color-background-secondary);
+  border: 1px solid var(--rbase-color-border);
+  border-radius: var(--rbase-radius-md);
   cursor: pointer;
   transition: all 0.2s;
   min-width: 0;
@@ -120,11 +120,11 @@
 
 .fontExample:active {
   transform: scale(0.98);
-  background-color: var(--adm-color-fill-content);
+  background-color: var(--rbase-color-background-tertiary);
 }
 
 .fontText {
-  color: var(--adm-color-text);
+  color: var(--rbase-color-text-primary);
   margin-bottom: 8px;
 }
 
@@ -135,14 +135,14 @@
 }
 
 .fontName {
-  font-size: var(--adm-font-size-3);
-  color: var(--adm-color-text-secondary);
+  font-size: var(--rbase-font-size-caption);
+  color: var(--rbase-color-text-secondary);
   font-weight: 500;
 }
 
 .fontValue {
-  font-size: var(--adm-font-size-2);
-  color: var(--adm-color-weak);
+  font-size: var(--rbase-font-size-overline);
+  color: var(--rbase-color-text-tertiary);
   font-family: monospace;
 }
 
@@ -157,9 +157,9 @@
 .fontWeightItem {
   position: relative;
   padding: 12px;
-  background-color: var(--adm-color-box);
-  border: 1px solid var(--adm-color-border);
-  border-radius: var(--adm-radius-m);
+  background-color: var(--rbase-color-background-secondary);
+  border: 1px solid var(--rbase-color-border);
+  border-radius: var(--rbase-radius-md);
   cursor: pointer;
   transition: all 0.2s;
   text-align: center;
@@ -168,18 +168,18 @@
 
 .fontWeightItem:active {
   transform: scale(0.98);
-  background-color: var(--adm-color-fill-content);
+  background-color: var(--rbase-color-background-tertiary);
 }
 
 .fontWeightText {
-  font-size: var(--adm-font-size-5);
-  color: var(--adm-color-text);
+  font-size: var(--rbase-font-size-body);
+  color: var(--rbase-color-text-primary);
   margin-bottom: 6px;
 }
 
 .fontWeightName {
-  font-size: var(--adm-font-size-2);
-  color: var(--adm-color-text-secondary);
+  font-size: var(--rbase-font-size-overline);
+  color: var(--rbase-color-text-secondary);
   text-transform: capitalize;
 }
 
@@ -194,9 +194,9 @@
 .lineHeightItem {
   position: relative;
   padding: 12px;
-  background-color: var(--adm-color-box);
-  border: 1px solid var(--adm-color-border);
-  border-radius: var(--adm-radius-m);
+  background-color: var(--rbase-color-background-secondary);
+  border: 1px solid var(--rbase-color-border);
+  border-radius: var(--rbase-radius-md);
   cursor: pointer;
   transition: all 0.2s;
   min-width: 0;
@@ -204,22 +204,22 @@
 
 .lineHeightItem:active {
   transform: scale(0.98);
-  background-color: var(--adm-color-fill-content);
+  background-color: var(--rbase-color-background-tertiary);
 }
 
 .lineHeightText {
-  font-size: var(--adm-font-size-4);
-  color: var(--adm-color-text);
+  font-size: var(--rbase-font-size-caption);
+  color: var(--rbase-color-text-primary);
   margin-bottom: 8px;
-  border-left: 2px solid var(--adm-color-primary);
+  border-left: 2px solid var(--rbase-color-primary);
   padding-left: 8px;
 }
 
 .lineHeightInfo {
   display: flex;
   justify-content: space-between;
-  font-size: var(--adm-font-size-2);
-  color: var(--adm-color-text-secondary);
+  font-size: var(--rbase-font-size-overline);
+  color: var(--rbase-color-text-secondary);
 }
 
 /* 字体家族 */
@@ -229,12 +229,12 @@
 
 .fontFamilyExample {
   padding: 12px;
-  background-color: var(--adm-color-box);
-  border: 1px solid var(--adm-color-border);
-  border-radius: var(--adm-radius-m);
+  background-color: var(--rbase-color-background-secondary);
+  border: 1px solid var(--rbase-color-border);
+  border-radius: var(--rbase-radius-md);
   margin-bottom: 12px;
-  font-size: var(--adm-font-size-3);
-  color: var(--adm-color-text);
+  font-size: var(--rbase-font-size-caption);
+  color: var(--rbase-color-text-primary);
   word-break: break-all;
 }
 
@@ -253,9 +253,9 @@
 .spacingExample {
   position: relative;
   padding: 12px;
-  background-color: var(--adm-color-box);
-  border: 1px solid var(--adm-color-border);
-  border-radius: var(--adm-radius-m);
+  background-color: var(--rbase-color-background-secondary);
+  border: 1px solid var(--rbase-color-border);
+  border-radius: var(--rbase-radius-md);
   cursor: pointer;
   transition: all 0.2s;
   min-width: 0;
@@ -263,7 +263,7 @@
 
 .spacingExample:active {
   transform: scale(0.98);
-  background-color: var(--adm-color-fill-content);
+  background-color: var(--rbase-color-background-tertiary);
 }
 
 .spacingVisual {
@@ -283,26 +283,26 @@
 .spacingBlock {
   width: 32px;
   height: 32px;
-  background-color: var(--adm-color-primary);
-  border-radius: var(--adm-radius-s);
+  background-color: var(--rbase-color-primary);
+  border-radius: var(--rbase-radius-sm);
   display: flex;
   align-items: center;
   justify-content: center;
   color: white;
   font-weight: 600;
-  font-size: var(--adm-font-size-4);
+  font-size: var(--rbase-font-size-caption);
   flex-shrink: 0;
 }
 
 .spacingGap {
   height: 2px;
   background: linear-gradient(to right,
-    var(--adm-color-primary) 0%,
-    var(--adm-color-primary) 30%,
+    var(--rbase-color-primary) 0%,
+    var(--rbase-color-primary) 30%,
     transparent 30%,
     transparent 70%,
-    var(--adm-color-primary) 70%,
-    var(--adm-color-primary) 100%);
+    var(--rbase-color-primary) 70%,
+    var(--rbase-color-primary) 100%);
   flex-shrink: 0;
 }
 
@@ -311,16 +311,16 @@
 }
 
 .spacingName {
-  font-size: var(--adm-font-size-3);
-  color: var(--adm-color-text);
+  font-size: var(--rbase-font-size-caption);
+  color: var(--rbase-color-text-primary);
   font-weight: 500;
   margin-bottom: 2px;
   text-transform: uppercase;
 }
 
 .spacingValue {
-  font-size: var(--adm-font-size-2);
-  color: var(--adm-color-text-secondary);
+  font-size: var(--rbase-font-size-overline);
+  color: var(--rbase-color-text-secondary);
   font-family: monospace;
 }
 
@@ -335,9 +335,9 @@
 .radiusExample {
   position: relative;
   padding: 12px;
-  background-color: var(--adm-color-box);
-  border: 1px solid var(--adm-color-border);
-  border-radius: var(--adm-radius-m);
+  background-color: var(--rbase-color-background-secondary);
+  border: 1px solid var(--rbase-color-border);
+  border-radius: var(--rbase-radius-md);
   cursor: pointer;
   transition: all 0.2s;
   min-width: 0;
@@ -345,7 +345,7 @@
 
 .radiusExample:active {
   transform: scale(0.98);
-  background-color: var(--adm-color-fill-content);
+  background-color: var(--rbase-color-background-tertiary);
 }
 
 .radiusVisual {
@@ -359,18 +359,18 @@
 .radiusBox {
   width: 100%;
   height: 60px;
-  background-color: var(--adm-color-primary);
+  background-color: var(--rbase-color-primary);
   opacity: 0.6;
 }
 
 .avatarDemo {
   width: 56px;
   height: 56px;
-  background: linear-gradient(135deg, var(--adm-color-primary) 0%, var(--adm-color-info) 100%);
+  background: linear-gradient(135deg, var(--rbase-color-primary) 0%, var(--rbase-color-info) 100%);
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: var(--adm-shadow-md);
+  box-shadow: var(--rbase-shadow-md);
 }
 
 .radiusInfo {
@@ -378,16 +378,16 @@
 }
 
 .radiusName {
-  font-size: var(--adm-font-size-3);
-  color: var(--adm-color-text);
+  font-size: var(--rbase-font-size-caption);
+  color: var(--rbase-color-text-primary);
   font-weight: 500;
   margin-bottom: 2px;
   text-transform: capitalize;
 }
 
 .radiusValue {
-  font-size: var(--adm-font-size-2);
-  color: var(--adm-color-text-secondary);
+  font-size: var(--rbase-font-size-overline);
+  color: var(--rbase-color-text-secondary);
   font-family: monospace;
 }
 
@@ -402,9 +402,9 @@
 .shadowExample {
   position: relative;
   padding: 12px;
-  background-color: var(--adm-color-box);
-  border: 1px solid var(--adm-color-border);
-  border-radius: var(--adm-radius-m);
+  background-color: var(--rbase-color-background-secondary);
+  border: 1px solid var(--rbase-color-border);
+  border-radius: var(--rbase-radius-md);
   cursor: pointer;
   transition: all 0.2s;
   min-width: 0;
@@ -417,9 +417,9 @@
 .shadowBox {
   width: 100%;
   height: 60px;
-  background-color: var(--adm-color-background);
+  background-color: var(--rbase-color-background);
   margin-bottom: 12px;
-  border-radius: var(--adm-radius-s);
+  border-radius: var(--rbase-radius-sm);
 }
 
 .shadowInfo {
@@ -427,19 +427,19 @@
 }
 
 .shadowName {
-  font-size: var(--adm-font-size-3);
-  color: var(--adm-color-text);
+  font-size: var(--rbase-font-size-caption);
+  color: var(--rbase-color-text-primary);
   font-weight: 500;
   margin-bottom: 2px;
   text-transform: uppercase;
 }
 
 .shadowValue {
-  font-size: var(--adm-font-size-2);
-  color: var(--adm-color-text-secondary);
+  font-size: var(--rbase-font-size-overline);
+  color: var(--rbase-color-text-secondary);
   font-family: monospace;
   word-break: break-all;
-  line-height: var(--adm-line-height-tight);
+  line-height: var(--rbase-line-height-tight);
 }
 
 /* 已复制标签 */

@@ -6,7 +6,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "build:tokens": "tsx scripts/build-tokens.ts"
   },
   "dependencies": {
     "next": "16.0.7",
@@ -24,6 +25,7 @@
     "postcss-px-to-viewport-8-plugin": "^1.2.5",
     "eslint": "^9",
     "eslint-config-next": "16.0.7",
+    "tsx": "^4.19.2",
     "typescript": "^5"
   }
 }

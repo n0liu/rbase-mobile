@@ -13,8 +13,8 @@ export default function TestPage() {
 
   // CSS 变量值（客户端获取）
   const [cssVars, setCssVars] = useState<Record<string, string>>({
-    '--adm-color-primary': '',
-    '--adm-font-size-main': '',
+    '--rbase-color-primary': '',
+    '--rbase-font-size-main': '',
     '--adm-radius-m': '',
     '--spacing-lg': '',
   });
@@ -33,8 +33,8 @@ export default function TestPage() {
 
       // eslint-disable-next-line react-hooks/set-state-in-effect
       setCssVars({
-        '--adm-color-primary': computedStyle.getPropertyValue('--adm-color-primary'),
-        '--adm-font-size-main': computedStyle.getPropertyValue('--adm-font-size-main'),
+        '--rbase-color-primary': computedStyle.getPropertyValue('--rbase-color-primary'),
+        '--rbase-font-size-main': computedStyle.getPropertyValue('--rbase-font-size-main'),
         '--adm-radius-m': computedStyle.getPropertyValue('--adm-radius-m'),
         '--spacing-lg': computedStyle.getPropertyValue('--spacing-lg'),
       });
@@ -102,38 +102,38 @@ export default function TestPage() {
         <Card title="🎨 设计令牌颜色" className={styles.card}>
           <div className={styles.colorGrid}>
             <div className={styles.colorItem}>
-              <div className={styles.colorBox} style={{ backgroundColor: 'var(--adm-color-primary)' }} />
+              <div className={styles.colorBox} style={{ backgroundColor: 'var(--rbase-color-primary)' }} />
               <div className={styles.colorLabel}>Primary</div>
             </div>
             <div className={styles.colorItem}>
-              <div className={styles.colorBox} style={{ backgroundColor: 'var(--adm-color-success)' }} />
+              <div className={styles.colorBox} style={{ backgroundColor: 'var(--rbase-color-success)' }} />
               <div className={styles.colorLabel}>Success</div>
             </div>
             <div className={styles.colorItem}>
-              <div className={styles.colorBox} style={{ backgroundColor: 'var(--adm-color-warning)' }} />
+              <div className={styles.colorBox} style={{ backgroundColor: 'var(--rbase-color-warning)' }} />
               <div className={styles.colorLabel}>Warning</div>
             </div>
             <div className={styles.colorItem}>
-              <div className={styles.colorBox} style={{ backgroundColor: 'var(--adm-color-danger)' }} />
+              <div className={styles.colorBox} style={{ backgroundColor: 'var(--rbase-color-danger)' }} />
               <div className={styles.colorLabel}>Danger</div>
             </div>
           </div>
 
           <div className={styles.colorGrid} style={{ marginTop: 16 }}>
             <div className={styles.colorItem}>
-              <div className={styles.colorBox} style={{ backgroundColor: 'var(--adm-color-text)' }} />
+              <div className={styles.colorBox} style={{ backgroundColor: 'var(--rbase-color-text-primary' }} />
               <div className={styles.colorLabel}>Text</div>
             </div>
             <div className={styles.colorItem}>
-              <div className={styles.colorBox} style={{ backgroundColor: 'var(--adm-color-text-secondary)' }} />
+              <div className={styles.colorBox} style={{ backgroundColor: 'var(--rbase-color-text-secondary)' }} />
               <div className={styles.colorLabel}>Text 2nd</div>
             </div>
             <div className={styles.colorItem}>
-              <div className={styles.colorBox} style={{ backgroundColor: 'var(--adm-color-weak)' }} />
+              <div className={styles.colorBox} style={{ backgroundColor: 'var(--rbase-color-text-tertiary)' }} />
               <div className={styles.colorLabel}>Text 3rd</div>
             </div>
             <div className={styles.colorItem}>
-              <div className={styles.colorBox} style={{ backgroundColor: 'var(--adm-color-border)' }} />
+              <div className={styles.colorBox} style={{ backgroundColor: 'var(--rbase-color-border)' }} />
               <div className={styles.colorLabel}>Border</div>
             </div>
           </div>
@@ -142,20 +142,20 @@ export default function TestPage() {
         {/* 字体展示卡片 */}
         <Card title="📝 字体大小" className={styles.card}>
           <div className={styles.fontSizes}>
-            <div style={{ fontSize: 'var(--adm-font-size-1)' }}>Font Size 1 (overline)</div>
-            <div style={{ fontSize: 'var(--adm-font-size-3)' }}>Font Size 3 (caption)</div>
-            <div style={{ fontSize: 'var(--adm-font-size-5)' }}>Font Size 5 (body)</div>
-            <div style={{ fontSize: 'var(--adm-font-size-7)' }}>Font Size 7 (h5)</div>
-            <div style={{ fontSize: 'var(--adm-font-size-8)' }}>Font Size 8 (h4)</div>
-            <div style={{ fontSize: 'var(--adm-font-size-10)' }}>Font Size 10 (h2)</div>
+            <div style={{ fontSize: 'var(--rbase-font-size-overline)' }}>Font Size 1 (overline)</div>
+            <div style={{ fontSize: 'var(--rbase-font-size-caption)' }}>Font Size 3 (caption)</div>
+            <div style={{ fontSize: 'var(--rbase-font-size-body)' }}>Font Size 5 (body)</div>
+            <div style={{ fontSize: 'var(--rbase-font-size-h5)' }}>Font Size 7 (h5)</div>
+            <div style={{ fontSize: 'var(--rbase-font-size-h4)' }}>Font Size 8 (h4)</div>
+            <div style={{ fontSize: 'var(--rbase-font-size-h2)' }}>Font Size 10 (h2)</div>
           </div>
         </Card>
 
         {/* CSS 变量信息 */}
         <Card title="⚙️ CSS 变量预览" className={styles.card}>
           <div className={styles.variableList}>
-            <div>--adm-color-primary: <code>{cssVars['--adm-color-primary'] || '加载中...'}</code></div>
-            <div>--adm-font-size-main: <code>{cssVars['--adm-font-size-main'] || '加载中...'}</code></div>
+            <div>--rbase-color-primary: <code>{cssVars['--rbase-color-primary'] || '加载中...'}</code></div>
+            <div>--rbase-font-size-main: <code>{cssVars['--rbase-font-size-main'] || '加载中...'}</code></div>
             <div>--adm-radius-m: <code>{cssVars['--adm-radius-m'] || '加载中...'}</code></div>
             <div>--spacing-lg: <code>{cssVars['--spacing-lg'] || '加载中...'}</code></div>
           </div>

@@ -6,7 +6,7 @@ import type { Root } from 'react-dom/client';
 import { getThemeConfig } from '@/theme';
 import { ThemeProvider, useTheme } from '@/contexts/ThemeContext';
 import "./globals.css";
-import "@/styles/antd-overrides.css"; // 引入 antd 样式覆盖
+import "@/styles/ui-overrides.css"; // 引入 UI 框架样式覆盖
 import { useEffect } from 'react';
 
 // React 19 兼容性配置（官方方案）
