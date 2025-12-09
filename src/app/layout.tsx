@@ -1,6 +1,6 @@
 'use client';
 
-import { ConfigProvider, unstableSetRender, SafeArea } from 'antd-mobile';
+import { ConfigProvider, unstableSetRender } from 'antd-mobile';
 import { createRoot } from 'react-dom/client';
 import type { Root } from 'react-dom/client';
 import { getThemeConfig } from '@/theme';
@@ -47,9 +47,7 @@ function AppContent({ children }: { children: React.ReactNode }) {
 
   return (
     <ConfigProvider>
-      <SafeArea position='top' />
       {children}
-      <SafeArea position='bottom' />
     </ConfigProvider>
   );
 }
@@ -68,7 +66,7 @@ export default function RootLayout({
   return (
     <html lang="zh-CN">
       <head>
-        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
         <title>rbase-mobile</title>
         {/* 内联 CSS 变量，避免字体闪烁 */}
         <style dangerouslySetInnerHTML={{

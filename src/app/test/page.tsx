@@ -19,21 +19,13 @@ export default function TestPage() {
     '--spacing-lg': '',
   });
 
-  // 安全区域值（客户端获取）
-  const [safeAreaInsets, setSafeAreaInsets] = useState({
-    top: '',
-    bottom: '',
-    left: '',
-    right: '',
-  });
-
   // 标记组件已在客户端挂载
   useEffect(() => {
     // eslint-disable-next-line react-hooks/set-state-in-effect
     setMounted(true);
   }, []);
 
-  // 在客户端获取 CSS 变量值和安全区域值
+  // 在客户端获取 CSS 变量值
   useEffect(() => {
     if (mounted) {
       const root = document.documentElement;
@@ -45,14 +37,6 @@ export default function TestPage() {
         '--adm-font-size-main': computedStyle.getPropertyValue('--adm-font-size-main'),
         '--adm-radius-m': computedStyle.getPropertyValue('--adm-radius-m'),
         '--spacing-lg': computedStyle.getPropertyValue('--spacing-lg'),
-      });
-
-      // eslint-disable-next-line react-hooks/set-state-in-effect
-      setSafeAreaInsets({
-        top: computedStyle.getPropertyValue('env(safe-area-inset-top)') || '0px',
-        bottom: computedStyle.getPropertyValue('env(safe-area-inset-bottom)') || '0px',
-        left: computedStyle.getPropertyValue('env(safe-area-inset-left)') || '0px',
-        right: computedStyle.getPropertyValue('env(safe-area-inset-right)') || '0px',
       });
     }
   }, [mounted, resolvedTheme]); // 当主题变化时重新获取
@@ -175,24 +159,6 @@ export default function TestPage() {
             <div>--adm-radius-m: <code>{cssVars['--adm-radius-m'] || '加载中...'}</code></div>
             <div>--spacing-lg: <code>{cssVars['--spacing-lg'] || '加载中...'}</code></div>
           </div>
-        </Card>
-
-        {/* 安全区域信息 */}
-        <Card title="📱 安全区域" className={styles.card}>
-          <div className={styles.variableList}>
-            <div>顶部安全区域: <code>{safeAreaInsets.top || '加载中...'}</code></div>
-            <div>底部安全区域: <code>{safeAreaInsets.bottom || '加载中...'}</code></div>
-            <div>左侧安全区域: <code>{safeAreaInsets.left || '加载中...'}</code></div>
-            <div>右侧安全区域: <code>{safeAreaInsets.right || '加载中...'}</code></div>
-          </div>
-          <p style={{
-            fontSize: 'var(--adm-font-size-3)',
-            color: 'var(--adm-color-text-secondary)',
-            marginTop: '12px',
-            lineHeight: 1.5
-          }}>
-            💡 安全区域由 SafeArea 组件自动处理，在有刘海/圆角的设备上会显示非零值
-          </p>
         </Card>
       </div>
     </div>
