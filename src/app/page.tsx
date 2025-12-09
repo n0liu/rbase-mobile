@@ -1,15 +1,13 @@
 'use client';
 
-import { Button, Card, NavBar, List, Tag, Space } from 'antd-mobile';
+import { Button, Card, NavBar, List, Space } from 'antd-mobile';
 import { useRouter } from 'next/navigation';
 import { useTheme } from '@/contexts/ThemeContext';
-import { useResponsive } from '@/hooks/useResponsive';
 import { useState, useEffect } from 'react';
 
 export default function Home() {
   const router = useRouter();
   const { mode, resolvedTheme, isDark } = useTheme();
-  const { deviceType, width, height, isMobile, isTablet, isDesktop } = useResponsive();
 
   // 标记是否已在客户端挂载（避免 Hydration 错误）
   const [mounted, setMounted] = useState(false);
@@ -33,18 +31,6 @@ export default function Home() {
         {/* 当前状态 */}
         <Card title="📊 当前状态" style={{ marginBottom: '16px' }}>
           <List>
-            <List.Item extra={deviceType}>设备类型</List.Item>
-            <List.Item extra={mounted ? `${width} x ${height}px` : '加载中...'}>
-              屏幕尺寸
-            </List.Item>
-            <List.Item>
-              设备标签
-              <Space style={{ marginLeft: 8 }}>
-                {mounted && isMobile && <Tag color="primary">手机</Tag>}
-                {mounted && isTablet && <Tag color="success">平板</Tag>}
-                {mounted && isDesktop && <Tag color="warning">桌面</Tag>}
-              </Space>
-            </List.Item>
             <List.Item extra={mounted ? mode : '加载中...'}>主题模式</List.Item>
             <List.Item extra={mounted ? resolvedTheme : '加载中...'}>实际主题</List.Item>
             <List.Item extra={mounted ? (isDark ? '是' : '否') : '加载中...'}>暗黑模式</List.Item>
@@ -73,7 +59,7 @@ export default function Home() {
             <List.Item>设计令牌系统</List.Item>
             <List.Item>CSS Variables 动态注入</List.Item>
             <List.Item>postcss-px-to-viewport</List.Item>
-            <List.Item>Context API + Zustand</List.Item>
+            <List.Item>Context API（主题管理）</List.Item>
           </List>
         </Card>
 

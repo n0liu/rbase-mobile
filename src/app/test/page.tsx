@@ -1,14 +1,12 @@
 'use client';
 
-import { Button, Card, List, NavBar, Space, Tag, Dialog } from 'antd-mobile';
+import { Button, Card, List, NavBar, Space, Dialog } from 'antd-mobile';
 import { useTheme } from '@/contexts/ThemeContext';
-import { useResponsive } from '@/hooks/useResponsive';
 import { useState, useEffect } from 'react';
 import styles from './page.module.css';
 
 export default function TestPage() {
   const { mode, resolvedTheme, setMode, isDark } = useTheme();
-  const { deviceType, width, height, orientation, isMobile, isTablet, isDesktop } = useResponsive();
 
   // 标记是否已在客户端挂载（避免 Hydration 错误）
   const [mounted, setMounted] = useState(false);
@@ -39,7 +37,7 @@ export default function TestPage() {
         '--spacing-lg': getComputedStyle(root).getPropertyValue('--spacing-lg'),
       });
     }
-  }, [mounted, resolvedTheme, deviceType]); // 当主题或设备类型变化时重新获取
+  }, [mounted, resolvedTheme]); // 当主题变化时重新获取
 
   const handleThemeChange = () => {
     const modes: Array<'light' | 'dark' | 'system'> = ['light', 'dark', 'system'];
@@ -50,28 +48,9 @@ export default function TestPage() {
 
   return (
     <div className={styles.container}>
-      <NavBar back={null}>主题和响应式测试</NavBar>
+      <NavBar back={null}>主题测试</NavBar>
 
       <div className={styles.content}>
-        {/* 设备信息卡片 */}
-        <Card title="📱 设备信息" className={styles.card}>
-          <List>
-            <List.Item extra={deviceType}>设备类型</List.Item>
-            <List.Item extra={mounted ? `${width} x ${height}px` : '加载中...'}>
-              屏幕尺寸
-            </List.Item>
-            <List.Item extra={orientation}>屏幕方向</List.Item>
-            <List.Item>
-              标签
-              <Space style={{ marginLeft: 8 }}>
-                {mounted && isMobile && <Tag color="primary">手机</Tag>}
-                {mounted && isTablet && <Tag color="success">平板</Tag>}
-                {mounted && isDesktop && <Tag color="warning">桌面</Tag>}
-              </Space>
-            </List.Item>
-          </List>
-        </Card>
-
         {/* 主题信息卡片 */}
         <Card title="🎨 主题信息" className={styles.card}>
           <List>
