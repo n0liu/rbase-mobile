@@ -74,7 +74,8 @@
   font-family: monospace;
 }
 
-/* 平板适配 */
+/* 大屏幕布局优化 */
+/* 说明：字体和间距已通过 vw 自动响应式，这里仅保留布局级别的调整 */
 @media (min-width: 768px) {
   .content {
     padding: 24px;

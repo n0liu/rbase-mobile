@@ -9,11 +9,6 @@
 /* 按钮 */
 .adm-button {
   font-weight: 500;
-  transition: all 0.25s ease-in-out;
-}
-
-.adm-button:active {
-  transform: scale(0.98);
 }
 
 /* 列表 */
@@ -21,18 +16,9 @@
   transition: background-color 0.25s ease-in-out;
 }
 
-.adm-list-item:active {
-  background-color: var(--adm-color-fill-content);
-}
-
 /* 卡片 */
 .adm-card {
   box-shadow: var(--adm-shadow-md);
-  transition: box-shadow 0.25s ease-in-out;
-}
-
-.adm-card:hover {
-  box-shadow: var(--adm-shadow-lg);
 }
 
 /* 输入框 */
@@ -75,9 +61,7 @@
 
 /* ==================== 响应式调整 ==================== */
 
-/* 平板端组件调整 */
-@media (min-width: 768px) {
-  .adm-button {
-    font-size: var(--adm-font-size-main);
-  }
-}
+/* 说明：
+ * 字体大小已通过 vw 单位自动响应式，无需媒体查询
+ * 这里仅保留布局级别的调整（如果需要的话）
+ */

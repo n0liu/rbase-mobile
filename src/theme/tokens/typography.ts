@@ -1,6 +1,7 @@
 /**
  * 字体设计令牌
- * 包含响应式字号系统（手机 + 平板）
+ * 统一基于 375px 基准的响应式字号系统
+ * 通过 vw 单位实现真正的响应式，适配所有屏幕尺寸
  */
 
 // 字体家族
@@ -9,8 +10,11 @@ export const fontFamily = {
   monospace: '"SF Mono", Monaco, "Cascadia Code", "Roboto Mono", Consolas, "Courier New", monospace',
 } as const;
 
-// 手机端字号（基准：375px）
-export const mobileFontSize = {
+/**
+ * 字号系统（基准：375px）
+ * 将通过 pxToVw() 函数转换为 vw 单位，实现跨设备响应式
+ */
+export const fontSize = {
   h1: '24px',
   h2: '20px',
   h3: '18px',
@@ -20,19 +24,6 @@ export const mobileFontSize = {
   bodySmall: '13px',
   caption: '12px',
   overline: '11px',
-} as const;
-
-// 平板端字号（基准：768px）
-export const tabletFontSize = {
-  h1: '28px',
-  h2: '24px',
-  h3: '20px',
-  h4: '18px',
-  h5: '16px',
-  body: '15px',
-  bodySmall: '14px',
-  caption: '13px',
-  overline: '12px',
 } as const;
 
 // 字重
@@ -62,24 +53,15 @@ export const letterSpacing = {
 } as const;
 
 // 类型定义
-export type DeviceType = 'mobile' | 'tablet';
-export type FontSizeKeys = keyof typeof mobileFontSize;
+export type FontSizeKeys = keyof typeof fontSize;
 export type FontSizeTokens = Record<FontSizeKeys, string>;
-
-/**
- * 根据设备类型获取字号令牌
- */
-export function getFontSize(deviceType: DeviceType): FontSizeTokens {
-  return deviceType === 'mobile' ? { ...mobileFontSize } : { ...tabletFontSize };
-}
 
 /**
  * 完整的字体系统配置
  */
 export const typography = {
   fontFamily,
-  mobile: mobileFontSize,
-  tablet: tabletFontSize,
+  fontSize,
   fontWeight,
   lineHeight,
   letterSpacing,

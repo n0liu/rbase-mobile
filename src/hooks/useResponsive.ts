@@ -3,8 +3,16 @@
 import { useState, useEffect } from 'react';
 import { getDeviceType, getOrientation, type DeviceType, type Orientation } from '@/theme/breakpoints';
 
+/**
+ * 响应式状态
+ *
+ * 重要说明：
+ * - deviceType 仅用于布局判断，不用于主题配置
+ * - 字体和间距已通过 vw 单位自动响应式，无需根据设备类型切换
+ * - 使用场景：布局切换、组件显示/隐藏、交互调整
+ */
 export interface ResponsiveState {
-  /** 设备类型 */
+  /** 设备类型（仅用于布局判断） */
   deviceType: DeviceType;
   /** 屏幕方向 */
   orientation: Orientation;
@@ -16,7 +24,7 @@ export interface ResponsiveState {
   isMobile: boolean;
   /** 是否为平板 */
   isTablet: boolean;
-  /** 是否为桌面（>=1366px，使用平板样式） */
+  /** 是否为桌面（>=1366px） */
   isDesktop: boolean;
   /** 是否为竖屏 */
   isPortrait: boolean;
@@ -40,7 +48,7 @@ function getCurrentState(): ResponsiveState {
     height,
     isMobile: deviceType === 'mobile',
     isTablet: deviceType === 'tablet',
-    isDesktop: width >= 1366, // 桌面宽度，但使用平板样式
+    isDesktop: width >= 1366, // 桌面宽度（用于布局判断）
     isPortrait: orientation === 'portrait',
     isLandscape: orientation === 'landscape',
   };

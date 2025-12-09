@@ -5,7 +5,6 @@ import { createRoot } from 'react-dom/client';
 import type { Root } from 'react-dom/client';
 import { getThemeConfig } from '@/theme';
 import { ThemeProvider, useTheme } from '@/contexts/ThemeContext';
-import { useResponsive } from '@/hooks/useResponsive';
 import "./globals.css";
 import "@/styles/antd-overrides.css"; // 引入 antd 样式覆盖
 import { useEffect } from 'react';
@@ -26,10 +25,9 @@ unstableSetRender((node, container) => {
 // 内部组件：应用主题配置
 function AppContent({ children }: { children: React.ReactNode }) {
   const { resolvedTheme } = useTheme();
-  const { deviceType } = useResponsive();
 
-  // 根据主题和设备类型生成配置
-  const themeConfig = getThemeConfig(resolvedTheme, deviceType);
+  // 根据主题生成配置（统一基于 375px 基准）
+  const themeConfig = getThemeConfig(resolvedTheme);
 
   useEffect(() => {
     if (process.env.NODE_ENV === 'development') {
@@ -59,8 +57,8 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  // 生成默认的 CSS 变量（light + mobile），用于服务端渲染和初始加载
-  const defaultThemeConfig = getThemeConfig('light', 'mobile');
+  // 生成默认的 CSS 变量（light 主题），用于服务端渲染和初始加载
+  const defaultThemeConfig = getThemeConfig('light');
   const cssVariablesString = Object.entries(defaultThemeConfig)
     .map(([key, value]) => `${key}: ${value};`)
     .join('\n    ');
