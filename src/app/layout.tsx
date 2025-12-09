@@ -1,6 +1,6 @@
 'use client';
 
-import { ConfigProvider, unstableSetRender } from 'antd-mobile';
+import { ConfigProvider, unstableSetRender, SafeArea } from 'antd-mobile';
 import { createRoot } from 'react-dom/client';
 import type { Root } from 'react-dom/client';
 import { getThemeConfig } from '@/theme';
@@ -47,7 +47,9 @@ function AppContent({ children }: { children: React.ReactNode }) {
 
   return (
     <ConfigProvider>
+      <SafeArea position='top' />
       {children}
+      <SafeArea position='bottom' />
     </ConfigProvider>
   );
 }

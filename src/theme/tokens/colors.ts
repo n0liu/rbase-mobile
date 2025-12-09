@@ -27,7 +27,7 @@ export const lightColors = {
   dangerActive: '#cf1322',
   dangerBg: '#fff1f0',
 
-  info: '#1677FF',
+  info: '#0072f5',
   infoHover: '#4096FF',
   infoActive: '#0958D9',
   infoBg: '#e6f4ff',

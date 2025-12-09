@@ -1,6 +1,6 @@
 'use client';
 
-import { Button, Card, List, NavBar, Space, Dialog, SafeArea } from 'antd-mobile';
+import { Button, Card, List, NavBar, Space, Dialog } from 'antd-mobile';
 import { useTheme } from '@/contexts/ThemeContext';
 import { useState, useEffect } from 'react';
 import styles from './page.module.css';
@@ -66,8 +66,6 @@ export default function TestPage() {
 
   return (
     <div className={styles.container}>
-      <SafeArea position='top' />
-
       <NavBar back={null}>主题测试</NavBar>
 
       <div className={styles.content}>
@@ -197,8 +195,6 @@ export default function TestPage() {
           </p>
         </Card>
       </div>
-
-      <SafeArea position='bottom' />
     </div>
   );
 }

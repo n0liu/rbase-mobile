@@ -1,6 +1,6 @@
 'use client';
 
-import { Button, Card, NavBar, List, Space, SafeArea } from 'antd-mobile';
+import { Button, Card, NavBar, List, Space } from 'antd-mobile';
 import { useRouter } from 'next/navigation';
 import { useTheme } from '@/contexts/ThemeContext';
 import { useState, useEffect } from 'react';
@@ -19,8 +19,6 @@ export default function Home() {
 
   return (
     <div style={{ minHeight: '100vh', backgroundColor: 'var(--adm-color-background)' }}>
-      <SafeArea position='top' />
-
       <NavBar back={null}>移动端组件库</NavBar>
 
       <div style={{ padding: '16px' }}>
@@ -87,8 +85,6 @@ export default function Home() {
           </Space>
         </Card>
       </div>
-
-      <SafeArea position='bottom' />
     </div>
   );
 }
