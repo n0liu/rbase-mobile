@@ -20,17 +20,14 @@ export const fontSize = {
   h3: '18px',
   h4: '16px',
   h5: '14px',
-  body: '14px',
-  bodySmall: '13px',
+  body: '16px',
+  bodySmall: '14px',
   caption: '12px',
-  overline: '11px',
+  overline: '10px',
 } as const;
 
-// 以下导出暂时保留，以便将来扩展使用
-// 如需使用，可从 typography.ts 导入
-
 // 字重
-const fontWeight = {
+export const fontWeight = {
   light: 300,
   regular: 400,
   medium: 500,
@@ -39,10 +36,11 @@ const fontWeight = {
 } as const;
 
 // 行高
-const lineHeight = {
+export const lineHeight = {
   tight: 1.2,
   normal: 1.5,
-  relaxed: 1.75,
+  relaxed: 1.625,  // 正文行高：26px / 16px = 1.625
+  loose: 1.75,
 } as const;
 
 // 字母间距
@@ -55,7 +53,7 @@ const letterSpacing = {
   widest: '0.1em',
 } as const;
 
-// 导出完整配置（如果将来需要）
+// 导出完整配置
 export const typography = {
   fontFamily,
   fontSize,

@@ -32,9 +32,21 @@ export const lightColors = {
   infoActive: '#0958D9',
   infoBg: '#e6f4ff',
 
+  // 强调色（橙色 - 用于CTA按钮、搜索按钮）
+  accent: '#FF7B00',
+  accentHover: '#FF9533',
+  accentActive: '#E56F00',
+  accentBg: '#FFF4E6',
+
+  // 成功色（浅绿 - 用于影响因子标签、正向指标）
+  successLight: '#5FCA96',
+  successLightHover: '#7FD4AB',
+  successLightActive: '#4AB580',
+  successLightBg: '#F0FBF6',
+
   // 文本色
   textPrimary: '#333333',
-  textSecondary: '#666666',
+  textSecondary: '#808080',
   textTertiary: '#999999',
   textQuaternary: '#CCCCCC',
   textDisabled: '#DDDDDD',
@@ -84,6 +96,18 @@ export const darkColors = {
   infoHover: '#5A9FF0',
   infoActive: '#2373DB',
   infoBg: '#111D2C',
+
+  // 强调色（橙色 - 暗黑模式稍亮）
+  accent: '#FF9533',
+  accentHover: '#FFB366',
+  accentActive: '#E56F00',
+  accentBg: '#2B1F11',
+
+  // 成功色（浅绿 - 暗黑模式稍暗）
+  successLight: '#4AB580',
+  successLightHover: '#5FCA96',
+  successLightActive: '#3A9F6F',
+  successLightBg: '#162312',
 
   // 文本色
   textPrimary: '#E8E8E8',

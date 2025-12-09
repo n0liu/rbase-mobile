@@ -5,7 +5,7 @@
  */
 
 import { getColors } from './tokens/colors';
-import { fontSize, fontFamily } from './tokens/typography';
+import { fontSize, fontFamily, lineHeight } from './tokens/typography';
 import { spacing, componentSpacing } from './tokens/spacing';
 import { radius } from './tokens/radius';
 import { getShadows } from './tokens/shadows';
@@ -29,6 +29,18 @@ export function generateCSSVariables(
     '--adm-color-warning': colors.warning,
     '--adm-color-danger': colors.danger,
     '--adm-color-info': colors.info,
+
+    // 强调色（橙色）
+    '--adm-color-accent': colors.accent,
+    '--adm-color-accent-hover': colors.accentHover,
+    '--adm-color-accent-active': colors.accentActive,
+    '--adm-color-accent-bg': colors.accentBg,
+
+    // 成功色（浅绿）
+    '--adm-color-success-light': colors.successLight,
+    '--adm-color-success-light-hover': colors.successLightHover,
+    '--adm-color-success-light-active': colors.successLightActive,
+    '--adm-color-success-light-bg': colors.successLightBg,
 
     '--adm-color-text': colors.textPrimary,
     '--adm-color-text-secondary': colors.textSecondary,
@@ -57,6 +69,12 @@ export function generateCSSVariables(
     '--adm-font-size-main': pxToVw(fontSize.body),
 
     '--adm-font-family': fontFamily.base,
+
+    // 行高变量
+    '--adm-line-height-tight': lineHeight.tight.toString(),
+    '--adm-line-height-normal': lineHeight.normal.toString(),
+    '--adm-line-height-relaxed': lineHeight.relaxed.toString(),
+    '--adm-line-height-loose': lineHeight.loose.toString(),
 
     // ==================== 圆角变量 ====================
     '--adm-radius-s': radius.sm,
@@ -99,7 +117,7 @@ export function getThemeConfig(
 
 // 导出所有令牌以供直接使用
 export * from './tokens/colors';
-export { fontSize, fontFamily } from './tokens/typography';
+export { fontSize, fontFamily, lineHeight, fontWeight } from './tokens/typography';
 export { spacing, componentSpacing } from './tokens/spacing';
 export * from './tokens/radius';
 export * from './tokens/shadows';
