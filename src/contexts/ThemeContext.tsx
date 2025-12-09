@@ -65,11 +65,6 @@ export function ThemeProvider({ children, defaultMode = 'system' }: ThemeProvide
     return () => mediaQuery.removeEventListener('change', handler);
   }, [mode]);
 
-  // 更新 HTML 标签的 data-theme 属性
-  useEffect(() => {
-    document.documentElement.setAttribute('data-theme', resolvedTheme);
-  }, [resolvedTheme]);
-
   // 设置主题模式并保存到 localStorage
   const setMode = (newMode: ThemeMode) => {
     setModeState(newMode);
