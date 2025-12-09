@@ -1,94 +1,102 @@
 'use client';
 
-import { Button, Card, NavBar, List, Space } from 'antd-mobile';
+import { Card, Grid } from 'antd-mobile';
 import { useRouter } from 'next/navigation';
-import { useTheme } from '@/contexts/ThemeContext';
-import { useState, useEffect } from 'react';
+import {
+  AppOutline,
+  FileOutline,
+  UnorderedListOutline,
+  SetOutline
+} from 'antd-mobile-icons';
+import styles from './home.module.css';
 
 export default function Home() {
   const router = useRouter();
-  const { mode, resolvedTheme, isDark } = useTheme();
 
-  // 标记是否已在客户端挂载（避免 Hydration 错误）
-  const [mounted, setMounted] = useState(false);
-
-  useEffect(() => {
-    // eslint-disable-next-line react-hooks/set-state-in-effect
-    setMounted(true);
-  }, []);
+  const menuItems = [
+    {
+      icon: <AppOutline />,
+      title: '设计系统',
+      description: 'Design Tokens 展示',
+      path: '/design-system',
+      color: 'var(--rbase-color-primary)'
+    },
+    {
+      icon: <FileOutline />,
+      title: '版本1：经典布局',
+      description: '折叠卡片式',
+      path: '/article-v1',
+      color: 'var(--rbase-color-success)'
+    },
+    {
+      icon: <UnorderedListOutline />,
+      title: '版本2：标签页',
+      description: 'Tabs 切换式',
+      path: '/article-v2',
+      color: 'var(--rbase-color-warning)'
+    },
+    {
+      icon: <SetOutline />,
+      title: '版本3：卡片流',
+      description: '底部操作栏式',
+      path: '/article-v3',
+      color: 'var(--rbase-color-accent)'
+    }
+  ];
 
   return (
-    <div style={{ minHeight: '100vh', backgroundColor: 'var(--rbase-color-background)' }}>
-      <NavBar back={null}>移动端组件库</NavBar>
+    <div className={styles.container}>
+      {/* 英雄区 */}
+      <div className={styles.hero}>
+        <div className={styles.heroContent}>
+          <h1 className={styles.heroTitle}>RBase Mobile</h1>
+          <p className={styles.heroSubtitle}>
+            我们追踪全球肠道科学研究进展，充分链接学术与产业界，推动转化和应用。
+          </p>
+        </div>
+      </div>
 
-      <div style={{ padding: '16px' }}>
-        {/* 欢迎卡片 */}
-        <Card title="🎉 欢迎使用" style={{ marginBottom: '16px' }}>
-          <p>这是一个基于 Next.js 16 + Ant Design Mobile 5 的移动端组件库</p>
-          <p>支持手机、平板响应式设计，内置暗黑模式和完整的设计令牌系统</p>
+      {/* 菜单网格 */}
+      <div className={styles.content}>
+        <Card className={styles.menuCard}>
+          <Grid columns={2} gap={16}>
+            {menuItems.map((item, index) => (
+              <Grid.Item key={index}>
+                <div
+                  className={styles.menuItem}
+                  onClick={() => router.push(item.path)}
+                >
+                  <div className={styles.menuIcon} style={{ color: item.color }}>
+                    {item.icon}
+                  </div>
+                  <div className={styles.menuTitle}>{item.title}</div>
+                  <div className={styles.menuDescription}>{item.description}</div>
+                </div>
+              </Grid.Item>
+            ))}
+          </Grid>
         </Card>
 
-        {/* 当前状态 */}
-        <Card title="📊 当前状态" style={{ marginBottom: '16px' }}>
-          <List>
-            <List.Item extra={mounted ? mode : '加载中...'}>主题模式</List.Item>
-            <List.Item extra={mounted ? resolvedTheme : '加载中...'}>实际主题</List.Item>
-            <List.Item extra={mounted ? (isDark ? '是' : '否') : '加载中...'}>暗黑模式</List.Item>
-          </List>
-        </Card>
-
-        {/* 已完成功能 */}
-        <Card title="✅ 已完成功能" style={{ marginBottom: '16px' }}>
-          <List>
-            <List.Item prefix="🎨">完整的设计令牌系统（颜色、字体、间距等）</List.Item>
-            <List.Item prefix="🌓">主题切换（亮色/暗色/跟随系统）</List.Item>
-            <List.Item prefix="📱">响应式设计（基于 375px 基准 vw 单位）</List.Item>
-            <List.Item prefix="📐">px 到 vw 自动转换</List.Item>
-            <List.Item prefix="🎯">Ant Design Mobile 样式覆盖</List.Item>
-            <List.Item prefix="💾">单一数据源（所有样式来自 tokens）</List.Item>
-          </List>
-        </Card>
-
-        {/* 技术栈 */}
-        <Card title="🛠️ 技术栈" style={{ marginBottom: '16px' }}>
-          <List>
-            <List.Item>Next.js 16 + React 19</List.Item>
-            <List.Item>Ant Design Mobile 5.41.1</List.Item>
-            <List.Item>TypeScript 5</List.Item>
-            <List.Item>设计令牌系统</List.Item>
-            <List.Item>CSS Variables 动态注入</List.Item>
-            <List.Item>postcss-px-to-viewport</List.Item>
-            <List.Item>Context API（主题管理）</List.Item>
-          </List>
-        </Card>
-
-        {/* 操作按钮 */}
-        <Card title="🚀 开始体验" style={{ marginBottom: '16px' }}>
-          <Space direction="vertical" block>
-            <Button
-              color="primary"
-              size="large"
-              block
-              onClick={() => router.push('/design-system')}
-            >
-              查看设计系统
-            </Button>
-            <Button
-              size="large"
-              block
-              onClick={() => router.push('/test')}
-            >
-              进入测试页面
-            </Button>
-            <p style={{
-              fontSize: 'var(--rbase-font-size-caption)',
-              color: 'var(--rbase-color-text-secondary)',
-              textAlign: 'center',
-              marginTop: '8px'
-            }}>
-              设计系统展示所有 Design Tokens，测试页面可以切换主题和测试响应式
-            </p>
-          </Space>
+        {/* 说明卡片 */}
+        <Card className={styles.infoCard}>
+          <h3 className={styles.infoTitle}>移动端文献详情页 - 3个版本</h3>
+          <div className={styles.infoContent}>
+            <div className={styles.infoItem}>
+              <strong>版本1：</strong>经典单栏布局，使用折叠卡片展示详细信息，配合浮动操作按钮
+            </div>
+            <div className={styles.infoItem}>
+              <strong>版本2：</strong>标签页布局，通过 Tabs 切换不同内容区域（概览、详情、讨论、相关）
+            </div>
+            <div className={styles.infoItem}>
+              <strong>版本3：</strong>卡片流布局，每个信息块独立展示，底部固定操作栏
+            </div>
+          </div>
+          <div className={styles.features}>
+            <div className={styles.featureTag}>英雄区设计</div>
+            <div className={styles.featureTag}>Design Tokens</div>
+            <div className={styles.featureTag}>响应式布局</div>
+            <div className={styles.featureTag}>Ant Design Mobile</div>
+          </div>
         </Card>
       </div>
     </div>

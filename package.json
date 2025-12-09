@@ -10,11 +10,12 @@
     "build:tokens": "tsx scripts/build-tokens.ts"
   },
   "dependencies": {
+    "antd-mobile": "^5.41.1",
+    "antd-mobile-icons": "^0.3.0",
+    "axios": "^1.13.2",
     "next": "16.0.7",
     "react": "19.2.0",
     "react-dom": "19.2.0",
-    "antd-mobile": "^5.41.1",
-    "axios": "^1.13.2",
     "vconsole": "^3.15.1",
     "zustand": "^5.0.9"
   },
@@ -22,9 +23,9 @@
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
-    "postcss-px-to-viewport-8-plugin": "^1.2.5",
     "eslint": "^9",
     "eslint-config-next": "16.0.7",
+    "postcss-px-to-viewport-8-plugin": "^1.2.5",
     "tsx": "^4.19.2",
     "typescript": "^5"
   }

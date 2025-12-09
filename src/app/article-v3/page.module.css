@@ -1,0 +1,577 @@
+.container {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background-color: var(--rbase-color-background);
+}
+
+/* ==================== 顶部导航栏 ==================== */
+.topBar {
+  flex-shrink: 0;
+  min-height: 56px;
+  background: white;
+  border-bottom: 1px solid var(--rbase-color-border);
+  z-index: 100;
+}
+
+.navbar {
+  --adm-color-primary: var(--rbase-color-primary);
+  background: white;
+}
+
+.navbar :global(.adm-nav-bar-title) {
+  font-size: var(--rbase-font-size-body);
+  font-weight: var(--rbase-font-weight-semibold);
+}
+
+/* ==================== 中间滚动区域 ==================== */
+.scrollArea {
+  flex: 1;
+  overflow-y: auto;
+  padding: var(--rbase-spacing-md);
+  padding-bottom: 80px;
+}
+
+.scrollArea::-webkit-scrollbar {
+  width: 4px;
+}
+
+.scrollArea::-webkit-scrollbar-track {
+  background: var(--rbase-color-background-tertiary);
+  border-radius: 2px;
+}
+
+.scrollArea::-webkit-scrollbar-thumb {
+  background: var(--rbase-color-border-strong);
+  border-radius: 2px;
+}
+
+/* ==================== 文章英雄区 ==================== */
+.heroCard {
+  background: white;
+  border-radius: var(--rbase-radius-card);
+  padding: var(--rbase-spacing-md);
+  margin-bottom: var(--rbase-spacing-md);
+  box-shadow: var(--rbase-shadow-sm);
+}
+
+.articleTitle {
+  font-size: var(--rbase-font-size-h4);
+  font-weight: var(--rbase-font-weight-bold);
+  color: var(--rbase-color-text-primary);
+  line-height: var(--rbase-line-height-relaxed);
+  margin: 0 0 var(--rbase-spacing-xs) 0;
+}
+
+.articleTitleCn {
+  font-size: var(--rbase-font-size-body-small);
+  color: var(--rbase-color-text-secondary);
+  line-height: var(--rbase-line-height-relaxed);
+  margin: 0 0 var(--rbase-spacing-md) 0;
+}
+
+.metaInfo {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--rbase-spacing-md);
+  padding-bottom: var(--rbase-spacing-sm);
+  border-bottom: 1px solid var(--rbase-color-border);
+}
+
+.journalInfo {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.journalName {
+  font-size: var(--rbase-font-size-body-small);
+  font-weight: var(--rbase-font-weight-semibold);
+  color: var(--rbase-color-primary);
+}
+
+.journalYear {
+  font-size: var(--rbase-font-size-caption);
+  color: var(--rbase-color-text-tertiary);
+}
+
+.tags {
+  flex-shrink: 0;
+}
+
+/* 作者横向滚动 */
+.authorsScroll {
+  display: flex;
+  gap: var(--rbase-spacing-sm);
+  overflow-x: auto;
+  padding-bottom: var(--rbase-spacing-xs);
+  -webkit-overflow-scrolling: touch;
+}
+
+.authorsScroll::-webkit-scrollbar {
+  height: 2px;
+}
+
+.authorsScroll::-webkit-scrollbar-thumb {
+  background: var(--rbase-color-border);
+  border-radius: 1px;
+}
+
+.authorChip {
+  display: flex;
+  align-items: center;
+  gap: var(--rbase-spacing-xs);
+  padding: var(--rbase-spacing-xs) var(--rbase-spacing-sm);
+  background: var(--rbase-color-background-secondary);
+  border-radius: var(--rbase-radius-full);
+  flex-shrink: 0;
+}
+
+.authorAvatar {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.authorName {
+  font-size: var(--rbase-font-size-caption);
+  color: var(--rbase-color-text-primary);
+  white-space: nowrap;
+}
+
+.corrMark {
+  color: var(--rbase-color-accent);
+  font-weight: var(--rbase-font-weight-bold);
+}
+
+/* ==================== 可折叠卡片 ==================== */
+.collapsibleCard {
+  background: white;
+  border-radius: var(--rbase-radius-card);
+  margin-bottom: var(--rbase-spacing-sm);
+  box-shadow: var(--rbase-shadow-sm);
+  overflow: hidden;
+  border-left: 3px solid var(--accent-color, var(--rbase-color-primary));
+}
+
+.cardHeader {
+  display: flex;
+  align-items: center;
+  gap: var(--rbase-spacing-sm);
+  padding: var(--rbase-spacing-md);
+  cursor: pointer;
+  user-select: none;
+  transition: background-color 0.2s;
+}
+
+.cardHeader:active {
+  background-color: var(--rbase-color-background-secondary);
+}
+
+.cardIcon {
+  font-size: 20px;
+  color: var(--accent-color, var(--rbase-color-primary));
+  display: flex;
+  align-items: center;
+}
+
+.cardTitle {
+  flex: 1;
+  font-size: var(--rbase-font-size-body-small);
+  font-weight: var(--rbase-font-weight-semibold);
+  color: var(--rbase-color-text-primary);
+}
+
+.cardCount {
+  font-size: var(--rbase-font-size-caption);
+  color: white;
+  background: var(--accent-color, var(--rbase-color-primary));
+  padding: 2px 8px;
+  border-radius: var(--rbase-radius-full);
+  min-width: 20px;
+  text-align: center;
+}
+
+.expandIcon {
+  font-size: 16px;
+  color: var(--rbase-color-text-tertiary);
+  display: flex;
+  align-items: center;
+  transition: transform 0.3s;
+}
+
+/* 折叠内容区域 */
+.cardContent {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.3s ease-out;
+}
+
+.cardContent.expanded {
+  max-height: 2000px;
+  transition: max-height 0.5s ease-in;
+}
+
+.cardInner {
+  padding: 0 var(--rbase-spacing-md) var(--rbase-spacing-md);
+}
+
+/* ==================== AI解读样式 ==================== */
+.aiDisclaimer {
+  display: flex;
+  align-items: center;
+  gap: var(--rbase-spacing-xs);
+  font-size: var(--rbase-font-size-caption);
+  color: var(--rbase-color-text-tertiary);
+  background: var(--rbase-color-background-secondary);
+  padding: var(--rbase-spacing-xs) var(--rbase-spacing-sm);
+  border-radius: var(--rbase-radius-sm);
+  margin-bottom: var(--rbase-spacing-sm);
+}
+
+.interpretGrid {
+  display: flex;
+  flex-direction: column;
+  gap: var(--rbase-spacing-xs);
+}
+
+.interpretItem {
+  display: flex;
+  align-items: center;
+  gap: var(--rbase-spacing-sm);
+  padding: var(--rbase-spacing-sm);
+  background: var(--rbase-color-background-secondary);
+  border-radius: var(--rbase-radius-sm);
+  font-size: var(--rbase-font-size-body-small);
+  color: var(--rbase-color-text-primary);
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.interpretItem:active {
+  background: var(--rbase-color-background-tertiary);
+  transform: translateX(4px);
+}
+
+.interpretIcon {
+  color: var(--rbase-color-accent);
+  font-size: 14px;
+  flex-shrink: 0;
+}
+
+/* ==================== 关键词样式 ==================== */
+.keywordsSection {
+  display: flex;
+  flex-direction: column;
+  gap: var(--rbase-spacing-md);
+}
+
+.kwRow {
+  display: flex;
+  flex-direction: column;
+  gap: var(--rbase-spacing-xs);
+}
+
+.kwLabel {
+  font-size: var(--rbase-font-size-caption);
+  color: var(--rbase-color-text-tertiary);
+  font-weight: var(--rbase-font-weight-medium);
+}
+
+/* ==================== 干预措施表格 ==================== */
+.interventionTable {
+  display: flex;
+  flex-direction: column;
+  gap: var(--rbase-spacing-xs);
+}
+
+.tableHeader {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 50px;
+  gap: var(--rbase-spacing-xs);
+  padding: var(--rbase-spacing-xs) var(--rbase-spacing-sm);
+  background: var(--rbase-color-background-tertiary);
+  border-radius: var(--rbase-radius-sm);
+  font-size: var(--rbase-font-size-caption);
+  color: var(--rbase-color-text-tertiary);
+  font-weight: var(--rbase-font-weight-medium);
+}
+
+.tableRow {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 50px;
+  gap: var(--rbase-spacing-xs);
+  padding: var(--rbase-spacing-sm);
+  background: var(--rbase-color-background-secondary);
+  border-radius: var(--rbase-radius-sm);
+  font-size: var(--rbase-font-size-caption);
+  color: var(--rbase-color-text-primary);
+  align-items: center;
+}
+
+/* ==================== 频道和主题样式 ==================== */
+.channelSection {
+  display: flex;
+  flex-direction: column;
+  gap: var(--rbase-spacing-md);
+}
+
+.channelRow {
+  display: flex;
+  flex-direction: column;
+  gap: var(--rbase-spacing-xs);
+}
+
+.channelLabel {
+  font-size: var(--rbase-font-size-caption);
+  color: var(--rbase-color-text-tertiary);
+  font-weight: var(--rbase-font-weight-medium);
+}
+
+/* ==================== 属性网格 ==================== */
+.attributeGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--rbase-spacing-sm);
+}
+
+.attrItem {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: var(--rbase-spacing-sm);
+  background: var(--rbase-color-background-secondary);
+  border-radius: var(--rbase-radius-sm);
+}
+
+.attrLabel {
+  font-size: var(--rbase-font-size-caption);
+  color: var(--rbase-color-text-tertiary);
+}
+
+.attrValue {
+  font-size: var(--rbase-font-size-body-small);
+  color: var(--rbase-color-text-primary);
+  font-weight: var(--rbase-font-weight-medium);
+}
+
+/* ==================== 材料样式 ==================== */
+.materialSection {
+  display: flex;
+  flex-direction: column;
+  gap: var(--rbase-spacing-md);
+}
+
+.materialRow {
+  display: flex;
+  flex-direction: column;
+  gap: var(--rbase-spacing-xs);
+}
+
+.materialLabel {
+  font-size: var(--rbase-font-size-caption);
+  color: var(--rbase-color-text-tertiary);
+  font-weight: var(--rbase-font-weight-medium);
+}
+
+/* ==================== 临床试验样式 ==================== */
+.clinicalGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--rbase-spacing-sm);
+}
+
+.clinicalItem {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: var(--rbase-spacing-sm);
+  background: var(--rbase-color-background-secondary);
+  border-radius: var(--rbase-radius-sm);
+}
+
+.clinicalItemFull {
+  grid-column: 1 / -1;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: var(--rbase-spacing-sm);
+  background: var(--rbase-color-background-secondary);
+  border-radius: var(--rbase-radius-sm);
+}
+
+.clinicalLabel {
+  font-size: var(--rbase-font-size-caption);
+  color: var(--rbase-color-text-tertiary);
+}
+
+.clinicalValue {
+  font-size: var(--rbase-font-size-body-small);
+  color: var(--rbase-color-text-primary);
+}
+
+.clinicalLink {
+  grid-column: 1 / -1;
+  display: flex;
+  align-items: center;
+  gap: var(--rbase-spacing-xs);
+  padding: var(--rbase-spacing-sm);
+  background: var(--rbase-color-primary-light);
+  border-radius: var(--rbase-radius-sm);
+  font-size: var(--rbase-font-size-caption);
+  color: var(--rbase-color-primary);
+  cursor: pointer;
+}
+
+/* ==================== 子区块 ==================== */
+.subSection {
+  margin-top: var(--rbase-spacing-md);
+  padding-top: var(--rbase-spacing-sm);
+  border-top: 1px dashed var(--rbase-color-border);
+}
+
+.subLabel {
+  display: block;
+  font-size: var(--rbase-font-size-caption);
+  color: var(--rbase-color-text-tertiary);
+  margin-bottom: var(--rbase-spacing-xs);
+}
+
+/* ==================== 分子网格 ==================== */
+.moleculeGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--rbase-spacing-sm);
+}
+
+.moleculeItem {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--rbase-spacing-sm);
+  background: var(--rbase-color-background-secondary);
+  border-radius: var(--rbase-radius-sm);
+}
+
+.moleculeName {
+  font-size: var(--rbase-font-size-body-small);
+  color: var(--rbase-color-text-primary);
+  font-weight: var(--rbase-font-weight-medium);
+}
+
+/* ==================== 产出样式 ==================== */
+.outputSection {
+  display: flex;
+  flex-direction: column;
+  gap: var(--rbase-spacing-md);
+}
+
+.outputRow {
+  display: flex;
+  flex-direction: column;
+  gap: var(--rbase-spacing-xs);
+}
+
+.outputLabel {
+  font-size: var(--rbase-font-size-caption);
+  color: var(--rbase-color-text-tertiary);
+  font-weight: var(--rbase-font-weight-medium);
+}
+
+.outputItem {
+  font-size: var(--rbase-font-size-body-small);
+  color: var(--rbase-color-text-primary);
+  padding: var(--rbase-spacing-sm);
+  background: var(--rbase-color-background-secondary);
+  border-radius: var(--rbase-radius-sm);
+  line-height: var(--rbase-line-height-relaxed);
+}
+
+/* ==================== 贡献者样式 ==================== */
+.contributorList {
+  display: flex;
+  flex-direction: column;
+  gap: var(--rbase-spacing-sm);
+}
+
+.contributorItem {
+  display: flex;
+  align-items: center;
+  gap: var(--rbase-spacing-sm);
+  padding: var(--rbase-spacing-sm);
+  background: var(--rbase-color-background-secondary);
+  border-radius: var(--rbase-radius-sm);
+}
+
+.contributorAvatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.contributorName {
+  flex: 1;
+  font-size: var(--rbase-font-size-body-small);
+  color: var(--rbase-color-text-primary);
+}
+
+/* ==================== 底部快捷导航 ==================== */
+.bottomNav {
+  flex-shrink: 0;
+  background: white;
+  border-top: 1px solid var(--rbase-color-border);
+  box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.06);
+  z-index: 100;
+}
+
+.navScroll {
+  display: flex;
+  overflow-x: auto;
+  padding: var(--rbase-spacing-xs) var(--rbase-spacing-sm);
+  gap: var(--rbase-spacing-xs);
+  -webkit-overflow-scrolling: touch;
+}
+
+.navScroll::-webkit-scrollbar {
+  display: none;
+}
+
+.navItem {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  padding: var(--rbase-spacing-xs) var(--rbase-spacing-sm);
+  border-radius: var(--rbase-radius-sm);
+  cursor: pointer;
+  flex-shrink: 0;
+  min-width: 48px;
+  transition: all 0.2s;
+}
+
+.navItem:active {
+  background: var(--rbase-color-background-secondary);
+}
+
+.navIcon {
+  font-size: 18px;
+  color: var(--rbase-color-text-secondary);
+  display: flex;
+}
+
+.navLabel {
+  font-size: 10px;
+  color: var(--rbase-color-text-tertiary);
+  white-space: nowrap;
+}
+
+/* ==================== 响应式 ==================== */
+@media (min-width: 768px) {
+  .scrollArea {
+    max-width: 768px;
+    margin: 0 auto;
+  }
+}

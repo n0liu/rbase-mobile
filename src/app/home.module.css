@@ -1,0 +1,137 @@
+.container {
+  min-height: 100vh;
+  background-color: var(--rbase-color-background);
+}
+
+/* ==================== 英雄区 ==================== */
+.hero {
+  background: linear-gradient(135deg, #0072f5 0%, #3b82f6 100%);
+  padding: var(--rbase-spacing-xxl) var(--rbase-spacing-lg);
+  padding-top: 60px;
+}
+
+.heroContent {
+  text-align: center;
+}
+
+.heroTitle {
+  font-size: var(--rbase-font-size-h4);
+  font-weight: var(--rbase-font-weight-bold);
+  color: white;
+  margin: 0 0 var(--rbase-spacing-sm) 0;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.heroSubtitle {
+  font-size: var(--rbase-font-size-body-small);
+  color: rgba(255, 255, 255, 0.9);
+  margin: 0;
+  line-height: var(--rbase-line-height-relaxed);
+}
+
+/* ==================== 内容区 ==================== */
+.content {
+  padding: var(--rbase-spacing-md);
+  margin-top: calc(-1 * var(--rbase-spacing-lg));
+}
+
+/* ==================== 菜单卡片 ==================== */
+.menuCard {
+  border-radius: var(--rbase-radius-card);
+  box-shadow: var(--rbase-shadow-lg);
+  margin-bottom: var(--rbase-spacing-md);
+}
+
+.menuItem {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: var(--rbase-spacing-md);
+  background-color: var(--rbase-color-background-secondary);
+  border-radius: var(--rbase-radius-md);
+  cursor: pointer;
+  transition: all 0.2s;
+  min-height: 100px;
+}
+
+.menuItem:active {
+  transform: scale(0.95);
+  background-color: var(--rbase-color-background-tertiary);
+}
+
+.menuIcon {
+  font-size: 32px;
+  margin-bottom: var(--rbase-spacing-sm);
+}
+
+.menuTitle {
+  font-size: var(--rbase-font-size-body-small);
+  font-weight: var(--rbase-font-weight-semibold);
+  color: var(--rbase-color-text-primary);
+  text-align: center;
+  margin-bottom: var(--rbase-spacing-xs);
+}
+
+.menuDescription {
+  font-size: var(--rbase-font-size-caption);
+  color: var(--rbase-color-text-secondary);
+  text-align: center;
+}
+
+/* ==================== 说明卡片 ==================== */
+.infoCard {
+  border-radius: var(--rbase-radius-card);
+  box-shadow: var(--rbase-shadow-md);
+  border-left: 4px solid var(--rbase-color-primary);
+}
+
+.infoTitle {
+  font-size: var(--rbase-font-size-body);
+  font-weight: var(--rbase-font-weight-bold);
+  color: var(--rbase-color-text-primary);
+  margin: 0 0 var(--rbase-spacing-md) 0;
+}
+
+.infoContent {
+  display: flex;
+  flex-direction: column;
+  gap: var(--rbase-spacing-sm);
+  margin-bottom: var(--rbase-spacing-md);
+}
+
+.infoItem {
+  font-size: var(--rbase-font-size-body-small);
+  color: var(--rbase-color-text-primary);
+  line-height: var(--rbase-line-height-relaxed);
+  padding: var(--rbase-spacing-sm);
+  background-color: var(--rbase-color-background-secondary);
+  border-radius: var(--rbase-radius-md);
+}
+
+.infoItem strong {
+  color: var(--rbase-color-primary);
+}
+
+/* ==================== 特性标签 ==================== */
+.features {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--rbase-spacing-sm);
+}
+
+.featureTag {
+  font-size: var(--rbase-font-size-caption);
+  color: var(--rbase-color-text-secondary);
+  padding: var(--rbase-spacing-xs) var(--rbase-spacing-sm);
+  background-color: var(--rbase-color-background-tertiary);
+  border-radius: 9999px;
+  white-space: nowrap;
+}
+
+/* ==================== 响应式 ==================== */
+@media (min-width: 768px) {
+  .content {
+    max-width: 768px;
+    margin: calc(-1 * var(--rbase-spacing-lg)) auto 0;
+  }
+}
