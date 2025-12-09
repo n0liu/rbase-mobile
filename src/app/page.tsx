@@ -1,6 +1,6 @@
 'use client';
 
-import { Button, Card, NavBar, List, Space } from 'antd-mobile';
+import { Button, Card, NavBar, List, Space, SafeArea } from 'antd-mobile';
 import { useRouter } from 'next/navigation';
 import { useTheme } from '@/contexts/ThemeContext';
 import { useState, useEffect } from 'react';
@@ -19,6 +19,8 @@ export default function Home() {
 
   return (
     <div style={{ minHeight: '100vh', backgroundColor: 'var(--adm-color-background)' }}>
+      <SafeArea position='top' />
+
       <NavBar back={null}>移动端组件库</NavBar>
 
       <div style={{ padding: '16px' }}>
@@ -42,8 +44,8 @@ export default function Home() {
           <List>
             <List.Item prefix="🎨">完整的设计令牌系统（颜色、字体、间距等）</List.Item>
             <List.Item prefix="🌓">主题切换（亮色/暗色/跟随系统）</List.Item>
-            <List.Item prefix="📱">响应式设计（手机/平板/桌面）</List.Item>
-            <List.Item prefix="🔄">横竖屏自适应</List.Item>
+            <List.Item prefix="📱">响应式设计（基于 375px 基准 vw 单位）</List.Item>
+            <List.Item prefix="🛡️">安全区域处理（刘海屏/圆角屏自适配）</List.Item>
             <List.Item prefix="📐">px 到 vw 自动转换</List.Item>
             <List.Item prefix="🎯">Ant Design Mobile 样式覆盖</List.Item>
             <List.Item prefix="💾">单一数据源（所有样式来自 tokens）</List.Item>
@@ -85,6 +87,8 @@ export default function Home() {
           </Space>
         </Card>
       </div>
+
+      <SafeArea position='bottom' />
     </div>
   );
 }

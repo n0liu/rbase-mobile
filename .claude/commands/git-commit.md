@@ -44,7 +44,4 @@ feat: 添加用户认证功能
 - 集成后端 API 接口
 - 添加路由守卫保护私有页面
 
-🤖 Generated with [Claude Code](https://claude.com/claude-code)
-
-Co-Authored-By: Claude <noreply@anthropic.com>
 ```

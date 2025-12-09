@@ -6,7 +6,7 @@
 // 亮色主题颜色
 export const lightColors = {
   // 品牌色
-  primary: '#1677FF',
+  primary: '#0072f5',
   primaryHover: '#4096FF',
   primaryActive: '#0958D9',
   primaryBg: '#E6F4FF',
