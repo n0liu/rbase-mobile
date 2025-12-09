@@ -64,7 +64,3 @@ export const componentSpacing = {
     left: 'env(safe-area-inset-left)',
   },
 } as const;
-
-// 类型定义
-export type SpacingKeys = keyof typeof spacing;
-export type SpacingTokens = Record<SpacingKeys, string>;

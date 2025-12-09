@@ -97,13 +97,10 @@ export function getThemeConfig(
   return generateCSSVariables(theme);
 }
 
-// 导出默认主题（兼容旧代码）
-export const defaultTheme = getThemeConfig('light');
-
 // 导出所有令牌以供直接使用
 export * from './tokens/colors';
-export * from './tokens/typography';
-export * from './tokens/spacing';
+export { fontSize, fontFamily } from './tokens/typography';
+export { spacing, componentSpacing } from './tokens/spacing';
 export * from './tokens/radius';
 export * from './tokens/shadows';
 export * from './tokens/animation';

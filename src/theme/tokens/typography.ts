@@ -26,8 +26,11 @@ export const fontSize = {
   overline: '11px',
 } as const;
 
+// 以下导出暂时保留，以便将来扩展使用
+// 如需使用，可从 typography.ts 导入
+
 // 字重
-export const fontWeight = {
+const fontWeight = {
   light: 300,
   regular: 400,
   medium: 500,
@@ -36,14 +39,14 @@ export const fontWeight = {
 } as const;
 
 // 行高
-export const lineHeight = {
+const lineHeight = {
   tight: 1.2,
   normal: 1.5,
   relaxed: 1.75,
 } as const;
 
 // 字母间距
-export const letterSpacing = {
+const letterSpacing = {
   tighter: '-0.05em',
   tight: '-0.025em',
   normal: '0',
@@ -52,13 +55,7 @@ export const letterSpacing = {
   widest: '0.1em',
 } as const;
 
-// 类型定义
-export type FontSizeKeys = keyof typeof fontSize;
-export type FontSizeTokens = Record<FontSizeKeys, string>;
-
-/**
- * 完整的字体系统配置
- */
+// 导出完整配置（如果将来需要）
 export const typography = {
   fontFamily,
   fontSize,
