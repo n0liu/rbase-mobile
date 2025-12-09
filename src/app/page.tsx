@@ -63,10 +63,17 @@ export default function Home() {
         </Card>
 
         {/* 操作按钮 */}
-        <Card title="🚀 开始测试" style={{ marginBottom: '16px' }}>
+        <Card title="🚀 开始体验" style={{ marginBottom: '16px' }}>
           <Space direction="vertical" block>
             <Button
               color="primary"
+              size="large"
+              block
+              onClick={() => router.push('/design-system')}
+            >
+              查看设计系统
+            </Button>
+            <Button
               size="large"
               block
               onClick={() => router.push('/test')}
@@ -79,7 +86,7 @@ export default function Home() {
               textAlign: 'center',
               marginTop: '8px'
             }}>
-              在测试页面中可以查看所有设计令牌、切换主题、测试响应式行为
+              设计系统展示所有 Design Tokens，测试页面可以切换主题和测试响应式
             </p>
           </Space>
         </Card>
