@@ -5,7 +5,7 @@
  */
 
 import { getColors } from './tokens/colors';
-import { fontSize, fontFamily, lineHeight } from './tokens/typography';
+import { fontSize, fontFamily, lineHeight, fontWeight } from './tokens/typography';
 import { spacing, componentSpacing } from './tokens/spacing';
 import { radius } from './tokens/radius';
 import { getShadows } from './tokens/shadows';
@@ -95,6 +95,13 @@ export function generateCSSVariables(
 
     '--rbase-font-family-base': fontFamily.base,
     '--rbase-font-family-monospace': fontFamily.monospace,
+
+    // 字重变量
+    '--rbase-font-weight-light': fontWeight.light.toString(),
+    '--rbase-font-weight-regular': fontWeight.regular.toString(),
+    '--rbase-font-weight-medium': fontWeight.medium.toString(),
+    '--rbase-font-weight-semibold': fontWeight.semibold.toString(),
+    '--rbase-font-weight-bold': fontWeight.bold.toString(),
 
     // 行高变量
     '--rbase-line-height-tight': lineHeight.tight.toString(),
