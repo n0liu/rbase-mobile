@@ -20,9 +20,9 @@ export const fontSize = {
   h3: '18px',
   h4: '16px',
   h5: '14px',
-  body: '14px',
-  bodySmall: '12px',
-  caption: '11px',
+  body: '16px',
+  bodySmall: '14px',
+  caption: '12px',
   overline: '10px',
 } as const;
 
