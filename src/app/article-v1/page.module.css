@@ -342,12 +342,6 @@
   margin-bottom: 6px;
 }
 
-.aiItemText {
-  font-size: var(--rbase-font-size-body-small);
-  color: var(--rbase-color-text-secondary);
-  line-height: 1.7;
-}
-
 /* ==================== AI一键解读 ==================== */
 .aiReadTitleRow {
   display: flex;
@@ -379,6 +373,7 @@
   font-size: var(--rbase-font-size-caption);
   font-weight: var(--rbase-font-weight-medium);
   cursor: pointer;
+  transition: all 0.2s;
 }
 
 /* ==================== 相关链接 ==================== */
@@ -406,6 +401,7 @@
   border: 1px solid var(--rbase-color-border);
   border-radius: var(--rbase-radius-md);
   position: relative;
+  transition: border-color 0.2s;
 }
 
 .bmcLogo {
@@ -579,6 +575,7 @@
   border-radius: var(--rbase-radius-card);
   border: 1px solid var(--rbase-color-border);
   text-align: center;
+  transition: all 0.2s;
 }
 
 .institutionAbbr {
@@ -640,10 +637,40 @@
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
   cursor: pointer;
   z-index: 50;
+  transition: all 0.2s;
 }
 
 .structureIcon {
   font-size: 16px;
+}
+
+/* ==================== 回到顶部按钮 ==================== */
+.backTopBtn {
+  position: fixed;
+  right: var(--rbase-spacing-md);
+  bottom: 130px; /* 在结构化按钮上方 */
+  width: 40px;
+  height: 40px;
+  background: white;
+  border: 1px solid var(--rbase-color-border);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--rbase-color-text-secondary);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  z-index: 49;
+  cursor: pointer;
+  transition: all 0.3s;
+  opacity: 0;
+  transform: translateY(20px);
+  pointer-events: none;
+}
+
+.backTopBtnVisible {
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
 }
 
 /* ==================== 底部栏 ==================== */
@@ -674,6 +701,7 @@
   font-weight: var(--rbase-font-weight-medium);
   cursor: pointer;
   flex-shrink: 0;
+  transition: all 0.2s;
 }
 
 .aiIcon {
@@ -687,6 +715,14 @@
   background: var(--rbase-color-background-secondary);
   border-radius: 20px;
   padding: 0 var(--rbase-spacing-md);
+  border: 1px solid transparent;
+  transition: all 0.2s;
+}
+
+.inputWrapper:focus-within {
+  background: white;
+  border-color: var(--rbase-color-primary);
+  box-shadow: 0 0 0 2px rgba(0, 102, 255, 0.1);
 }
 
 .inputField {

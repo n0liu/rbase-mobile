@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import { Tag, Popup, Tabs } from 'antd-mobile';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
@@ -15,6 +15,11 @@ import {
   EyeOutline,
   ContentOutline,
   SendOutline,
+  MoreOutline,
+  FilterOutline,
+  DownOutline,
+  UpOutline,
+  CloseOutline,
   AppstoreOutline,
   SetOutline,
   TagOutline,
@@ -26,23 +31,21 @@ import {
   GlobalOutline,
   UnorderedListOutline,
   AppOutline,
-  ShopbagOutline,
-  UpOutline,
-  DownOutline,
-  CloseOutline,
-  FilterOutline
+  ShopbagOutline
 } from 'antd-mobile-icons';
 import styles from './page.module.css';
+import BackToTop from '@/components/BackToTop';
 
 export default function ArticleV2Page() {
   const router = useRouter();
+  const scrollRef = useRef<HTMLDivElement>(null);
+  const [leftPanelVisible, setLeftPanelVisible] = useState(false);
   const [filterPanelVisible, setFilterPanelVisible] = useState(false);
   const [activeFilterMenu, setActiveFilterMenu] = useState('影响因子');
   const [aiPopupVisible, setAiPopupVisible] = useState(false);
   const [aiPopupContent, setAiPopupContent] = useState({ title: '', content: '' });
   const [aiTabKey, setAiTabKey] = useState('cn');
   const [activeFilters, setActiveFilters] = useState<string[]>(['0-5 (452)', '5-10 (311)', '10-15 (189)']);
-  const [leftPanelVisible, setLeftPanelVisible] = useState(false);
   const [expandedNodes, setExpandedNodes] = useState<Set<string>>(new Set(['益生菌']));
   const [selectedPath, setSelectedPath] = useState<string[]>(['益生菌']);
   const [selectedNode, setSelectedNode] = useState<string>('益生菌');
@@ -522,7 +525,7 @@ export default function ArticleV2Page() {
       </div>
 
       {/* 可滚动内容区 */}
-      <div className={styles.scrollArea}>
+      <div className={styles.scrollArea} ref={scrollRef}>
         <div className={styles.content}>
           {/* 期刊封面 */}
           <div className={styles.coverSection}>
@@ -882,6 +885,7 @@ export default function ArticleV2Page() {
           </div>
         </div>
       </Popup>
+      <BackToTop scrollContainerRef={scrollRef} threshold={200} bottomOffset={80} />
     </div>
   );
 }

@@ -346,8 +346,10 @@
 }
 
 .filterTagClose {
-  margin-left: 4px;
-  font-size: 12px;
+  margin-left: 8px; /* 增加间距 */
+  font-size: 14px;  /* 增大点击区域视觉 */
+  padding: 4px;     /* 增大点击热区 */
+  margin-right: -4px;
 }
 
 .moreIcon {
@@ -370,6 +372,11 @@
   padding: var(--rbase-spacing-md) var(--rbase-spacing-lg);
   border-bottom: 1px solid var(--rbase-color-border);
   gap: var(--rbase-spacing-md);
+  transition: background-color 0.2s;
+}
+
+.articleItem:active {
+  background-color: var(--rbase-color-background-secondary);
 }
 
 .articleDate {
@@ -1558,7 +1565,8 @@
   padding: var(--rbase-spacing-xs) 0;
   position: relative;
   margin: 2px 0;
-  padding-left: calc(var(--node-level, 0) * 24px);
+  /* 优化缩进：每级 16px */
+  padding-left: calc(var(--node-level, 0) * 16px);
   cursor: pointer;
 }
 
@@ -1575,7 +1583,8 @@
 .orgChildrenWrapper::before {
   content: '';
   position: absolute;
-  left: calc((var(--node-level, 0)) * 24px + 8px);
+  /* 优化缩进计算：每级 16px，基础偏移 8px */
+  left: calc((var(--node-level, 0)) * 16px + 8px);
   top: 0;
   bottom: 0;
   width: 1px;

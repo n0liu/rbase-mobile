@@ -129,12 +129,14 @@
   font-weight: var(--rbase-font-weight-bold);
   color: white;
   margin: 0 0 4px 0;
+  text-shadow: 0 2px 4px rgba(0,0,0,0.5); /* 增加文字阴影提升可读性 */
 }
 
 .institutionNameEn {
   font-size: var(--rbase-font-size-body-small);
   color: rgba(255, 255, 255, 0.9);
   margin: 0;
+  text-shadow: 0 1px 2px rgba(0,0,0,0.5); /* 增加文字阴影 */
 }
 
 .followBtn {
@@ -245,7 +247,7 @@
 }
 
 .indicatorDotActive {
-  width: 24px;
+  width: 28px; /* 增加激活状态长度 */
   background: var(--rbase-color-primary);
 }
 

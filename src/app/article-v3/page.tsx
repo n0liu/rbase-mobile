@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import { Tag, Popup, Swiper } from 'antd-mobile';
 import {
   AddOutline,
@@ -14,8 +14,10 @@ import {
   UnorderedListOutline
 } from 'antd-mobile-icons';
 import styles from './page.module.css';
+import BackToTop from '@/components/BackToTop';
 
 export default function ArticleV3Page() {
+  const scrollRef = useRef<HTMLDivElement>(null);
   const [activeTab, setActiveTab] = useState<'articles' | 'patents'>('articles');
   const [leftPanelVisible, setLeftPanelVisible] = useState(false);
   const [filterPanelVisible, setFilterPanelVisible] = useState(false);
@@ -305,7 +307,7 @@ export default function ArticleV3Page() {
       </div>
 
       {/* 可滚动内容区 */}
-      <div className={styles.scrollArea}>
+      <div className={styles.scrollArea} ref={scrollRef}>
         <div className={styles.content}>
           {/* 机构横幅 */}
           <div className={styles.institutionBanner}>
@@ -675,6 +677,7 @@ export default function ArticleV3Page() {
           </div>
         </div>
       </Popup>
+      <BackToTop scrollContainerRef={scrollRef} threshold={200} bottomOffset={80} />
     </div>
   );
 }

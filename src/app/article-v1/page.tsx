@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import { Tag, Dialog, Popup, Tabs } from 'antd-mobile';
 import Image from 'next/image';
 import {
@@ -10,8 +10,10 @@ import {
 } from 'antd-mobile-icons';
 import AIInputBar from '@/components/layout/AIInputBar';
 import styles from './page.module.css';
+import BackToTop from '@/components/BackToTop';
 
 export default function ArticleV1Page() {
+  const scrollRef = useRef<HTMLDivElement>(null);
   const [aiTabKey, setAiTabKey] = useState('cn');
   const [drawerVisible, setDrawerVisible] = useState(false);
   const [activeMenu, setActiveMenu] = useState('关键词');
@@ -229,7 +231,7 @@ export default function ArticleV1Page() {
       </div>
 
       {/* 可滚动内容区 */}
-      <div className={styles.scrollArea}>
+      <div className={styles.scrollArea} ref={scrollRef}>
         <div className={styles.content}>
 
           {/* 文章元信息 */}
@@ -393,6 +395,8 @@ export default function ArticleV1Page() {
         <UnorderedListOutline className={styles.structureIcon} />
         <span>结构化解读</span>
       </div>
+
+      <BackToTop scrollContainerRef={scrollRef} bottomOffset={140} />
 
       {/* 底部 AI 问答栏 */}
       <AIInputBar
