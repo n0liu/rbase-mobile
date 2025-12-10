@@ -6,9 +6,9 @@ import Image from 'next/image';
 import {
   RightOutline,
   SearchOutline,
-  UnorderedListOutline,
-  UpOutline
+  UnorderedListOutline
 } from 'antd-mobile-icons';
+import AIInputBar from '@/components/layout/AIInputBar';
 import styles from './page.module.css';
 
 export default function ArticleV1Page() {
@@ -395,18 +395,10 @@ export default function ArticleV1Page() {
       </div>
 
       {/* 底部 AI 问答栏 */}
-      <div className={styles.bottomBar}>
-        <div className={styles.aiButton}>
-          <span className={styles.aiIcon}>✦</span>
-          <span>AI问答</span>
-        </div>
-        <div className={styles.inputWrapper}>
-          <input type="text" placeholder="输入问题，对话权威文献" className={styles.inputField} />
-        </div>
-        <div className={styles.upButton}>
-          <UpOutline />
-        </div>
-      </div>
+      <AIInputBar
+        onSend={(text) => console.log('发送:', text)}
+        onAIButtonClick={() => console.log('AI按钮点击')}
+      />
 
       {/* 结构化解读抽屉 */}
       <Popup

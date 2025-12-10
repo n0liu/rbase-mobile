@@ -1,0 +1,91 @@
+.topBar {
+  flex-shrink: 0;
+  height: 56px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 var(--rbase-spacing-lg);
+  background: white;
+  border-bottom: 1px solid var(--rbase-color-border);
+}
+
+.topLeft {
+  display: flex;
+  align-items: center;
+  gap: var(--rbase-spacing-xs);
+}
+
+.leftIcon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  font-size: 18px;
+  color: var(--rbase-color-text-primary);
+  cursor: pointer;
+  transition: opacity 0.2s;
+
+  &:active {
+    opacity: 0.6;
+  }
+}
+
+.logoR {
+  font-size: 22px;
+  font-weight: var(--rbase-font-weight-bold);
+  color: var(--rbase-color-primary);
+}
+
+.logoDot {
+  font-size: 22px;
+  font-weight: var(--rbase-font-weight-bold);
+  color: var(--rbase-color-accent);
+  margin: 0 2px;
+}
+
+.logoText {
+  font-size: 22px;
+  font-weight: var(--rbase-font-weight-bold);
+  color: var(--rbase-color-text-primary);
+}
+
+.docTag {
+  margin-left: var(--rbase-spacing-sm);
+  font-size: 11px !important;
+  padding: 2px 8px !important;
+  background: transparent !important;
+  color: var(--rbase-color-primary) !important;
+  border: 1px solid var(--rbase-color-primary) !important;
+  border-radius: 4px !important;
+}
+
+.topRight {
+  display: flex;
+  align-items: center;
+  gap: var(--rbase-spacing-md);
+}
+
+.topIcon {
+  font-size: 22px;
+  color: var(--rbase-color-text-primary);
+  cursor: pointer;
+  transition: opacity 0.2s;
+
+  &:active {
+    opacity: 0.6;
+  }
+}
+
+.userAvatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  object-fit: cover;
+  cursor: pointer;
+  transition: opacity 0.2s;
+
+  &:active {
+    opacity: 0.8;
+  }
+}

@@ -1,0 +1,86 @@
+.treeView {
+  position: relative;
+}
+
+.nodeWrapper {
+  position: relative;
+}
+
+.nodeItem {
+  display: flex;
+  align-items: center;
+  gap: var(--rbase-spacing-xs);
+  padding: var(--rbase-spacing-xs) 0;
+  position: relative;
+  margin: 2px 0;
+  padding-left: calc(var(--node-level, 0) * var(--level-indent, 24px));
+  cursor: pointer;
+  transition: opacity 0.2s;
+
+  &:active {
+    opacity: 0.7;
+  }
+}
+
+.nodeSelected .nodeName {
+  color: var(--rbase-color-primary) !important;
+  font-weight: var(--rbase-font-weight-bold) !important;
+}
+
+/* 子节点容器 - 带垂直连接线 */
+.childrenWrapper {
+  position: relative;
+
+  &::before {
+    content: '';
+    position: absolute;
+    left: calc(var(--node-level, 0) * var(--level-indent, 24px) + 8px);
+    top: 0;
+    bottom: 0;
+    width: 1px;
+    background: var(--rbase-color-border);
+    z-index: 0;
+  }
+}
+
+.iconWrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.expandIcon,
+.collapseIcon,
+.leafIcon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--rbase-color-text-tertiary);
+  width: 16px;
+  height: 16px;
+  font-size: 16px;
+
+  svg {
+    width: 100%;
+    height: 100%;
+  }
+}
+
+.nodeName {
+  flex: 1;
+  font-size: var(--rbase-font-size-body-small);
+  color: var(--rbase-color-text-secondary);
+  font-weight: var(--rbase-font-weight-regular);
+}
+
+.nodeNameRoot {
+  font-size: var(--rbase-font-size-h4);
+  color: var(--rbase-color-text-primary);
+  font-weight: var(--rbase-font-weight-medium);
+}
+
+.nodeCount {
+  color: var(--rbase-color-text-tertiary);
+  font-weight: var(--rbase-font-weight-regular);
+}

@@ -1,0 +1,76 @@
+.bottomBar {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  display: flex;
+  align-items: center;
+  gap: var(--rbase-spacing-sm);
+  padding: var(--rbase-spacing-sm) var(--rbase-spacing-lg);
+  padding-bottom: calc(var(--rbase-spacing-sm) + env(safe-area-inset-bottom));
+  background: #ffffff;
+  border-top: 1px solid var(--rbase-color-border);
+  z-index: 100;
+}
+
+.aiButton {
+  display: flex;
+  align-items: center;
+  gap: var(--rbase-spacing-xs);
+  padding: var(--rbase-spacing-sm) var(--rbase-spacing-md);
+  background: var(--rbase-color-accent);
+  color: white;
+  border-radius: var(--rbase-radius-button);
+  font-size: var(--rbase-font-size-body-small);
+  font-weight: var(--rbase-font-weight-medium);
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: opacity 0.2s;
+
+  &:active {
+    opacity: 0.8;
+  }
+}
+
+.aiIcon {
+  font-size: 14px;
+}
+
+.inputWrapper {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  background: var(--rbase-color-background-secondary);
+  border-radius: 20px;
+  padding: 0 var(--rbase-spacing-md);
+}
+
+.inputField {
+  flex: 1;
+  border: none;
+  background: transparent;
+  padding: 10px 0;
+  font-size: var(--rbase-font-size-body-small);
+  color: var(--rbase-color-text-primary);
+  outline: none;
+
+  &::placeholder {
+    color: var(--rbase-color-text-tertiary);
+  }
+}
+
+.rightButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  color: var(--rbase-color-text-tertiary);
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: opacity 0.2s;
+
+  &:active {
+    opacity: 0.6;
+  }
+}
