@@ -1,638 +1,689 @@
 'use client';
 
-import { useState, useRef } from 'react';
-import { NavBar, Tag, Space } from 'antd-mobile';
-import { useRouter } from 'next/navigation';
+import { useState } from 'react';
+import { Tag, Popup, Swiper } from 'antd-mobile';
 import {
-  LeftOutline,
-  RightOutline,
-  StarOutline,
-  SendOutline,
-  EditSOutline,
+  AddOutline,
+  SearchOutline,
   DownOutline,
-  UpOutline,
-  FileOutline,
-  TeamOutline,
-  AppstoreOutline,
-  SetOutline,
-  EnvironmentOutline,
-  InformationCircleOutline,
-  ContentOutline,
-  CheckCircleOutline,
-  ClockCircleOutline,
+  CloseOutline,
+  MoreOutline,
   LinkOutline,
-  UserOutline
+  FilterOutline,
+  UpOutline,
+  UnorderedListOutline
 } from 'antd-mobile-icons';
 import styles from './page.module.css';
 
-// 可折叠卡片组件
-interface CollapsibleCardProps {
-  id: string;
-  title: string;
-  icon: React.ReactNode;
-  children: React.ReactNode;
-  defaultExpanded?: boolean;
-  accentColor?: string;
-  count?: number;
-}
-
-function CollapsibleCard({
-  id,
-  title,
-  icon,
-  children,
-  defaultExpanded = false,
-  accentColor = 'var(--rbase-color-primary)',
-  count
-}: CollapsibleCardProps) {
-  const [expanded, setExpanded] = useState(defaultExpanded);
-
-  return (
-    <div
-      id={id}
-      className={styles.collapsibleCard}
-      style={{ '--accent-color': accentColor } as React.CSSProperties}
-    >
-      <div
-        className={styles.cardHeader}
-        onClick={() => setExpanded(!expanded)}
-      >
-        <span className={styles.cardIcon}>{icon}</span>
-        <span className={styles.cardTitle}>{title}</span>
-        {count !== undefined && (
-          <span className={styles.cardCount}>{count}</span>
-        )}
-        <span className={styles.expandIcon}>
-          {expanded ? <UpOutline /> : <DownOutline />}
-        </span>
-      </div>
-      <div className={`${styles.cardContent} ${expanded ? styles.expanded : ''}`}>
-        <div className={styles.cardInner}>
-          {children}
-        </div>
-      </div>
-    </div>
-  );
-}
-
 export default function ArticleV3Page() {
-  const router = useRouter();
-  const contentRef = useRef<HTMLDivElement>(null);
+  const [activeTab, setActiveTab] = useState<'articles' | 'patents'>('articles');
+  const [leftPanelVisible, setLeftPanelVisible] = useState(false);
+  const [filterPanelVisible, setFilterPanelVisible] = useState(false);
+  const [activeFilters, setActiveFilters] = useState<string[]>(['消化道菌群 (388)', '肠道微生物组 (472)']);
+  const [activeFilterMenu, setActiveFilterMenu] = useState('研究领域');
+  const [researcherSwiperIndex, setResearcherSwiperIndex] = useState(0);
+  const [expandedNodes, setExpandedNodes] = useState<Set<string>>(new Set(['香港中文大学', '医学院', '消化疾病研究所']));
 
-  // 完整的文献数据 (与V1、V2一致)
-  const article = {
-    title: "Gut microbiota modulates innate immunity in the small intestine through a B cell-Myd88 signaling pathway",
-    titleCn: "肠道菌群通过B细胞-MyD88信号通路调节小肠先天性免疫",
-    journal: "Nature Communications",
-    year: "2024",
-    volume: "15",
-    issue: "1",
-    pages: "1234-1245",
-    doi: "10.1038/s41467-024-12345-6",
-    impactFactor: "16.6",
-    quartile: "Q1",
-    isOpenAccess: true,
-    pubDate: "2024-03-15",
-    authors: [
-      { name: "Zhang Wei", nameCn: "张伟", avatar: "https://via.placeholder.com/80/ff7b00/ffffff?text=ZW", institution: "Stanford University", isCorresponding: true },
-      { name: "Li Ming", nameCn: "李明", avatar: "https://via.placeholder.com/80/5fca96/ffffff?text=LM", institution: "MIT", isCorresponding: false },
-      { name: "Wang Fang", nameCn: "王芳", avatar: "https://via.placeholder.com/80/0072f5/ffffff?text=WF", institution: "Harvard University", isCorresponding: false },
-      { name: "Chen Lei", nameCn: "陈磊", avatar: "https://via.placeholder.com/80/9333ea/ffffff?text=CL", institution: "Peking University", isCorresponding: true },
-      { name: "Liu Yang", nameCn: "刘洋", avatar: "https://via.placeholder.com/80/ec4899/ffffff?text=LY", institution: "Tsinghua University", isCorresponding: false }
-    ],
-    abstract: "The gut microbiota plays a crucial role in regulating host immunity. Here, we demonstrate that commensal bacteria modulate innate immune responses in the small intestine through a B cell-dependent mechanism involving the MyD88 signaling pathway...",
-    abstractCn: "肠道菌群在调节宿主免疫中发挥关键作用。本研究表明，共生细菌通过依赖B细胞的机制，通过MyD88信号通路调节小肠的先天性免疫反应...",
-    aiInterpretation: [
-      "原文摘要",
-      "创新要点",
-      "科普解读",
-      "专家点评",
-      "热心肠日报解读",
-      "研究背景与假设",
-      "主要方法与结果",
-      "研究结论与意义",
-      "研究局限性",
-      "后续研究方向"
-    ],
-    keywords: {
-      core: ["肠道菌群", "益生菌", "免疫调节", "MyD88信号通路", "B细胞"],
-      extended: ["肠道健康", "微生物组", "先天免疫", "适应性免疫", "黏膜免疫"],
-      ai: ["肠道微生态", "免疫平衡", "炎症反应", "肠道屏障"],
-      artificial: ["炎症性肠病", "肠易激综合征", "代谢综合征"],
-      mesh: ["Hepatitis B, Chronic", "Haplorhinl", "Fedratinib Methanesulfonate"]
+  // 机构数据
+  const institution = {
+    name: '香港中文大学',
+    nameEn: 'The Chinese University of Hong Kong',
+    cover: 'https://pics-xldkp-com.oss-cn-qingdao.aliyuncs.com/images/rxcgw/home-1.png',
+    stats: {
+      articles: '200+',
+      patents: '50+',
+      collaborators: '150+'
     },
-    interventions: [
-      { name: "菊粉", condition: "脂肪肝", method: "动物实验", result: "阳性" },
-      { name: "益生菌LGG", condition: "肠炎", method: "临床试验", result: "阳性" },
-      { name: "粪菌移植", condition: "CDI感染", method: "临床试验", result: "阳性" },
-      { name: "抗生素", condition: "菌群失调", method: "动物实验", result: "阴性" }
+    departments: [
+      {
+        name: '香港中文大学',
+        count: 1450,
+        children: [
+          {
+            name: '医学院',
+            count: 2450,
+            children: [
+              { name: '内科及药物治疗学系', count: 234 },
+              { name: '外科学系', count: 234 },
+              {
+                name: '消化疾病研究所',
+                count: 234,
+                children: [
+                  { name: '肠道菌群研究中心', count: 120 },
+                  { name: '消化道肿瘤实验室', count: 120 }
+                ]
+              },
+              { name: '理学院', count: 234 },
+              { name: '工程学院', count: 234 },
+              { name: '李嘉诚健康科学研究所', count: 234 },
+              { name: '农业生物技术国家重点实验室', count: 234 }
+            ]
+          }
+        ]
+      }
     ],
-    channels: ["微生物（组）", "营养", "消化", "免疫", "代谢"],
-    hotGutTopics: ["益生菌", "菌群移植", "肠道免疫", "短链脂肪酸"],
-    articleAttributes: {
-      researchType: "基础研究",
-      stage: "动物实验",
-      evidenceLevel: "Ⅱ级",
-      direction: "正向/阳性",
-      majorField: "免疫学",
-      minorFields: ["微生物学", "消化病学"],
-      fundingSource: "国家自然科学基金"
-    },
-    experimentMaterials: {
-      model: ["C57BL/6小鼠", "MyD88-/-小鼠", "无菌小鼠"],
-      bacteria: ["大肠杆菌 Nissle 1917", "乳酸杆菌 LGG", "双歧杆菌 BB-12"],
-      cell: "293T"
-    },
-    clinicalTrial: {
-      sponsor: "斯坦福大学医学院",
-      grouping: "随机分组",
-      phase: "II期",
-      population: "成人（18-65岁）",
-      blinding: "双盲",
-      control: "安慰剂对照",
-      route: "口服",
-      duration: "12周",
-      frequency: "每日一次",
-      dosage: "1×10^9 CFU",
-      primaryEndpoint: "肠道炎症评分变化",
-      secondaryEndpoints: ["菌群多样性", "免疫细胞比例", "细胞因子水平"],
-      adverseEvents: "轻度腹胀（5%）",
-      registrationNumber: "NCT04567890",
-      ethicsApproval: "IRB-2024-001"
-    },
-    experimentMethods: [
-      "16S rDNA测序",
-      "液相色谱-质谱联用（LC-MS）",
-      "RNA测序（RNA-seq）",
-      "流式细胞术（FACS）",
-      "Western Blot",
-      "qRT-PCR",
-      "免疫组化（IHC）",
-      "ELISA"
+    researchers: [
+      { name: '于君', avatar: 'https://pics-xldkp-com.oss-cn-qingdao.aliyuncs.com/users/default_avatar.png' },
+      { name: '沈湘荣', avatar: 'https://pics-xldkp-com.oss-cn-qingdao.aliyuncs.com/users/default_avatar.png' },
+      { name: '陈家荣', avatar: 'https://pics-xldkp-com.oss-cn-qingdao.aliyuncs.com/users/default_avatar.png' },
+      { name: '卢炬明', avatar: 'https://pics-xldkp-com.oss-cn-qingdao.aliyuncs.com/users/default_avatar.png' },
+      { name: '黄革', avatar: 'https://pics-xldkp-com.oss-cn-qingdao.aliyuncs.com/users/default_avatar.png' },
+      { name: '陈浩森', avatar: 'https://pics-xldkp-com.oss-cn-qingdao.aliyuncs.com/users/default_avatar.png' },
+      { name: '段崇智', avatar: 'https://pics-xldkp-com.oss-cn-qingdao.aliyuncs.com/users/default_avatar.png' },
+      { name: 'HM 何敏', avatar: 'https://pics-xldkp-com.oss-cn-qingdao.aliyuncs.com/users/default_avatar.png' },
+      { name: 'LT 蓝霆', avatar: 'https://pics-xldkp-com.oss-cn-qingdao.aliyuncs.com/users/default_avatar.png' }
     ],
-    analysisSoftware: ["SPSS", "GraphPad Prism", "R语言", "QIIME2"],
-    molecules: [
-      { name: "PD-1", type: "蛋白" },
-      { name: "CTLA-4", type: "蛋白" },
-      { name: "IL-6", type: "细胞因子" },
-      { name: "TNF-α", type: "细胞因子" },
-      { name: "MyD88", type: "信号分子" },
-      { name: "NF-κB", type: "转录因子" }
-    ],
-    outputs: {
-      patents: ["CN202410001234.5 - 一种调节肠道免疫的益生菌组合物"],
-      products: ["益生菌胶囊（临床前）"],
-      guidelines: ["肠道菌群调节免疫的临床应用指南（草案）"]
-    },
-    contributors: [
-      { name: "mCloud", role: "录入", avatar: "https://via.placeholder.com/40/0072f5/ffffff?text=M" },
-      { name: "王教授", role: "审核", avatar: "https://via.placeholder.com/40/5fca96/ffffff?text=王" },
-      { name: "AI助手", role: "解读", avatar: "https://via.placeholder.com/40/ff7b00/ffffff?text=AI" }
+    links: [
+      { label: '官方网站', icon: <LinkOutline /> },
+      { label: 'Twitter / X', icon: <LinkOutline /> }
     ]
   };
 
-  // 导航章节配置
-  const sections = [
-    { id: 'keywords', label: '关键词', icon: <AppstoreOutline /> },
-    { id: 'interventions', label: '干预', icon: <SetOutline /> },
-    { id: 'channels', label: '频道', icon: <EnvironmentOutline /> },
-    { id: 'attributes', label: '属性', icon: <InformationCircleOutline /> },
-    { id: 'materials', label: '材料', icon: <ContentOutline /> },
-    { id: 'clinical', label: '临床', icon: <CheckCircleOutline /> },
-    { id: 'methods', label: '方法', icon: <SetOutline /> },
-    { id: 'molecules', label: '分子', icon: <ClockCircleOutline /> },
-    { id: 'outputs', label: '转化', icon: <LinkOutline /> },
-    { id: 'contributors', label: '贡献', icon: <UserOutline /> }
+  // 筛选数据
+  const filterData = {
+    researchFields: [
+      { label: '消化道菌群', count: 388 },
+      { label: '肠道微生物组', count: 472 },
+      { label: '胃癌', count: 436 },
+      { label: '结直肠癌', count: 116 },
+      { label: '肝癌', count: 96 },
+      { label: '基因组学', count: 216 },
+      { label: '表观遗传学', count: 87 },
+      { label: '生物信息学', count: 254 }
+    ],
+    authors: [
+      { label: '于君', count: 115 },
+      { label: '沈湘荣', count: 98 },
+      { label: '陈家荣', count: 85 },
+      { label: '卢炬明', count: 77 }
+    ],
+    institutions: [
+      { label: '医学院', count: 450 },
+      { label: '消化疾病研究所', count: 210 },
+      { label: '理学院', count: 180 },
+      { label: '李嘉诚健康科学研究所', count: 155 }
+    ],
+    journals: [
+      { label: 'Q1区', count: 268 },
+      { label: 'Q2区', count: 79 },
+      { label: '顶刊', count: 205 },
+      { label: 'CNS', count: 386 }
+    ],
+    publishYear: [
+      { label: '近1年', count: 213 },
+      { label: '近3年', count: 449 },
+      { label: '近5年', count: 445 },
+      { label: '2000年以前', count: 24 }
+    ]
+  };
+
+  // 文献列表数据
+  const articles = [
+    {
+      id: 1,
+      date: { day: '15', month: '10' },
+      journal: 'Gut Microbes',
+      if: '[IF:12.2]',
+      titleCn: 'Bifidobacterium longum BB536 对改善老年人肠道健康和免疫功能的随机对照试验',
+      titleEn: 'A Randomized, Controlled Trial of Bifidobacterium longum BB536 for Improving Gut Health and Immune Function in the Elderly',
+      type: 'Article',
+      publishDate: '2025-10-15',
+      authors: [
+        { name: 'Jun-Yao Xu', hasEmail: false },
+        { name: 'Yao-Yu Yu', hasEmail: false },
+        { name: '郑军平', hasEmail: true },
+        { name: '刘荣奇', hasEmail: true },
+        { name: '理科', hasEmail: true }
+      ],
+      tags: ['益生菌', '长双歧杆菌BB536']
+    },
+    {
+      id: 2,
+      date: { day: '08', month: '10' },
+      journal: 'Microbiome',
+      if: '[IF:16.6]',
+      titleCn: '菊粉型益生元对调节肥胖个体肠道菌群结构和代谢产物的宏基因组组学研究',
+      titleEn: 'Metagenomic analysis reveals the effects of inulin-type prebiotics on gut microbial structure and metabolic output in obese individuals and something...',
+      type: 'Article',
+      publishDate: '2025-10-08',
+      authors: [
+        { name: '汪芳宏', hasEmail: false },
+        { name: '蓝湘辉', hasEmail: true },
+        { name: '张和平', hasEmail: true },
+        { name: '朱光', hasEmail: true },
+        { name: '张发明', hasEmail: true }
+      ],
+      tags: ['益生元', '菊粉']
+    },
+    {
+      id: 3,
+      date: { day: '29', month: '09' },
+      journal: 'Nature Communications',
+      if: '[IF:17.7]',
+      titleCn: '鼠李糖乳杆菌GG通过调节肠-脑轴缓解小鼠焦虑样行为',
+      titleEn: 'Lactobacillus rhamnosus GG alleviates anxiety-like behavior in mice by modulating the gut-brain axis',
+      type: 'Article',
+      publishDate: '2025-09-29',
+      authors: [
+        { name: 'Bradley G Fitzgerald', hasEmail: false },
+        { name: 'Matthew T Sorbara', hasEmail: true }
+      ],
+      tags: ['精神益生菌', 'LGG']
+    },
+    {
+      id: 4,
+      date: { day: '15', month: '09' },
+      journal: 'The ISME Journal',
+      if: '[IF:11.0]',
+      titleCn: '母乳低聚糖 (HMOs) 对塑儿早期肠道菌群定植的选择性塑造作用',
+      titleEn: 'Selective shaping of the infant gut microbiome by human milk oligosaccharides (HMOs)',
+      type: 'Commentary',
+      publishDate: '2025-09-15',
+      authors: [
+        { name: 'Xianyun Gao', hasEmail: false },
+        { name: 'Yiyu Jin', hasEmail: false },
+        { name: 'Mengyao Liu', hasEmail: false },
+        { name: '陈泊汐', hasEmail: true },
+        { name: '叶湛瀚', hasEmail: true },
+        { name: '霍宁子', hasEmail: true }
+      ],
+      tags: ['益生元', 'HMOs']
+    },
+    {
+      id: 5,
+      date: { day: '01', month: '09' },
+      journal: 'Cell Host & Microbe',
+      if: '[IF:30.3]',
+      titleCn: '活体生物药 (LBP) 在炎症性肠病 (IBD) 治疗中的应用与挑战',
+      titleEn: 'Applications and challenges of live biotherapeutic products (LBPs) in the treatment of inflammatory bowel disease (IBD)',
+      type: 'Review',
+      publishDate: '2025-09-01',
+      authors: [
+        { name: 'Siqi Hua', hasEmail: false },
+        { name: '朱波', hasEmail: true },
+        { name: '华子春', hasEmail: true }
+      ],
+      tags: ['LBP', 'IBD']
+    }
   ];
 
-  // 滚动到指定章节
-  const scrollToSection = (id: string) => {
-    const element = document.getElementById(id);
-    if (element && contentRef.current) {
-      const headerHeight = 56;
-      const elementTop = element.offsetTop - headerHeight - 12;
-      contentRef.current.scrollTo({
-        top: elementTop,
-        behavior: 'smooth'
-      });
+  // 切换节点展开/收起
+  const toggleNode = (nodeName: string) => {
+    const newExpanded = new Set(expandedNodes);
+    if (newExpanded.has(nodeName)) {
+      newExpanded.delete(nodeName);
+    } else {
+      newExpanded.add(nodeName);
     }
+    setExpandedNodes(newExpanded);
+  };
+
+  // 递归渲染组织结构树节点
+  interface OrgNode {
+    name: string;
+    count: number;
+    children?: OrgNode[];
+  }
+
+  const renderOrgNode = (node: OrgNode, level: number = 0, isLast: boolean = false): React.ReactNode => {
+    const isExpanded = expandedNodes.has(node.name);
+    const hasChildren = node.children && node.children.length > 0;
+    const isLeaf = !hasChildren;
+
+    return (
+      <div
+        key={node.name}
+        className={`${styles.orgNodeWrapper} ${isLast ? styles.orgNodeLast : ''}`}
+        style={{
+          '--line-left': `${level * 24 + 8}px`
+        } as React.CSSProperties}
+      >
+        <div
+          className={styles.orgItemChild}
+          style={{
+            paddingLeft: `calc(${level * 24}px)`,
+            cursor: hasChildren ? 'pointer' : 'default'
+          }}
+          onClick={() => hasChildren && toggleNode(node.name)}
+        >
+          <div className={styles.orgItemIconWrapper}>
+            {isLeaf ? (
+              // 叶子节点:只显示横线
+              <div className={styles.orgLeafIcon}>
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                  <line x1="4" y1="8" x2="12" y2="8" stroke="currentColor" strokeWidth="1.5"/>
+                </svg>
+              </div>
+            ) : isExpanded ? (
+              // 已展开:圆圈-号
+              <div className={styles.orgCollapseIcon}>
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                  <circle cx="8" cy="8" r="7" stroke="currentColor" strokeWidth="1.5" fill="none"/>
+                  <line x1="4" y1="8" x2="12" y2="8" stroke="currentColor" strokeWidth="1.5"/>
+                </svg>
+              </div>
+            ) : (
+              // 未展开:圆圈+号
+              <div className={styles.orgExpandIcon}>
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                  <circle cx="8" cy="8" r="7" stroke="currentColor" strokeWidth="1.5" fill="none"/>
+                  <line x1="4" y1="8" x2="12" y2="8" stroke="currentColor" strokeWidth="1.5"/>
+                  <line x1="8" y1="4" x2="8" y2="12" stroke="currentColor" strokeWidth="1.5"/>
+                </svg>
+              </div>
+            )}
+          </div>
+          <div className={level === 0 ? `${styles.orgItemName} ${styles.orgItemNameRoot}` : styles.orgItemName}>
+            {node.name} <span className={styles.orgItemCount}>({node.count})</span>
+          </div>
+        </div>
+        {isExpanded && hasChildren && (
+          <div
+            className={styles.orgChildrenWrapper}
+            style={{
+              '--line-left': `calc(${level * 24}px + 8px)`
+            } as React.CSSProperties}
+          >
+            {node.children!.map((child, index) =>
+              renderOrgNode(child, level + 1, index === node.children!.length - 1)
+            )}
+          </div>
+        )}
+      </div>
+    );
   };
 
   return (
     <div className={styles.container}>
       {/* 顶部导航栏 */}
       <div className={styles.topBar}>
-        <NavBar
-          onBack={() => router.back()}
-          className={styles.navbar}
-          right={
-            <Space>
-              <StarOutline fontSize={20} />
-              <SendOutline fontSize={20} />
-            </Space>
-          }
-        >
-          文献详情 V3
-        </NavBar>
-      </div>
-
-      {/* 中间滚动区域 */}
-      <div className={styles.scrollArea} ref={contentRef}>
-        {/* 文章基本信息卡片 - 始终展开 */}
-        <div className={styles.heroCard}>
-          <h1 className={styles.articleTitle}>{article.title}</h1>
-          <p className={styles.articleTitleCn}>{article.titleCn}</p>
-
-          <div className={styles.metaInfo}>
-            <div className={styles.journalInfo}>
-              <span className={styles.journalName}>{article.journal}</span>
-              <span className={styles.journalYear}>{article.year}</span>
-            </div>
-            <Space className={styles.tags}>
-              {article.isOpenAccess && <Tag color="primary">OA</Tag>}
-              <Tag color="success">IF {article.impactFactor}</Tag>
-              <Tag color="warning">{article.quartile}</Tag>
-            </Space>
-          </div>
-
-          {/* 作者横向滚动 */}
-          <div className={styles.authorsScroll}>
-            {article.authors.map((author, index) => (
-              <div key={index} className={styles.authorChip}>
-                <img src={author.avatar} alt={author.name} className={styles.authorAvatar} />
-                <span className={styles.authorName}>{author.nameCn}</span>
-                {author.isCorresponding && <span className={styles.corrMark}>*</span>}
-              </div>
-            ))}
-          </div>
+        <div className={styles.topLeft}>
+          <span className={styles.logoR}>R</span>
+          <span className={styles.logoDot}>•</span>
+          <span className={styles.logoText}>base</span>
+          <Tag className={styles.docTag}>机构</Tag>
         </div>
-
-        {/* AI解读 - 默认展开 */}
-        <CollapsibleCard
-          id="ai-interpretation"
-          title="AI智能解读"
-          icon={<EditSOutline />}
-          defaultExpanded={true}
-          accentColor="var(--rbase-color-accent)"
-          count={article.aiInterpretation.length}
-        >
-          <div className={styles.aiDisclaimer}>
-            <InformationCircleOutline /> 以下内容由AI生成，仅供参考
-          </div>
-          <div className={styles.interpretGrid}>
-            {article.aiInterpretation.map((item, index) => (
-              <div key={index} className={styles.interpretItem}>
-                <RightOutline className={styles.interpretIcon} />
-                <span>{item}</span>
-              </div>
-            ))}
-          </div>
-        </CollapsibleCard>
-
-        {/* 关键词 */}
-        <CollapsibleCard
-          id="keywords"
-          title="关键词"
-          icon={<AppstoreOutline />}
-          defaultExpanded={false}
-          accentColor="var(--rbase-color-primary)"
-          count={Object.values(article.keywords).flat().length}
-        >
-          <div className={styles.keywordsSection}>
-            <div className={styles.kwRow}>
-              <span className={styles.kwLabel}>核心关键词</span>
-              <Space wrap>
-                {article.keywords.core.map((kw, i) => (
-                  <Tag key={i} color="primary">{kw}</Tag>
-                ))}
-              </Space>
-            </div>
-            <div className={styles.kwRow}>
-              <span className={styles.kwLabel}>扩展关键词</span>
-              <Space wrap>
-                {article.keywords.extended.map((kw, i) => (
-                  <Tag key={i} color="default" fill="outline">{kw}</Tag>
-                ))}
-              </Space>
-            </div>
-            <div className={styles.kwRow}>
-              <span className={styles.kwLabel}>AI生成</span>
-              <Space wrap>
-                {article.keywords.ai.map((kw, i) => (
-                  <Tag key={i} color="warning" fill="outline">{kw}</Tag>
-                ))}
-              </Space>
-            </div>
-            <div className={styles.kwRow}>
-              <span className={styles.kwLabel}>MeSH词</span>
-              <Space wrap>
-                {article.keywords.mesh.map((kw, i) => (
-                  <Tag key={i} color="success" fill="outline">{kw}</Tag>
-                ))}
-              </Space>
-            </div>
-          </div>
-        </CollapsibleCard>
-
-        {/* 治疗与干预措施 */}
-        <CollapsibleCard
-          id="interventions"
-          title="治疗与干预措施"
-          icon={<SetOutline />}
-          defaultExpanded={false}
-          accentColor="var(--rbase-color-success)"
-          count={article.interventions.length}
-        >
-          <div className={styles.interventionTable}>
-            <div className={styles.tableHeader}>
-              <span>干预物</span>
-              <span>疾病/状态</span>
-              <span>方法</span>
-              <span>结果</span>
-            </div>
-            {article.interventions.map((item, index) => (
-              <div key={index} className={styles.tableRow}>
-                <span>{item.name}</span>
-                <span>{item.condition}</span>
-                <span>{item.method}</span>
-                <Tag
-                  color={item.result === '阳性' ? 'success' : 'danger'}
-                  fill="outline"
-                  style={{ fontSize: '10px' }}
-                >
-                  {item.result}
-                </Tag>
-              </div>
-            ))}
-          </div>
-        </CollapsibleCard>
-
-        {/* 收录频道和主题词 */}
-        <CollapsibleCard
-          id="channels"
-          title="收录频道和主题词"
-          icon={<EnvironmentOutline />}
-          defaultExpanded={false}
-          accentColor="#9333ea"
-        >
-          <div className={styles.channelSection}>
-            <div className={styles.channelRow}>
-              <span className={styles.channelLabel}>收录频道</span>
-              <Space wrap>
-                {article.channels.map((ch, i) => (
-                  <Tag key={i} color="primary" fill="outline">{ch}</Tag>
-                ))}
-              </Space>
-            </div>
-            <div className={styles.channelRow}>
-              <span className={styles.channelLabel}>热心肠主题</span>
-              <Space wrap>
-                {article.hotGutTopics.map((topic, i) => (
-                  <Tag key={i} color="warning">{topic}</Tag>
-                ))}
-              </Space>
-            </div>
-          </div>
-        </CollapsibleCard>
-
-        {/* 文章属性 */}
-        <CollapsibleCard
-          id="attributes"
-          title="文章属性"
-          icon={<InformationCircleOutline />}
-          defaultExpanded={false}
-          accentColor="#0ea5e9"
-        >
-          <div className={styles.attributeGrid}>
-            <div className={styles.attrItem}>
-              <span className={styles.attrLabel}>研究类型</span>
-              <span className={styles.attrValue}>{article.articleAttributes.researchType}</span>
-            </div>
-            <div className={styles.attrItem}>
-              <span className={styles.attrLabel}>研究阶段</span>
-              <span className={styles.attrValue}>{article.articleAttributes.stage}</span>
-            </div>
-            <div className={styles.attrItem}>
-              <span className={styles.attrLabel}>证据等级</span>
-              <span className={styles.attrValue}>{article.articleAttributes.evidenceLevel}</span>
-            </div>
-            <div className={styles.attrItem}>
-              <span className={styles.attrLabel}>研究方向</span>
-              <span className={styles.attrValue}>{article.articleAttributes.direction}</span>
-            </div>
-            <div className={styles.attrItem}>
-              <span className={styles.attrLabel}>主要领域</span>
-              <span className={styles.attrValue}>{article.articleAttributes.majorField}</span>
-            </div>
-            <div className={styles.attrItem}>
-              <span className={styles.attrLabel}>资助来源</span>
-              <span className={styles.attrValue}>{article.articleAttributes.fundingSource}</span>
-            </div>
-          </div>
-        </CollapsibleCard>
-
-        {/* 实验材料和对象 */}
-        <CollapsibleCard
-          id="materials"
-          title="实验材料和对象"
-          icon={<ContentOutline />}
-          defaultExpanded={false}
-          accentColor="#f59e0b"
-        >
-          <div className={styles.materialSection}>
-            <div className={styles.materialRow}>
-              <span className={styles.materialLabel}>动物模型</span>
-              <Space wrap>
-                {article.experimentMaterials.model.map((m, i) => (
-                  <Tag key={i} fill="outline">{m}</Tag>
-                ))}
-              </Space>
-            </div>
-            <div className={styles.materialRow}>
-              <span className={styles.materialLabel}>细菌/菌株</span>
-              <Space wrap>
-                {article.experimentMaterials.bacteria.map((b, i) => (
-                  <Tag key={i} color="success" fill="outline">{b}</Tag>
-                ))}
-              </Space>
-            </div>
-            <div className={styles.materialRow}>
-              <span className={styles.materialLabel}>细胞系</span>
-              <Tag fill="outline">{article.experimentMaterials.cell}</Tag>
-            </div>
-          </div>
-        </CollapsibleCard>
-
-        {/* 临床试验信息 */}
-        <CollapsibleCard
-          id="clinical"
-          title="临床试验信息"
-          icon={<CheckCircleOutline />}
-          defaultExpanded={false}
-          accentColor="#ec4899"
-        >
-          <div className={styles.clinicalGrid}>
-            <div className={styles.clinicalItem}>
-              <span className={styles.clinicalLabel}>申办方</span>
-              <span className={styles.clinicalValue}>{article.clinicalTrial.sponsor}</span>
-            </div>
-            <div className={styles.clinicalItem}>
-              <span className={styles.clinicalLabel}>分组方式</span>
-              <span className={styles.clinicalValue}>{article.clinicalTrial.grouping}</span>
-            </div>
-            <div className={styles.clinicalItem}>
-              <span className={styles.clinicalLabel}>试验分期</span>
-              <span className={styles.clinicalValue}>{article.clinicalTrial.phase}</span>
-            </div>
-            <div className={styles.clinicalItem}>
-              <span className={styles.clinicalLabel}>受试人群</span>
-              <span className={styles.clinicalValue}>{article.clinicalTrial.population}</span>
-            </div>
-            <div className={styles.clinicalItem}>
-              <span className={styles.clinicalLabel}>盲法</span>
-              <span className={styles.clinicalValue}>{article.clinicalTrial.blinding}</span>
-            </div>
-            <div className={styles.clinicalItem}>
-              <span className={styles.clinicalLabel}>对照</span>
-              <span className={styles.clinicalValue}>{article.clinicalTrial.control}</span>
-            </div>
-            <div className={styles.clinicalItem}>
-              <span className={styles.clinicalLabel}>给药途径</span>
-              <span className={styles.clinicalValue}>{article.clinicalTrial.route}</span>
-            </div>
-            <div className={styles.clinicalItem}>
-              <span className={styles.clinicalLabel}>疗程</span>
-              <span className={styles.clinicalValue}>{article.clinicalTrial.duration}</span>
-            </div>
-            <div className={styles.clinicalItemFull}>
-              <span className={styles.clinicalLabel}>主要终点</span>
-              <span className={styles.clinicalValue}>{article.clinicalTrial.primaryEndpoint}</span>
-            </div>
-            <div className={styles.clinicalItemFull}>
-              <span className={styles.clinicalLabel}>次要终点</span>
-              <span className={styles.clinicalValue}>{article.clinicalTrial.secondaryEndpoints.join('、')}</span>
-            </div>
-            <div className={styles.clinicalLink}>
-              <LinkOutline /> 注册号: {article.clinicalTrial.registrationNumber}
-            </div>
-          </div>
-        </CollapsibleCard>
-
-        {/* 实验方法 */}
-        <CollapsibleCard
-          id="methods"
-          title="实验方法"
-          icon={<SetOutline />}
-          defaultExpanded={false}
-          accentColor="#14b8a6"
-          count={article.experimentMethods.length}
-        >
-          <Space wrap>
-            {article.experimentMethods.map((method, i) => (
-              <Tag key={i} color="primary" fill="outline">{method}</Tag>
-            ))}
-          </Space>
-          <div className={styles.subSection}>
-            <span className={styles.subLabel}>分析软件</span>
-            <Space wrap>
-              {article.analysisSoftware.map((sw, i) => (
-                <Tag key={i} fill="outline">{sw}</Tag>
-              ))}
-            </Space>
-          </div>
-        </CollapsibleCard>
-
-        {/* 分子/通路 */}
-        <CollapsibleCard
-          id="molecules"
-          title="分子/通路"
-          icon={<ClockCircleOutline />}
-          defaultExpanded={false}
-          accentColor="#8b5cf6"
-          count={article.molecules.length}
-        >
-          <div className={styles.moleculeGrid}>
-            {article.molecules.map((mol, i) => (
-              <div key={i} className={styles.moleculeItem}>
-                <span className={styles.moleculeName}>{mol.name}</span>
-                <Tag fill="outline" style={{ fontSize: '10px' }}>{mol.type}</Tag>
-              </div>
-            ))}
-          </div>
-        </CollapsibleCard>
-
-        {/* 产出与转化 */}
-        <CollapsibleCard
-          id="outputs"
-          title="产出与转化"
-          icon={<LinkOutline />}
-          defaultExpanded={false}
-          accentColor="#f43f5e"
-        >
-          <div className={styles.outputSection}>
-            {article.outputs.patents.length > 0 && (
-              <div className={styles.outputRow}>
-                <span className={styles.outputLabel}>相关专利</span>
-                {article.outputs.patents.map((p, i) => (
-                  <div key={i} className={styles.outputItem}>{p}</div>
-                ))}
-              </div>
-            )}
-            {article.outputs.products.length > 0 && (
-              <div className={styles.outputRow}>
-                <span className={styles.outputLabel}>产品开发</span>
-                {article.outputs.products.map((p, i) => (
-                  <Tag key={i} color="success">{p}</Tag>
-                ))}
-              </div>
-            )}
-            {article.outputs.guidelines.length > 0 && (
-              <div className={styles.outputRow}>
-                <span className={styles.outputLabel}>指南规范</span>
-                {article.outputs.guidelines.map((g, i) => (
-                  <div key={i} className={styles.outputItem}>{g}</div>
-                ))}
-              </div>
-            )}
-          </div>
-        </CollapsibleCard>
-
-        {/* 内容贡献者 */}
-        <CollapsibleCard
-          id="contributors"
-          title="内容贡献者"
-          icon={<UserOutline />}
-          defaultExpanded={false}
-          accentColor="#64748b"
-          count={article.contributors.length}
-        >
-          <div className={styles.contributorList}>
-            {article.contributors.map((c, i) => (
-              <div key={i} className={styles.contributorItem}>
-                <img src={c.avatar} alt={c.name} className={styles.contributorAvatar} />
-                <span className={styles.contributorName}>{c.name}</span>
-                <Tag fill="outline" style={{ fontSize: '10px' }}>{c.role}</Tag>
-              </div>
-            ))}
-          </div>
-        </CollapsibleCard>
+        <div className={styles.topRight}>
+          <UnorderedListOutline className={styles.topIcon} onClick={() => setLeftPanelVisible(true)} />
+          <SearchOutline className={styles.topIcon} />
+          <img src="https://pics-xldkp-com.oss-cn-qingdao.aliyuncs.com/users/default_avatar.png" alt="用户头像" className={styles.userAvatar} />
+        </div>
       </div>
 
-      {/* 底部快捷导航 */}
-      <div className={styles.bottomNav}>
-        <div className={styles.navScroll}>
-          {sections.map((section) => (
-            <div
-              key={section.id}
-              className={styles.navItem}
-              onClick={() => scrollToSection(section.id)}
+      {/* 可滚动内容区 */}
+      <div className={styles.scrollArea}>
+        <div className={styles.content}>
+          {/* 机构横幅 */}
+          <div className={styles.institutionBanner}>
+            <img src={institution.cover} alt={institution.name} className={styles.bannerImage} />
+            <div className={styles.bannerOverlay}>
+              <div className={styles.institutionInfo}>
+                <h1 className={styles.institutionName}>{institution.name}</h1>
+                <p className={styles.institutionNameEn}>{institution.nameEn}</p>
+              </div>
+              <button className={styles.followBtn}>
+                <AddOutline style={{ fontSize: 14 }} />
+                <span>关注</span>
+              </button>
+            </div>
+          </div>
+
+          {/* 机构统计 */}
+          <div className={styles.statsSection}>
+            <div className={styles.statItem}>
+              <div className={styles.statValue}>{institution.stats.articles}</div>
+              <div className={styles.statLabel}>期刊文章</div>
+            </div>
+            <div className={styles.statDivider}></div>
+            <div className={styles.statItem}>
+              <div className={styles.statValue}>{institution.stats.patents}</div>
+              <div className={styles.statLabel}>专利成果</div>
+            </div>
+            <div className={styles.statDivider}></div>
+            <div className={styles.statItem}>
+              <div className={styles.statValue}>{institution.stats.collaborators}</div>
+              <div className={styles.statLabel}>合作机构</div>
+            </div>
+          </div>
+
+          {/* 研究学者宫格 */}
+          <div className={styles.researcherGridSection}>
+            <Swiper
+              trackOffset={0}
+              stuckAtBoundary={false}
+              style={{
+                '--height': researcherSwiperIndex === 1 ? '200px' : '100px',
+                '--track-padding': '0px'
+              } as React.CSSProperties}
+              onIndexChange={(index) => setResearcherSwiperIndex(index)}
+              indicator={false}
             >
-              <span className={styles.navIcon}>{section.icon}</span>
-              <span className={styles.navLabel}>{section.label}</span>
+              {[
+                <Swiper.Item key="page1">
+                  <div className={styles.departmentGridSingleRow}>
+                    {institution.researchers.slice(0, 4).map((researcher, idx) => (
+                      <div key={idx} className={styles.departmentGridItem}>
+                        <img src={researcher.avatar} alt={researcher.name} className={styles.researcherGridAvatar} />
+                        <div className={styles.departmentName}>{researcher.name}</div>
+                      </div>
+                    ))}
+                  </div>
+                </Swiper.Item>,
+                institution.researchers.length > 4 ? (
+                  <Swiper.Item key="page2">
+                    <div className={styles.departmentGrid}>
+                      {institution.researchers.slice(4, 11).map((researcher, idx) => (
+                        <div key={idx} className={styles.departmentGridItem}>
+                          <img src={researcher.avatar} alt={researcher.name} className={styles.researcherGridAvatar} />
+                          <div className={styles.departmentName}>{researcher.name}</div>
+                        </div>
+                      ))}
+                      {/* 第8个位置永远显示"更多"按钮 */}
+                      <div className={styles.departmentGridItem} style={{ cursor: 'pointer' }}>
+                        <div className={styles.moreButton}>
+                          <MoreOutline style={{ fontSize: 24 }} />
+                        </div>
+                        <div className={styles.departmentName}>更多</div>
+                      </div>
+                    </div>
+                  </Swiper.Item>
+                ) : null
+              ].filter((item): item is React.ReactElement => item !== null)}
+            </Swiper>
+            <div className={styles.customIndicator}>
+              {Array.from({ length: institution.researchers.length > 4 ? 2 : 1 }).map((_, index) => (
+                <div
+                  key={index}
+                  className={`${styles.indicatorDot} ${index === researcherSwiperIndex ? styles.indicatorDotActive : ''}`}
+                />
+              ))}
             </div>
-          ))}
+          </div>
+
+          {/* 筛选标签区 */}
+          {activeFilters.length > 0 && (
+            <div className={styles.filterTags}>
+              <span className={styles.filterTagsLabel}>当前未选择任何筛选条件</span>
+              <div className={styles.activeFilters}>
+                {activeFilters.map((filter, idx) => (
+                  <Tag
+                    key={idx}
+                    color="primary"
+                    className={styles.activeFilterTag}
+                    onClick={() => {
+                      setActiveFilters(activeFilters.filter((_, i) => i !== idx));
+                    }}
+                  >
+                    {filter}
+                    <CloseOutline style={{ marginLeft: 4, fontSize: 12 }} />
+                  </Tag>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* 文献列表区域 */}
+          <div className={styles.listSection}>
+            <div className={styles.listTabBar}>
+              <div className={styles.listTabs}>
+                <div
+                  className={`${styles.listTab} ${activeTab === 'articles' ? styles.listTabActive : ''}`}
+                  onClick={() => setActiveTab('articles')}
+                >
+                  文献 (850+)
+                </div>
+                <div
+                  className={`${styles.listTab} ${activeTab === 'patents' ? styles.listTabActive : ''}`}
+                  onClick={() => setActiveTab('patents')}
+                >
+                  专利 (25)
+                </div>
+              </div>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                <div className={styles.sortBtn}>
+                  <span>发表时间</span>
+                  <DownOutline style={{ fontSize: 12, marginLeft: 4 }} />
+                </div>
+                <FilterOutline
+                  style={{ fontSize: 20, color: 'var(--rbase-color-text-secondary)', cursor: 'pointer' }}
+                  onClick={() => setFilterPanelVisible(true)}
+                />
+              </div>
+            </div>
+
+            <div className={styles.articleList}>
+              {articles.map((article) => (
+                <div key={article.id} className={styles.articleItem}>
+                  <div className={styles.articleDate}>
+                    <div className={styles.articleDay}>{article.date.day}</div>
+                    <div className={styles.articleMonth}>{article.date.month}</div>
+                  </div>
+                  <div className={styles.articleMain}>
+                    <div className={styles.articleHeader}>
+                      <span className={styles.articleJournal}>{article.journal}</span>
+                      <span className={styles.headerSeparator}>•</span>
+                      <span className={styles.articleIF}>{article.if}</span>
+                    </div>
+                    <div className={styles.articleTitleCn}>{article.titleCn}</div>
+                    <div className={styles.articleTitleEn}>{article.titleEn}</div>
+                    <div className={styles.articleMeta}>
+                      <div className={styles.articleMetaRow}>
+                        <span className={styles.articleType}>{article.type}</span>
+                        <span className={styles.headerSeparator}>•</span>
+                        <span className={styles.articleMetaDate}>{article.publishDate}</span>
+                      </div>
+                      <div className={styles.articleAuthors}>
+                        {article.authors.map((author, idx) => (
+                          <span key={idx} className={styles.authorItem}>
+                            {author.name}
+                            {author.hasEmail && <span className={styles.mailIcon}>✉</span>}
+                            {idx < article.authors.length - 1 && ' | '}
+                          </span>
+                        ))}
+                      </div>
+                    </div>
+                    <div className={styles.articleBottom}>
+                      <div className={styles.articleKeywords}>
+                        {article.tags.map((tag, idx) => (
+                          <Tag key={idx} color="primary" fill="outline" className={styles.keywordTag}>
+                            {tag}
+                          </Tag>
+                        ))}
+                      </div>
+                      <MoreOutline className={styles.articleMore} />
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
         </div>
       </div>
+
+      {/* 底部 AI 问答栏 */}
+      <div className={styles.bottomBar}>
+        <div className={styles.aiButton}>
+          <span className={styles.aiIcon}>✦</span>
+          <span>AI问答</span>
+        </div>
+        <div className={styles.inputWrapper}>
+          <input type="text" placeholder="输入问题，对话权威文献" className={styles.inputField} />
+        </div>
+        <div className={styles.upButton}>
+          <UpOutline />
+        </div>
+      </div>
+
+      {/* 左侧组织结构面板 */}
+      <Popup
+        visible={leftPanelVisible}
+        onMaskClick={() => setLeftPanelVisible(false)}
+        position="left"
+        bodyStyle={{ width: '80vw', maxWidth: '300px' }}
+      >
+        <div className={styles.leftPanel}>
+          <div className={styles.leftPanelHeader}>
+            <span className={styles.leftPanelTitle}>组织结构图</span>
+            <span className={styles.leftPanelClose} onClick={() => setLeftPanelVisible(false)}>×</span>
+          </div>
+          <div className={styles.leftPanelBody}>
+            {/* 组织结构树 */}
+            <div className={styles.orgSection}>
+              <div className={styles.orgTree}>
+                {institution.departments.map(dept => renderOrgNode(dept))}
+              </div>
+            </div>
+
+            {/* 官方链接 */}
+            <div className={styles.linksSection}>
+              <div className={styles.linksSectionTitle}>官方链接</div>
+              {institution.links.map((link, idx) => (
+                <div key={idx} className={styles.linkItem}>
+                  <span className={styles.linkIcon}>{link.icon}</span>
+                  <span className={styles.linkLabel}>{link.label}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </Popup>
+
+      {/* 右侧筛选面板 */}
+      <Popup
+        visible={filterPanelVisible}
+        onMaskClick={() => setFilterPanelVisible(false)}
+        position="right"
+        bodyStyle={{ width: '85vw', maxWidth: '400px' }}
+      >
+        <div className={styles.drawer}>
+          <div className={styles.drawerHeader}>
+            <span className={styles.drawerTitle}>筛选文献</span>
+            <span className={styles.drawerClose} onClick={() => setFilterPanelVisible(false)}>×</span>
+          </div>
+          <div className={styles.drawerBody}>
+            <div className={styles.drawerMenu}>
+              <div
+                className={`${styles.drawerMenuItem} ${activeFilterMenu === '研究领域' ? styles.drawerMenuItemActive : ''}`}
+                onClick={() => setActiveFilterMenu('研究领域')}
+              >
+                研究领域
+              </div>
+              <div
+                className={`${styles.drawerMenuItem} ${activeFilterMenu === '按学者' ? styles.drawerMenuItemActive : ''}`}
+                onClick={() => setActiveFilterMenu('按学者')}
+              >
+                按学者
+              </div>
+              <div
+                className={`${styles.drawerMenuItem} ${activeFilterMenu === '按机构' ? styles.drawerMenuItemActive : ''}`}
+                onClick={() => setActiveFilterMenu('按机构')}
+              >
+                按机构
+              </div>
+              <div
+                className={`${styles.drawerMenuItem} ${activeFilterMenu === '期刊分区' ? styles.drawerMenuItemActive : ''}`}
+                onClick={() => setActiveFilterMenu('期刊分区')}
+              >
+                期刊分区
+              </div>
+              <div
+                className={`${styles.drawerMenuItem} ${activeFilterMenu === '发表年份' ? styles.drawerMenuItemActive : ''}`}
+                onClick={() => setActiveFilterMenu('发表年份')}
+              >
+                发表年份
+              </div>
+            </div>
+            <div className={styles.drawerContent}>
+              {activeFilterMenu === '研究领域' && (
+                <div className={styles.drawerSection}>
+                  <div className={styles.kwGroup}>
+                    <span className={styles.kwGroupLabel}>研究领域和方向</span>
+                    <div className={styles.kwGroupTags}>
+                      {filterData.researchFields.map((item, idx) => (
+                        <Tag
+                          key={idx}
+                          color={activeFilters.includes(`${item.label} (${item.count})`) ? 'primary' : 'default'}
+                          fill={activeFilters.includes(`${item.label} (${item.count})`) ? 'solid' : 'outline'}
+                          onClick={() => {
+                            const filterText = `${item.label} (${item.count})`;
+                            if (activeFilters.includes(filterText)) {
+                              setActiveFilters(activeFilters.filter(f => f !== filterText));
+                            } else {
+                              setActiveFilters([...activeFilters, filterText]);
+                            }
+                          }}
+                        >
+                          {item.label} ({item.count})
+                        </Tag>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {activeFilterMenu === '按学者' && (
+                <div className={styles.drawerSection}>
+                  <div className={styles.kwGroup}>
+                    <span className={styles.kwGroupLabel}>按学者筛选</span>
+                    <div className={styles.kwGroupTags}>
+                      {filterData.authors.map((item, idx) => (
+                        <Tag key={idx} color="default" fill="outline">
+                          {item.label} ({item.count})
+                        </Tag>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {activeFilterMenu === '按机构' && (
+                <div className={styles.drawerSection}>
+                  <div className={styles.kwGroup}>
+                    <span className={styles.kwGroupLabel}>按院系/实验室筛选</span>
+                    <div className={styles.kwGroupTags}>
+                      {filterData.institutions.map((item, idx) => (
+                        <Tag key={idx} color="default" fill="outline">
+                          {item.label} ({item.count})
+                        </Tag>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {activeFilterMenu === '期刊分区' && (
+                <div className={styles.drawerSection}>
+                  <div className={styles.kwGroup}>
+                    <span className={styles.kwGroupLabel}>期刊分区</span>
+                    <div className={styles.kwGroupTags}>
+                      {filterData.journals.map((item, idx) => (
+                        <Tag key={idx} color="default" fill="outline">
+                          {item.label} ({item.count})
+                        </Tag>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {activeFilterMenu === '发表年份' && (
+                <div className={styles.drawerSection}>
+                  <div className={styles.kwGroup}>
+                    <span className={styles.kwGroupLabel}>发表年份</span>
+                    <div className={styles.kwGroupTags}>
+                      {filterData.publishYear.map((item, idx) => (
+                        <Tag key={idx} color="default" fill="outline">
+                          {item.label} ({item.count})
+                        </Tag>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
+      </Popup>
     </div>
   );
 }

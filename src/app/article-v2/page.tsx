@@ -25,25 +25,28 @@ import {
   TeamOutline,
   GlobalOutline,
   UnorderedListOutline,
-  AddOutline
+  AppOutline,
+  ShopbagOutline,
+  UpOutline,
+  DownOutline,
+  CloseOutline,
+  FilterOutline
 } from 'antd-mobile-icons';
 import styles from './page.module.css';
 
-// 菜单项类型
-interface MenuItem {
-  id: string;
-  icon: React.ReactNode;
-  label: string;
-  content: React.ReactNode;
-}
-
 export default function ArticleV2Page() {
   const router = useRouter();
-  const [drawerVisible, setDrawerVisible] = useState(false);
-  const [drawerContent, setDrawerContent] = useState<MenuItem | null>(null);
+  const [filterPanelVisible, setFilterPanelVisible] = useState(false);
+  const [activeFilterMenu, setActiveFilterMenu] = useState('影响因子');
   const [aiPopupVisible, setAiPopupVisible] = useState(false);
   const [aiPopupContent, setAiPopupContent] = useState({ title: '', content: '' });
   const [aiTabKey, setAiTabKey] = useState('cn');
+  const [activeFilters, setActiveFilters] = useState<string[]>(['0-5 (452)', '5-10 (311)', '10-15 (189)']);
+
+  // 格式化数量显示
+  const formatCount = (count: number) => {
+    return count > 100 ? '100+' : count.toString();
+  };
 
   const article = {
     type: "Article",
@@ -156,15 +159,87 @@ export default function ArticleV2Page() {
 
   // 分类菜单数据
   const categoryMenus = [
-    { id: 'probiotics', label: '益生菌', count: 8162, active: true },
-    { id: 'lbp', label: '药品/LBP', count: 450 },
-    { id: 'prebiotics', label: '益生元/纤维', count: 980 },
-    { id: 'postbiotics', label: '后生元', count: 230 },
-    { id: 'synbiotics', label: '合生制剂', count: 410 },
-    { id: 'fermented', label: '发酵食品', count: 760 },
-    { id: 'patent', label: '专利', count: 5721 },
-    { id: 'product', label: '产品', count: 1500 },
+    { id: 'probiotics', label: '益生菌', count: 8162, active: true, icon: <AppOutline /> },
+    { id: 'lbp', label: '药品/LBP', count: 450, icon: <CheckCircleOutline /> },
+    { id: 'prebiotics', label: '益生元/纤维', count: 980, icon: <UnorderedListOutline /> },
+    { id: 'postbiotics', label: '后生元', count: 230, icon: <UnorderedListOutline /> },
+    { id: 'synbiotics', label: '合生制剂', count: 410, icon: <SetOutline /> },
+    { id: 'fermented', label: '发酵食品', count: 760, icon: <AppstoreOutline /> },
+    { id: 'patent', label: '专利', count: 5721, icon: <FileOutline /> },
+    { id: 'product', label: '产品', count: 1500, icon: <ShopbagOutline /> },
   ];
+
+  // 筛选数据
+  const filterData = {
+    healthEffects: [
+      { label: '调节肠道菌群', count: 210 },
+      { label: '改善便秘', count: 150 },
+      { label: '预防腹泻', count: 121 },
+      { label: '增强免疫力', count: 101 },
+      { label: '缓解过敏症状', count: 95 },
+      { label: '体重管理', count: 88 },
+      { label: '降低胆固醇', count: 76 },
+      { label: '改善血糖', count: 65 },
+      { label: '女性私密健康', count: 54 },
+      { label: '改善皮肤状况', count: 43 },
+      { label: '缓解焦虑抑郁', count: 32 },
+      { label: '促进钙吸收', count: 21 },
+      { label: '抗氧化', count: 15 },
+      { label: '改善睡眠', count: 9 },
+      { label: '口腔健康', count: 5 },
+    ],
+    strains: [
+      { label: '鼠李糖乳杆菌GG', count: 88 },
+      { label: '动物双歧杆菌Bb-12', count: 76 },
+      { label: '乳双歧杆菌HN019', count: 65 },
+      { label: '嗜酸乳杆菌NCFM', count: 54 },
+      { label: '植物乳杆菌299v', count: 51 },
+      { label: '罗伊氏乳杆菌DSM17938', count: 49 },
+      { label: '干酪乳杆菌代田株', count: 45 },
+      { label: '长双歧杆菌BB536', count: 41 },
+      { label: '菊粉', count: 95 },
+      { label: '低聚果糖(FOS)', count: 81 },
+      { label: '低聚半乳糖(GOS)', count: 72 },
+      { label: '抗性糊精', count: 60 },
+      { label: '母乳低聚糖(HMOs)', count: 58 },
+      { label: '益生菌组合', count: 25 },
+      { label: '后生元', count: 20 },
+    ],
+    materials: [
+      { label: '健康成人', count: 210 },
+      { label: '婴幼儿', count: 155 },
+      { label: 'IBD患者', count: 88 },
+      { label: '过敏儿童', count: 72 },
+      { label: '肥胖人群', count: 61 },
+      { label: '老年人', count: 50 },
+      { label: '孕妇', count: 41 },
+      { label: 'C57BL/6J小鼠', count: 30 },
+      { label: 'BALB/c小鼠', count: 19 },
+      { label: 'Wistar大鼠', count: 15 },
+      { label: 'SD大鼠', count: 9 },
+      { label: '体外肠道模型', count: 5 },
+      { label: 'Caco-2细胞', count: 3 },
+      { label: 'HT-29细胞', count: 1 },
+      { label: '巨噬细胞RAW264.7', count: 1 },
+    ],
+    clinical: [
+      { label: '人体干预试验', count: 98 },
+      { label: '随机对照试验(RCT)', count: 81 },
+      { label: '双盲', count: 76 },
+      { label: '安慰剂对照', count: 72 },
+      { label: '交叉设计', count: 45 },
+      { label: '平行设计', count: 33 },
+      { label: '剂量效应研究', count: 21 },
+      { label: '安全性评估', count: 15 },
+      { label: '有效性评估', count: 12 },
+      { label: '长期跟踪', count: 8 },
+      { label: '招募中', count: 5 },
+      { label: '已完成', count: 101 },
+      { label: '单中心研究', count: 67 },
+      { label: '多中心研究', count: 81 },
+      { label: 'I期临床试验', count: 4 },
+    ],
+  };
 
   // 文献列表数据
   const [activeListTab, setActiveListTab] = useState<'literature' | 'patent'>('literature');
@@ -263,321 +338,6 @@ export default function ArticleV2Page() {
     },
   ];
 
-  // 菜单配置
-  const menuItems: MenuItem[] = [
-    {
-      id: 'keywords',
-      icon: <AppstoreOutline />,
-      label: '关键词',
-      content: (
-        <div className={styles.drawerSection}>
-          <div className={styles.kwGroup}>
-            <span className={styles.kwGroupLabel}>核心关键词</span>
-            <div className={styles.kwGroupTags}>
-              {article.keywords.core.map((kw, i) => (
-                <Tag key={i} color="primary">{kw}</Tag>
-              ))}
-            </div>
-          </div>
-          <div className={styles.kwGroup}>
-            <span className={styles.kwGroupLabel}>扩展关键词</span>
-            <div className={styles.kwGroupTags}>
-              {article.keywords.extended.map((kw, i) => (
-                <Tag key={i} fill="outline">{kw}</Tag>
-              ))}
-            </div>
-          </div>
-          <div className={styles.kwGroup}>
-            <span className={styles.kwGroupLabel}>AI生成</span>
-            <div className={styles.kwGroupTags}>
-              {article.keywords.ai.map((kw, i) => (
-                <Tag key={i} color="warning" fill="outline">{kw}</Tag>
-              ))}
-            </div>
-          </div>
-          <div className={styles.kwGroup}>
-            <span className={styles.kwGroupLabel}>MeSH词</span>
-            <div className={styles.kwGroupTags}>
-              {article.keywords.mesh.map((kw, i) => (
-                <Tag key={i} color="success" fill="outline">{kw}</Tag>
-              ))}
-            </div>
-          </div>
-        </div>
-      )
-    },
-    {
-      id: 'interventions',
-      icon: <SetOutline />,
-      label: '干预措施',
-      content: (
-        <div className={styles.drawerSection}>
-          <div className={styles.interventionTable}>
-            <div className={styles.tableHeader}>
-              <span>措施</span>
-              <span>适应情况</span>
-              <span>方法</span>
-              <span>结果</span>
-            </div>
-            {article.interventions.map((item, i) => (
-              <div key={i} className={styles.tableRow}>
-                <span>{item.name}</span>
-                <span>{item.condition}</span>
-                <span>{item.method}</span>
-                <Tag color={item.result === '阳性' ? 'success' : 'danger'} fill="outline">
-                  {item.result}
-                </Tag>
-              </div>
-            ))}
-          </div>
-        </div>
-      )
-    },
-    {
-      id: 'channels',
-      icon: <TagOutline />,
-      label: '频道主题',
-      content: (
-        <div className={styles.drawerSection}>
-          <div className={styles.kwGroup}>
-            <span className={styles.kwGroupLabel}>收录频道</span>
-            <div className={styles.kwGroupTags}>
-              {article.channels.map((ch, i) => (
-                <Tag key={i} color="primary" fill="outline">{ch}</Tag>
-              ))}
-            </div>
-          </div>
-          <div className={styles.kwGroup}>
-            <span className={styles.kwGroupLabel}>主题词</span>
-            <div className={styles.kwGroupTags}>
-              {article.topics.map((tp, i) => (
-                <Tag key={i}>{tp}</Tag>
-              ))}
-            </div>
-          </div>
-        </div>
-      )
-    },
-    {
-      id: 'attributes',
-      icon: <InformationCircleOutline />,
-      label: '文章属性',
-      content: (
-        <div className={styles.drawerSection}>
-          <div className={styles.attrGrid}>
-            <div className={styles.attrGridItem}>
-              <span className={styles.attrGridLabel}>研究类型</span>
-              <span className={styles.attrGridValue}>{article.articleAttributes.researchType}</span>
-            </div>
-            <div className={styles.attrGridItem}>
-              <span className={styles.attrGridLabel}>转化阶段</span>
-              <span className={styles.attrGridValue}>{article.articleAttributes.stage}</span>
-            </div>
-            <div className={styles.attrGridItem}>
-              <span className={styles.attrGridLabel}>循证等级</span>
-              <span className={styles.attrGridValue}>{article.articleAttributes.evidenceLevel}</span>
-            </div>
-            <div className={styles.attrGridItem}>
-              <span className={styles.attrGridLabel}>转化方向</span>
-              <span className={styles.attrGridValue}>{article.articleAttributes.direction}</span>
-            </div>
-            <div className={styles.attrGridItem}>
-              <span className={styles.attrGridLabel}>大类学科</span>
-              <span className={styles.attrGridValue}>{article.articleAttributes.majorField}</span>
-            </div>
-            <div className={styles.attrGridItem}>
-              <span className={styles.attrGridLabel}>小类学科</span>
-              <span className={styles.attrGridValue}>{article.articleAttributes.minorFields.join('、')}</span>
-            </div>
-          </div>
-        </div>
-      )
-    },
-    {
-      id: 'materials',
-      icon: <UnorderedListOutline />,
-      label: '实验材料',
-      content: (
-        <div className={styles.drawerSection}>
-          <div className={styles.kwGroup}>
-            <span className={styles.kwGroupLabel}>模型</span>
-            <div className={styles.kwGroupTags}>
-              {article.experimentMaterials.model.map((m, i) => (
-                <Tag key={i}>{m}</Tag>
-              ))}
-            </div>
-          </div>
-          <div className={styles.kwGroup}>
-            <span className={styles.kwGroupLabel}>微生物</span>
-            <div className={styles.kwGroupTags}>
-              {article.experimentMaterials.bacteria.map((b, i) => (
-                <Tag key={i} color="success" fill="outline">{b}</Tag>
-              ))}
-            </div>
-          </div>
-          <div className={styles.kwGroup}>
-            <span className={styles.kwGroupLabel}>细胞</span>
-            <div className={styles.kwGroupTags}>
-              <Tag>{article.experimentMaterials.cell}</Tag>
-            </div>
-          </div>
-        </div>
-      )
-    },
-    {
-      id: 'clinical',
-      icon: <CheckCircleOutline />,
-      label: '临床试验',
-      content: (
-        <div className={styles.drawerSection}>
-          <div className={styles.attrGrid}>
-            <div className={styles.attrGridItem}>
-              <span className={styles.attrGridLabel}>发起方</span>
-              <span className={styles.attrGridValue}>{article.clinicalTrial.sponsor}</span>
-            </div>
-            <div className={styles.attrGridItem}>
-              <span className={styles.attrGridLabel}>分组</span>
-              <span className={styles.attrGridValue}>{article.clinicalTrial.grouping}</span>
-            </div>
-            <div className={styles.attrGridItem}>
-              <span className={styles.attrGridLabel}>阶段</span>
-              <span className={styles.attrGridValue}>{article.clinicalTrial.phase}</span>
-            </div>
-            <div className={styles.attrGridItem}>
-              <span className={styles.attrGridLabel}>人群</span>
-              <span className={styles.attrGridValue}>{article.clinicalTrial.population}</span>
-            </div>
-            <div className={styles.attrGridItem}>
-              <span className={styles.attrGridLabel}>盲法</span>
-              <span className={styles.attrGridValue}>{article.clinicalTrial.blinding}</span>
-            </div>
-            <div className={styles.attrGridItem}>
-              <span className={styles.attrGridLabel}>对照</span>
-              <span className={styles.attrGridValue}>{article.clinicalTrial.control}</span>
-            </div>
-          </div>
-          <div className={styles.clinicalLink}>
-            <LinkOutline /> 注册号: {article.clinicalTrial.registrationNumber}
-          </div>
-        </div>
-      )
-    },
-    {
-      id: 'methods',
-      icon: <BillOutline />,
-      label: '实验方法',
-      content: (
-        <div className={styles.drawerSection}>
-          <div className={styles.kwGroup}>
-            <span className={styles.kwGroupLabel}>实验方法</span>
-            <div className={styles.kwGroupTags}>
-              {article.experimentMethods.map((m, i) => (
-                <Tag key={i} color="primary" fill="outline">{m}</Tag>
-              ))}
-            </div>
-          </div>
-          <div className={styles.kwGroup}>
-            <span className={styles.kwGroupLabel}>分析软件</span>
-            <div className={styles.kwGroupTags}>
-              {article.analysisMethods.map((m, i) => (
-                <Tag key={i}>{m}</Tag>
-              ))}
-            </div>
-          </div>
-        </div>
-      )
-    },
-    {
-      id: 'molecules',
-      icon: <TransportQRcodeOutline />,
-      label: '分子通路',
-      content: (
-        <div className={styles.drawerSection}>
-          <div className={styles.kwGroup}>
-            <span className={styles.kwGroupLabel}>生化分子</span>
-            <div className={styles.kwGroupTags}>
-              {article.molecules.biochemical.map((m, i) => (
-                <Tag key={i}>{m}</Tag>
-              ))}
-            </div>
-          </div>
-          <div className={styles.kwGroup}>
-            <span className={styles.kwGroupLabel}>靶点/标志物</span>
-            <div className={styles.kwGroupTags}>
-              {article.molecules.targets.map((m, i) => (
-                <Tag key={i} color="warning">{m}</Tag>
-              ))}
-            </div>
-          </div>
-          <div className={styles.kwGroup}>
-            <span className={styles.kwGroupLabel}>通路</span>
-            <div className={styles.kwGroupTags}>
-              {article.molecules.pathways.map((m, i) => (
-                <Tag key={i} color="success">{m}</Tag>
-              ))}
-            </div>
-          </div>
-        </div>
-      )
-    },
-    {
-      id: 'outputs',
-      icon: <GlobalOutline />,
-      label: '产出转化',
-      content: (
-        <div className={styles.drawerSection}>
-          <div className={styles.kwGroup}>
-            <span className={styles.kwGroupLabel}>研究资源</span>
-            <div className={styles.kwGroupTags}>
-              {article.outputs.resources.map((r, i) => (
-                <Tag key={i}>{r}</Tag>
-              ))}
-            </div>
-          </div>
-          <div className={styles.kwGroup}>
-            <span className={styles.kwGroupLabel}>相关产品</span>
-            <div className={styles.kwGroupTags}>
-              {article.outputs.products.map((p, i) => (
-                <Tag key={i} color="success">{p}</Tag>
-              ))}
-            </div>
-          </div>
-          <div className={styles.kwGroup}>
-            <span className={styles.kwGroupLabel}>相关企业</span>
-            <div className={styles.kwGroupTags}>
-              {article.outputs.companies.map((c, i) => (
-                <Tag key={i} color="primary" fill="outline">{c}</Tag>
-              ))}
-            </div>
-          </div>
-        </div>
-      )
-    },
-    {
-      id: 'contributors',
-      icon: <TeamOutline />,
-      label: '贡献者',
-      content: (
-        <div className={styles.drawerSection}>
-          <div className={styles.contributorGrid}>
-            {article.contributors.map((name, i) => (
-              <div key={i} className={styles.contributorCard}>
-                <div className={styles.contributorAvatar}>{name.charAt(0)}</div>
-                <span className={styles.contributorName}>{name}</span>
-              </div>
-            ))}
-          </div>
-        </div>
-      )
-    }
-  ];
-
-  // 打开抽屉
-  const openDrawer = (item: MenuItem) => {
-    setDrawerContent(item);
-    setDrawerVisible(true);
-  };
-
   // 打开AI解读弹窗
   const openAiPopup = (item: typeof article.aiInterpretation[0]) => {
     setAiPopupContent({ title: item.label, content: '' });
@@ -606,19 +366,14 @@ export default function ArticleV2Page() {
       {/* 顶部导航 */}
       <div className={styles.topBar}>
         <div className={styles.topLeft}>
-          <span className={styles.backBtn} onClick={() => router.back()}>
-            <LeftOutline />
-          </span>
           <span className={styles.logoR}>R</span>
-          <span className={styles.logoDot}>·</span>
+          <span className={styles.logoDot}>•</span>
           <span className={styles.logoText}>base</span>
-          <Tag className={styles.docTag}>文献</Tag>
+          <Tag className={styles.docTag}>HOPE</Tag>
         </div>
         <div className={styles.topRight}>
           <SearchOutline className={styles.topIcon} />
-          <div className={styles.userAvatar}>
-            <UserOutline />
-          </div>
+          <img src="https://pics-xldkp-com.oss-cn-qingdao.aliyuncs.com/users/default_avatar.png" alt="用户头像" className={styles.userAvatar} />
         </div>
       </div>
 
@@ -628,6 +383,13 @@ export default function ArticleV2Page() {
           {/* 期刊封面 */}
           <div className={styles.coverSection}>
             <img src={article.coverImage} alt={article.journal} className={styles.coverImage} />
+            <div className={styles.coverOverlay}>
+              <div className={styles.coverText}>
+                <h1 className={styles.coverTitleCn}>全球益生菌/益生元循证知识库</h1>
+                <p className={styles.coverTitleEn}>The Global Evidence-based Database for Health Outcomes of Pro/PrEbiotics</p>
+              </div>
+              <button className={styles.followBtn}>+ 关注</button>
+            </div>
           </div>
 
           {/* 两行宫格菜单 */}
@@ -639,7 +401,7 @@ export default function ArticleV2Page() {
                     key={item.id}
                     className={`${styles.menuItem} ${item.active ? styles.menuItemActive : ''}`}
                   >
-                    <AddOutline className={styles.menuIcon} fontSize={20} />
+                    <div className={styles.menuIcon}>{item.icon}</div>
                     <span className={styles.menuLabel}>{item.label}</span>
                     <span className={styles.menuCount}>({item.count})</span>
                   </div>
@@ -651,7 +413,7 @@ export default function ArticleV2Page() {
                     key={item.id}
                     className={`${styles.menuItem} ${item.active ? styles.menuItemActive : ''}`}
                   >
-                    <AddOutline className={styles.menuIcon} fontSize={20} />
+                    <div className={styles.menuIcon}>{item.icon}</div>
                     <span className={styles.menuLabel}>{item.label}</span>
                     <span className={styles.menuCount}>({item.count})</span>
                   </div>
@@ -669,23 +431,50 @@ export default function ArticleV2Page() {
                   className={`${styles.listTab} ${activeListTab === 'literature' ? styles.listTabActive : ''}`}
                   onClick={() => setActiveListTab('literature')}
                 >
-                  文献 (12,409)
+                  文献 ({formatCount(12409)})
                 </div>
                 <div
                   className={`${styles.listTab} ${activeListTab === 'patent' ? styles.listTabActive : ''}`}
                   onClick={() => setActiveListTab('patent')}
                 >
-                  专利 (5,721)
-                </div>
-                <div className={styles.refreshBtn}>
-                  <Image src="/icons/refresh-circle.svg" alt="刷新" width={18} height={18} />
+                  专利 ({formatCount(5721)})
                 </div>
               </div>
-              <div className={styles.sortBtn}>
-                发表时间
-                <Image src="/icons/arrow-down.svg" alt="排序" width={12} height={12} />
+              <div className={styles.analysisBtn}>
+                <Image src="/icons/refresh-circle.svg" alt="数据分析" width={18} height={18} />
+              </div>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '12px', flexShrink: 0 }}>
+                <div className={styles.sortBtn}>
+                  发表时间
+                  <Image src="/icons/arrow-down.svg" alt="排序" width={12} height={12} />
+                </div>
+                <div className={styles.filterBtn} onClick={() => setFilterPanelVisible(true)}>
+                  <FilterOutline style={{ fontSize: 18 }} />
+                </div>
               </div>
             </div>
+
+            {/* 筛选标签 */}
+            {activeFilters.length > 0 && (
+              <div className={styles.filterTags}>
+                <div className={styles.filterTagsLabel}>全部分类 &gt; 益生菌</div>
+                <div className={styles.activeFilters}>
+                  {activeFilters.map((filter, idx) => (
+                    <Tag
+                      key={idx}
+                      color="primary"
+                      className={styles.activeFilterTag}
+                      onClick={() => {
+                        setActiveFilters(activeFilters.filter((_, i) => i !== idx));
+                      }}
+                    >
+                      {filter}
+                      <CloseOutline style={{ marginLeft: 4, fontSize: 12 }} />
+                    </Tag>
+                  ))}
+                </div>
+              </div>
+            )}
 
             {/* 文献卡片列表 */}
             <div className={styles.articleList}>
@@ -749,24 +538,6 @@ export default function ArticleV2Page() {
         </div>
       </div>
 
-      {/* 右侧抽屉 */}
-      <Popup
-        visible={drawerVisible}
-        onMaskClick={() => setDrawerVisible(false)}
-        position="right"
-        bodyStyle={{ width: '80vw', maxWidth: '320px' }}
-      >
-        <div className={styles.drawer}>
-          <div className={styles.drawerHeader}>
-            <span className={styles.drawerTitle}>{drawerContent?.label}</span>
-            <span className={styles.drawerClose} onClick={() => setDrawerVisible(false)}>×</span>
-          </div>
-          <div className={styles.drawerBody}>
-            {drawerContent?.content}
-          </div>
-        </div>
-      </Popup>
-
       {/* AI解读底部弹窗 */}
       <Popup
         visible={aiPopupVisible}
@@ -785,6 +556,163 @@ export default function ArticleV2Page() {
           </Tabs>
           <div className={styles.aiPopupContent}>
             {article.aiInterpretation.find(a => a.label === aiPopupContent.title)?.[aiTabKey === 'cn' ? 'cnContent' : 'enContent']}
+          </div>
+        </div>
+      </Popup>
+
+      {/* 右侧筛选面板 */}
+      <Popup
+        visible={filterPanelVisible}
+        onMaskClick={() => setFilterPanelVisible(false)}
+        position="right"
+        bodyStyle={{ width: '85vw', maxWidth: '400px' }}
+      >
+        <div className={styles.drawer}>
+          <div className={styles.drawerHeader}>
+            <span className={styles.drawerTitle}>结构化解读</span>
+            <span className={styles.drawerClose} onClick={() => setFilterPanelVisible(false)}>×</span>
+          </div>
+          <div className={styles.drawerBody}>
+            <div className={styles.drawerMenu}>
+              <div
+                className={`${styles.drawerMenuItem} ${activeFilterMenu === '影响因子' ? styles.drawerMenuItemActive : ''}`}
+                onClick={() => setActiveFilterMenu('影响因子')}
+              >
+                影响因子
+              </div>
+              <div
+                className={`${styles.drawerMenuItem} ${activeFilterMenu === '发表日期' ? styles.drawerMenuItemActive : ''}`}
+                onClick={() => setActiveFilterMenu('发表日期')}
+              >
+                发表日期
+              </div>
+              <div
+                className={`${styles.drawerMenuItem} ${activeFilterMenu === '健康效应' ? styles.drawerMenuItemActive : ''}`}
+                onClick={() => setActiveFilterMenu('健康效应')}
+              >
+                健康效应
+              </div>
+              <div
+                className={`${styles.drawerMenuItem} ${activeFilterMenu === '菌株/原料' ? styles.drawerMenuItemActive : ''}`}
+                onClick={() => setActiveFilterMenu('菌株/原料')}
+              >
+                菌株/原料
+              </div>
+              <div
+                className={`${styles.drawerMenuItem} ${activeFilterMenu === '实验材料' ? styles.drawerMenuItemActive : ''}`}
+                onClick={() => setActiveFilterMenu('实验材料')}
+              >
+                实验材料
+              </div>
+              <div
+                className={`${styles.drawerMenuItem} ${activeFilterMenu === '临床试验' ? styles.drawerMenuItemActive : ''}`}
+                onClick={() => setActiveFilterMenu('临床试验')}
+              >
+                临床试验
+              </div>
+            </div>
+            <div className={styles.drawerContent}>
+              {activeFilterMenu === '影响因子' && (
+                <div className={styles.drawerSection}>
+                  <div className={styles.kwGroup}>
+                    <span className={styles.kwGroupLabel}>影响因子</span>
+                    <div className={styles.kwGroupTags}>
+                      {['0-5 (452)', '5-10 (311)', '10-15 (189)', '15-20 (98)', '20-30 (45)', '30+ (12)'].map((option, idx) => (
+                        <Tag
+                          key={idx}
+                          color={activeFilters.includes(option) ? 'primary' : 'default'}
+                          fill={activeFilters.includes(option) ? 'solid' : 'outline'}
+                          onClick={() => {
+                            if (activeFilters.includes(option)) {
+                              setActiveFilters(activeFilters.filter(f => f !== option));
+                            } else {
+                              setActiveFilters([...activeFilters, option]);
+                            }
+                          }}
+                        >
+                          {option}
+                        </Tag>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {activeFilterMenu === '发表日期' && (
+                <div className={styles.drawerSection}>
+                  <div className={styles.kwGroup}>
+                    <span className={styles.kwGroupLabel}>发表日期</span>
+                    <div className={styles.kwGroupTags}>
+                      {['2025 (156)', '2024 (892)', '2023 (1205)', '2022 (980)', '2021 (756)', '更早 (5420)'].map((option, idx) => (
+                        <Tag key={idx} color="default" fill="outline">
+                          {option}
+                        </Tag>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {activeFilterMenu === '健康效应' && (
+                <div className={styles.drawerSection}>
+                  <div className={styles.kwGroup}>
+                    <span className={styles.kwGroupLabel}>健康效应</span>
+                    <div className={styles.kwGroupTags}>
+                      {filterData.healthEffects.map((item, idx) => (
+                        <Tag key={idx} color="default" fill="outline">
+                          {item.label} ({item.count})
+                        </Tag>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {activeFilterMenu === '菌株/原料' && (
+                <div className={styles.drawerSection}>
+                  <div className={styles.kwGroup}>
+                    <span className={styles.kwGroupLabel}>菌株/原料</span>
+                    <div className={styles.kwGroupTags}>
+                      {filterData.strains.map((item, idx) => (
+                        <Tag key={idx} color="default" fill="outline">
+                          {item.label} ({item.count})
+                        </Tag>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {activeFilterMenu === '实验材料' && (
+                <div className={styles.drawerSection}>
+                  <div className={styles.kwGroup}>
+                    <span className={styles.kwGroupLabel}>实验/试验材料和对象</span>
+                    <div className={styles.kwGroupTags}>
+                      {filterData.materials.map((item, idx) => (
+                        <Tag key={idx} color="default" fill="outline">
+                          {item.label} ({item.count})
+                        </Tag>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {activeFilterMenu === '临床试验' && (
+                <div className={styles.drawerSection}>
+                  <div className={styles.kwGroup}>
+                    <span className={styles.kwGroupLabel}>临床试验信息</span>
+                    <div className={styles.kwGroupTags}>
+                      {filterData.clinical.map((item, idx) => (
+                        <Tag key={idx} color="default" fill="outline">
+                          {item.label} ({item.count})
+                        </Tag>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              )}
+            </div>
           </div>
         </div>
       </Popup>

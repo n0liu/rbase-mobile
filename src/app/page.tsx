@@ -23,21 +23,21 @@ export default function Home() {
     },
     {
       icon: <FileOutline />,
-      title: '版本1：经典布局',
+      title: '版本1：单篇文章',
       description: '折叠卡片式',
       path: '/article-v1',
       color: 'var(--rbase-color-success)'
     },
     {
       icon: <UnorderedListOutline />,
-      title: '版本2：标签页',
+      title: '版本2：HOPE',
       description: 'Tabs 切换式',
       path: '/article-v2',
       color: 'var(--rbase-color-warning)'
     },
     {
       icon: <SetOutline />,
-      title: '版本3：卡片流',
+      title: '版本3：机构',
       description: '底部操作栏式',
       path: '/article-v3',
       color: 'var(--rbase-color-accent)'
