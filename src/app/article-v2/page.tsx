@@ -131,7 +131,7 @@ export default function ArticleV2Page() {
   // 递归渲染分类树节点
   const renderCategoryNode = (node: CategoryNode, level: number = 0, isLast: boolean = false): React.ReactNode => {
     const isExpanded = expandedNodes.has(node.name);
-    const hasChildren = node.children && node.children.length > 0;
+    const hasChildren = Boolean(node.children && node.children.length > 0);
     const isLeaf = !hasChildren;
     const isSelected = selectedNode === node.name;
 
@@ -140,29 +140,28 @@ export default function ArticleV2Page() {
         key={node.name}
         className={`${styles.orgNodeWrapper} ${isLast ? styles.orgNodeLast : ''}`}
         style={{
-          '--line-left': `${level * 24 + 8}px`
+          '--node-level': level
         } as React.CSSProperties}
       >
         <div
           className={`${styles.orgItemChild} ${isSelected ? styles.orgItemSelected : ''}`}
           style={{
-            paddingLeft: `calc(${level * 24}px)`,
-            cursor: 'pointer'
-          }}
+            '--node-level': level
+          } as React.CSSProperties}
           onClick={() => handleNodeClick(node, hasChildren)}
         >
           <div className={styles.orgItemIconWrapper}>
             {isLeaf ? (
               // 叶子节点:只显示横线
               <div className={styles.orgLeafIcon}>
-                <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                <svg viewBox="0 0 16 16" fill="none">
                   <line x1="4" y1="8" x2="12" y2="8" stroke="currentColor" strokeWidth="1.5"/>
                 </svg>
               </div>
             ) : isExpanded ? (
               // 已展开:圆圈-号
               <div className={styles.orgCollapseIcon}>
-                <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                <svg viewBox="0 0 16 16" fill="none">
                   <circle cx="8" cy="8" r="7" stroke="currentColor" strokeWidth="1.5" fill="none"/>
                   <line x1="4" y1="8" x2="12" y2="8" stroke="currentColor" strokeWidth="1.5"/>
                 </svg>
@@ -170,7 +169,7 @@ export default function ArticleV2Page() {
             ) : (
               // 未展开:圆圈+号
               <div className={styles.orgExpandIcon}>
-                <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                <svg viewBox="0 0 16 16" fill="none">
                   <circle cx="8" cy="8" r="7" stroke="currentColor" strokeWidth="1.5" fill="none"/>
                   <line x1="4" y1="8" x2="12" y2="8" stroke="currentColor" strokeWidth="1.5"/>
                   <line x1="8" y1="4" x2="8" y2="12" stroke="currentColor" strokeWidth="1.5"/>
@@ -183,12 +182,7 @@ export default function ArticleV2Page() {
           </div>
         </div>
         {isExpanded && hasChildren && (
-          <div
-            className={styles.orgChildrenWrapper}
-            style={{
-              '--line-left': `calc(${level * 24}px + 8px)`
-            } as React.CSSProperties}
-          >
+          <div className={styles.orgChildrenWrapper}>
             {node.children!.map((child, index) =>
               renderCategoryNode(child, level + 1, index === node.children!.length - 1)
             )}
@@ -593,15 +587,15 @@ export default function ArticleV2Page() {
                 </div>
               </div>
               <div className={styles.analysisBtn}>
-                <Image src="/icons/refresh-circle.svg" alt="数据分析" width={18} height={18} />
+                <Image src="/icons/refresh-circle.svg" alt="数据分析" width={18} height={18} className={styles.analysisIcon} />
               </div>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '12px', flexShrink: 0 }}>
+              <div className={styles.listTabActions}>
                 <div className={styles.sortBtn}>
                   发表时间
-                  <Image src="/icons/arrow-down.svg" alt="排序" width={12} height={12} />
+                  <Image src="/icons/arrow-down.svg" alt="排序" width={12} height={12} className={styles.sortIcon} />
                 </div>
                 <div className={styles.filterBtn} onClick={() => setFilterPanelVisible(true)}>
-                  <FilterOutline style={{ fontSize: 18 }} />
+                  <FilterOutline className={styles.filterIcon} />
                 </div>
               </div>
             </div>
@@ -621,7 +615,7 @@ export default function ArticleV2Page() {
                       }}
                     >
                       {filter}
-                      <CloseOutline style={{ marginLeft: 4, fontSize: 12 }} />
+                      <CloseOutline className={styles.filterTagClose} />
                     </Tag>
                   ))}
                 </div>
@@ -645,7 +639,7 @@ export default function ArticleV2Page() {
                       <span className={styles.articleJournal}>{item.journal}</span>
                       <span className={styles.articleIF}>[IF:{item.impactFactor}]</span>
                       <div className={styles.articleMore}>
-                        <Image src="/icons/ellipsis.svg" alt="更多" width={16} height={16} />
+                        <Image src="/icons/ellipsis.svg" alt="更多" width={16} height={16} className={styles.moreIcon} />
                       </div>
                     </div>
                     <h3 className={styles.articleTitleCn}>{item.titleCn}</h3>
@@ -717,7 +711,7 @@ export default function ArticleV2Page() {
         visible={leftPanelVisible}
         onMaskClick={() => setLeftPanelVisible(false)}
         position="left"
-        bodyStyle={{ width: '80vw', maxWidth: '300px' }}
+        bodyStyle={{ width: '75vw' }}
       >
         <div className={styles.leftPanel}>
           <div className={styles.leftPanelHeader}>
@@ -737,7 +731,7 @@ export default function ArticleV2Page() {
         visible={filterPanelVisible}
         onMaskClick={() => setFilterPanelVisible(false)}
         position="right"
-        bodyStyle={{ width: '85vw', maxWidth: '400px' }}
+        bodyStyle={{ width: '80vw' }}
       >
         <div className={styles.drawer}>
           <div className={styles.drawerHeader}>

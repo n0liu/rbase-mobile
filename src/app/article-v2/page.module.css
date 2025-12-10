@@ -299,6 +299,17 @@
   background: var(--rbase-color-background-secondary);
 }
 
+.analysisIcon {
+  width: 18px;
+  height: 18px;
+}
+
+.listTabActions {
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+}
+
 .sortBtn {
   display: flex;
   align-items: center;
@@ -307,6 +318,11 @@
   color: var(--rbase-color-text-tertiary);
   cursor: pointer;
   white-space: nowrap;
+}
+
+.sortIcon {
+  width: 12px;
+  height: 12px;
 }
 
 .filterBtn {
@@ -323,6 +339,25 @@
 
 .filterBtn:active {
   background: var(--rbase-color-background-secondary);
+}
+
+.filterIcon {
+  font-size: 18px;
+}
+
+.filterTagClose {
+  margin-left: 4px;
+  font-size: 12px;
+}
+
+.moreIcon {
+  width: 16px;
+  height: 16px;
+}
+
+.mailIcon {
+  width: 8px;
+  height: 8px;
 }
 
 .articleList {
@@ -1523,6 +1558,8 @@
   padding: var(--rbase-spacing-xs) 0;
   position: relative;
   margin: 2px 0;
+  padding-left: calc(var(--node-level, 0) * 24px);
+  cursor: pointer;
 }
 
 .orgItemSelected .orgItemName {
@@ -1538,7 +1575,7 @@
 .orgChildrenWrapper::before {
   content: '';
   position: absolute;
-  left: var(--line-left, 8px);
+  left: calc((var(--node-level, 0)) * 24px + 8px);
   top: 0;
   bottom: 0;
   width: 1px;
@@ -1563,6 +1600,11 @@
   font-size: 16px;
 }
 
+.orgExpandIcon svg {
+  width: 100%;
+  height: 100%;
+}
+
 .orgCollapseIcon {
   display: flex;
   align-items: center;
@@ -1573,6 +1615,11 @@
   font-size: 16px;
 }
 
+.orgCollapseIcon svg {
+  width: 100%;
+  height: 100%;
+}
+
 .orgLeafIcon {
   display: flex;
   align-items: center;
@@ -1581,6 +1628,11 @@
   width: 16px;
   height: 16px;
   font-size: 16px;
+}
+
+.orgLeafIcon svg {
+  width: 100%;
+  height: 100%;
 }
 
 .orgItemName {
@@ -1599,12 +1651,4 @@
 .orgItemCount {
   color: var(--rbase-color-text-tertiary);
   font-weight: var(--rbase-font-weight-regular);
-}
-
-/* ==================== 响应式 ==================== */
-@media (min-width: 768px) {
-  .content {
-    max-width: 768px;
-    margin: 0 auto;
-  }
 }

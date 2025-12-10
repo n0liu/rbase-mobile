@@ -235,29 +235,28 @@ export default function ArticleV3Page() {
         key={node.name}
         className={`${styles.orgNodeWrapper} ${isLast ? styles.orgNodeLast : ''}`}
         style={{
-          '--line-left': `${level * 24 + 8}px`
+          '--node-level': level
         } as React.CSSProperties}
       >
         <div
-          className={styles.orgItemChild}
+          className={`${styles.orgItemChild} ${hasChildren ? styles.orgItemClickable : ''}`}
           style={{
-            paddingLeft: `calc(${level * 24}px)`,
-            cursor: hasChildren ? 'pointer' : 'default'
-          }}
+            '--node-level': level
+          } as React.CSSProperties}
           onClick={() => hasChildren && toggleNode(node.name)}
         >
           <div className={styles.orgItemIconWrapper}>
             {isLeaf ? (
               // 叶子节点:只显示横线
               <div className={styles.orgLeafIcon}>
-                <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                <svg viewBox="0 0 16 16" fill="none">
                   <line x1="4" y1="8" x2="12" y2="8" stroke="currentColor" strokeWidth="1.5"/>
                 </svg>
               </div>
             ) : isExpanded ? (
               // 已展开:圆圈-号
               <div className={styles.orgCollapseIcon}>
-                <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                <svg viewBox="0 0 16 16" fill="none">
                   <circle cx="8" cy="8" r="7" stroke="currentColor" strokeWidth="1.5" fill="none"/>
                   <line x1="4" y1="8" x2="12" y2="8" stroke="currentColor" strokeWidth="1.5"/>
                 </svg>
@@ -265,7 +264,7 @@ export default function ArticleV3Page() {
             ) : (
               // 未展开:圆圈+号
               <div className={styles.orgExpandIcon}>
-                <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                <svg viewBox="0 0 16 16" fill="none">
                   <circle cx="8" cy="8" r="7" stroke="currentColor" strokeWidth="1.5" fill="none"/>
                   <line x1="4" y1="8" x2="12" y2="8" stroke="currentColor" strokeWidth="1.5"/>
                   <line x1="8" y1="4" x2="8" y2="12" stroke="currentColor" strokeWidth="1.5"/>
@@ -278,12 +277,7 @@ export default function ArticleV3Page() {
           </div>
         </div>
         {isExpanded && hasChildren && (
-          <div
-            className={styles.orgChildrenWrapper}
-            style={{
-              '--line-left': `calc(${level * 24}px + 8px)`
-            } as React.CSSProperties}
-          >
+          <div className={styles.orgChildrenWrapper}>
             {node.children!.map((child, index) =>
               renderOrgNode(child, level + 1, index === node.children!.length - 1)
             )}
@@ -322,7 +316,7 @@ export default function ArticleV3Page() {
                 <p className={styles.institutionNameEn}>{institution.nameEn}</p>
               </div>
               <button className={styles.followBtn}>
-                <AddOutline style={{ fontSize: 14 }} />
+                <AddOutline className={styles.addIcon} />
                 <span>关注</span>
               </button>
             </div>
@@ -351,10 +345,7 @@ export default function ArticleV3Page() {
             <Swiper
               trackOffset={0}
               stuckAtBoundary={false}
-              style={{
-                '--height': researcherSwiperIndex === 1 ? '200px' : '100px',
-                '--track-padding': '0px'
-              } as React.CSSProperties}
+              className={`${styles.researcherSwiper} ${researcherSwiperIndex === 1 ? styles.researcherSwiperTall : styles.researcherSwiperShort}`}
               onIndexChange={(index) => setResearcherSwiperIndex(index)}
               indicator={false}
             >
@@ -379,9 +370,9 @@ export default function ArticleV3Page() {
                         </div>
                       ))}
                       {/* 第8个位置永远显示"更多"按钮 */}
-                      <div className={styles.departmentGridItem} style={{ cursor: 'pointer' }}>
+                      <div className={`${styles.departmentGridItem} ${styles.departmentGridMore}`}>
                         <div className={styles.moreButton}>
-                          <MoreOutline style={{ fontSize: 24 }} />
+                          <MoreOutline className={styles.moreOutlineIcon} />
                         </div>
                         <div className={styles.departmentName}>更多</div>
                       </div>
@@ -415,7 +406,7 @@ export default function ArticleV3Page() {
                     }}
                   >
                     {filter}
-                    <CloseOutline style={{ marginLeft: 4, fontSize: 12 }} />
+                    <CloseOutline className={styles.filterTagClose} />
                   </Tag>
                 ))}
               </div>
@@ -439,13 +430,13 @@ export default function ArticleV3Page() {
                   专利 (25)
                 </div>
               </div>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+              <div className={styles.listActions}>
                 <div className={styles.sortBtn}>
                   <span>发表时间</span>
-                  <DownOutline style={{ fontSize: 12, marginLeft: 4 }} />
+                  <DownOutline className={styles.downIcon} />
                 </div>
                 <FilterOutline
-                  style={{ fontSize: 20, color: 'var(--rbase-color-text-secondary)', cursor: 'pointer' }}
+                  className={styles.filterIcon}
                   onClick={() => setFilterPanelVisible(true)}
                 />
               </div>
@@ -519,7 +510,7 @@ export default function ArticleV3Page() {
         visible={leftPanelVisible}
         onMaskClick={() => setLeftPanelVisible(false)}
         position="left"
-        bodyStyle={{ width: '80vw', maxWidth: '300px' }}
+        bodyStyle={{ width: '75vw' }}
       >
         <div className={styles.leftPanel}>
           <div className={styles.leftPanelHeader}>
@@ -553,7 +544,7 @@ export default function ArticleV3Page() {
         visible={filterPanelVisible}
         onMaskClick={() => setFilterPanelVisible(false)}
         position="right"
-        bodyStyle={{ width: '85vw', maxWidth: '400px' }}
+        bodyStyle={{ width: '85vw' }}
       >
         <div className={styles.drawer}>
           <div className={styles.drawerHeader}>

@@ -67,7 +67,8 @@ export default function RootLayout({
     <html lang="zh-CN">
       <head>
         <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-        <title>rbase-mobile</title>
+        <link data-n-head="ssr" rel="icon" type="image/x-icon" href="https://cdn.mr-gut.cn/statics/3.0/xicon/xicon_rxcyjy.svg?202309027"></link>
+        <title>Rbase</title>
         {/* 内联 CSS 变量，避免字体闪烁 */}
         <style dangerouslySetInnerHTML={{
           __html: `:root {\n    ${cssVariablesString}\n  }`

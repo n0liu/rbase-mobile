@@ -157,6 +157,10 @@
   transform: scale(0.96);
 }
 
+.addIcon {
+  font-size: 14px;
+}
+
 /* ==================== 机构统计 ==================== */
 .statsSection {
   display: flex;
@@ -194,11 +198,18 @@
 .researcherGridSection {
   background: white;
   margin-bottom: var(--rbase-spacing-sm);
-  padding-bottom: var(--rbase-spacing-md);
 }
 
-.researcherGridSection :global(.adm-swiper) {
+.researcherSwiper {
   transition: height 0.3s ease;
+}
+
+.researcherSwiperShort {
+  height: 100px;
+}
+
+.researcherSwiperTall {
+  height: 200px;
 }
 
 .departmentGrid {
@@ -258,6 +269,14 @@
   border-radius: 50%;
   background: var(--rbase-color-background-secondary);
   color: var(--rbase-color-text-secondary);
+}
+
+.moreOutlineIcon {
+  font-size: 24px;
+}
+
+.departmentGridMore {
+  cursor: pointer;
 }
 
 .researcherGridAvatar {
@@ -358,6 +377,12 @@
   background-color: var(--rbase-color-primary);
 }
 
+.listActions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
 .sortBtn {
   display: flex;
   align-items: center;
@@ -365,6 +390,22 @@
   font-size: var(--rbase-font-size-body-small);
   color: var(--rbase-color-text-tertiary);
   cursor: pointer;
+}
+
+.downIcon {
+  font-size: 12px;
+  margin-left: 4px;
+}
+
+.filterIcon {
+  font-size: 20px;
+  color: var(--rbase-color-text-secondary);
+  cursor: pointer;
+}
+
+.filterTagClose {
+  margin-left: 4px;
+  font-size: 12px;
 }
 
 .articleList {
@@ -643,6 +684,11 @@
   gap: var(--rbase-spacing-xs);
   padding: var(--rbase-spacing-xs) 0;
   position: relative;
+  padding-left: calc(var(--node-level, 0) * 24px);
+}
+
+.orgItemClickable {
+  cursor: pointer;
 }
 
 /* 垂直连接线 - 从父节点图标下延伸到最后一个子节点 */
@@ -653,7 +699,7 @@
 .orgChildrenWrapper::before {
   content: '';
   position: absolute;
-  left: var(--line-left, 8px);
+  left: calc((var(--node-level, 0)) * 24px + 8px);
   top: 0;
   bottom: 0;
   width: 1px;
@@ -678,6 +724,11 @@
   font-size: 16px;
 }
 
+.orgExpandIcon svg {
+  width: 100%;
+  height: 100%;
+}
+
 .orgCollapseIcon {
   display: flex;
   align-items: center;
@@ -688,6 +739,11 @@
   font-size: 16px;
 }
 
+.orgCollapseIcon svg {
+  width: 100%;
+  height: 100%;
+}
+
 .orgLeafIcon {
   display: flex;
   align-items: center;
@@ -696,6 +752,11 @@
   width: 16px;
   height: 16px;
   font-size: 16px;
+}
+
+.orgLeafIcon svg {
+  width: 100%;
+  height: 100%;
 }
 
 .orgItemName {
@@ -951,9 +1012,3 @@
 }
 
 /* ==================== 响应式 ==================== */
-@media (min-width: 768px) {
-  .content {
-    max-width: 768px;
-    margin: 0 auto;
-  }
-}
