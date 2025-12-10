@@ -409,76 +409,79 @@ export default function ArticleV1Page() {
       </div>
 
       {/* 结构化解读抽屉 */}
-      {drawerVisible && (
-        <div className={styles.drawerMask} onClick={() => setDrawerVisible(false)}>
-          <div className={styles.drawer} onClick={(e) => e.stopPropagation()}>
-            <div className={styles.drawerHeader}>
-              <span className={styles.drawerTitle}>结构化解读</span>
-              <span className={styles.drawerClose} onClick={() => setDrawerVisible(false)}>×</span>
+      <Popup
+        visible={drawerVisible}
+        onMaskClick={() => setDrawerVisible(false)}
+        position="right"
+        bodyStyle={{ width: '80vw' }}
+      >
+        <div className={styles.drawer}>
+          <div className={styles.drawerHeader}>
+            <span className={styles.drawerTitle}>结构化解读</span>
+            <span className={styles.drawerClose} onClick={() => setDrawerVisible(false)}>×</span>
+          </div>
+          <div className={styles.drawerBody}>
+            <div className={styles.drawerMenu}>
+              {structureMenus.map((menu) => (
+                <div
+                  key={menu}
+                  className={`${styles.drawerMenuItem} ${activeMenu === menu ? styles.drawerMenuItemActive : ''}`}
+                  onClick={() => setActiveMenu(menu)}
+                >
+                  {menu}
+                </div>
+              ))}
             </div>
-            <div className={styles.drawerBody}>
-              <div className={styles.drawerMenu}>
-                {structureMenus.map((menu) => (
-                  <div
-                    key={menu}
-                    className={`${styles.drawerMenuItem} ${activeMenu === menu ? styles.drawerMenuItemActive : ''}`}
-                    onClick={() => setActiveMenu(menu)}
-                  >
-                    {menu}
+            <div className={styles.drawerContent}>
+              {activeMenu === '治疗措施' ? (
+                <>
+                  <div className={styles.drawerSectionTitle}>
+                    <span className={styles.drawerSectionBar}></span>
+                    <span>治疗与干预措施</span>
                   </div>
-                ))}
-              </div>
-              <div className={styles.drawerContent}>
-                {activeMenu === '治疗措施' ? (
-                  <>
-                    <div className={styles.drawerSectionTitle}>
-                      <span className={styles.drawerSectionBar}></span>
-                      <span>治疗与干预措施</span>
+                  {treatmentData.map((item, idx) => (
+                    <div key={idx} className={styles.treatmentCard}>
+                      <div className={styles.treatmentHeader}>
+                        <span className={styles.treatmentTitle}>{item.name}</span>
+                        <span className={`${styles.treatmentStatus} ${item.status === 'positive' ? styles.treatmentStatusPositive : styles.treatmentStatusNegative}`}>
+                          {item.status === 'positive' ? '阳性' : '阴性'}
+                        </span>
+                      </div>
+                      <div className={styles.treatmentRow}>
+                        <span className={styles.treatmentLabel}>适应症</span>
+                        <span className={styles.treatmentValue}>{item.indication}</span>
+                      </div>
+                      <div className={styles.treatmentRow}>
+                        <span className={styles.treatmentLabel}>方法</span>
+                        <span className={styles.treatmentValue}>{item.method}</span>
+                      </div>
                     </div>
-                    {treatmentData.map((item, idx) => (
-                      <div key={idx} className={styles.treatmentCard}>
-                        <div className={styles.treatmentHeader}>
-                          <span className={styles.treatmentTitle}>{item.name}</span>
-                          <span className={`${styles.treatmentStatus} ${item.status === 'positive' ? styles.treatmentStatusPositive : styles.treatmentStatusNegative}`}>
-                            {item.status === 'positive' ? '阳性' : '阴性'}
-                          </span>
-                        </div>
-                        <div className={styles.treatmentRow}>
-                          <span className={styles.treatmentLabel}>适应症</span>
-                          <span className={styles.treatmentValue}>{item.indication}</span>
-                        </div>
-                        <div className={styles.treatmentRow}>
-                          <span className={styles.treatmentLabel}>方法</span>
-                          <span className={styles.treatmentValue}>{item.method}</span>
-                        </div>
+                  ))}
+                </>
+              ) : (
+                <>
+                  {structureData[activeMenu]?.map((section, idx) => (
+                    <div key={idx} className={styles.drawerSection}>
+                      <div className={styles.drawerSectionTitle}>
+                        <span className={styles.drawerSectionBar}></span>
+                        <span>{section.title}</span>
                       </div>
-                    ))}
-                  </>
-                ) : (
-                  <>
-                    {structureData[activeMenu]?.map((section, idx) => (
-                      <div key={idx} className={styles.drawerSection}>
-                        <div className={styles.drawerSectionTitle}>
-                          <span className={styles.drawerSectionBar}></span>
-                          <span>{section.title}</span>
-                        </div>
-                        <div className={styles.drawerTags}>
-                          {section.tags.map((tag, tagIdx) => (
-                            <span key={tagIdx} className={styles.drawerTag}>{tag}</span>
-                          ))}
-                        </div>
+                      <div className={styles.drawerTags}>
+                        {section.tags.map((tag, tagIdx) => (
+                          <span key={tagIdx} className={styles.drawerTag}>{tag}</span>
+                        ))}
                       </div>
-                    ))}
-                    {(!structureData[activeMenu] || structureData[activeMenu].length === 0) && (
-                      <div className={styles.drawerEmpty}>暂无数据</div>
-                    )}
-                  </>
-                )}
-              </div>
+                    </div>
+                  ))}
+                  {(!structureData[activeMenu] || structureData[activeMenu].length === 0) && (
+                    <div className={styles.drawerEmpty}>暂无数据</div>
+                  )}
+                </>
+              )}
             </div>
           </div>
         </div>
-      )}
+      </Popup>
 
       {/* AI一键解读说明弹窗 */}
       <Dialog
@@ -511,9 +514,9 @@ export default function ArticleV1Page() {
         position="bottom"
         bodyStyle={{
           height: '70vh',
-          borderRadius: '16px 16px 0 0',
-          overflow: 'hidden'
+          borderRadius: '16px 16px 0 0'
         }}
+        destroyOnClose={false}
       >
         <div className={styles.aiReadPopup}>
           <div className={styles.aiReadHeader}>
