@@ -1460,6 +1460,147 @@
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1) !important;
 }
 
+/* ==================== 左侧分类树面板 ==================== */
+.leftPanel {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  background: var(--rbase-color-background-secondary);
+}
+
+.leftPanelHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--rbase-spacing-lg);
+  background: white;
+  border-bottom: 1px solid var(--rbase-color-border);
+  flex-shrink: 0;
+}
+
+.leftPanelTitle {
+  font-size: var(--rbase-font-size-h4);
+  font-weight: var(--rbase-font-weight-bold);
+  color: var(--rbase-color-text-primary);
+}
+
+.leftPanelClose {
+  font-size: 28px;
+  color: var(--rbase-color-text-tertiary);
+  cursor: pointer;
+  line-height: 1;
+  font-weight: 300;
+}
+
+.leftPanelBody {
+  flex: 1;
+  overflow-y: auto;
+  padding: var(--rbase-spacing-md);
+  padding-top: var(--rbase-spacing-sm);
+}
+
+.leftPanelBody::-webkit-scrollbar {
+  width: 4px;
+}
+
+.leftPanelBody::-webkit-scrollbar-thumb {
+  background: var(--rbase-color-border-strong);
+  border-radius: 2px;
+}
+
+.orgTree {
+  position: relative;
+}
+
+.orgNodeWrapper {
+  position: relative;
+}
+
+.orgItemChild {
+  display: flex;
+  align-items: center;
+  gap: var(--rbase-spacing-xs);
+  padding: var(--rbase-spacing-xs) 0;
+  position: relative;
+  margin: 2px 0;
+}
+
+.orgItemSelected .orgItemName {
+  color: var(--rbase-color-primary) !important;
+  font-weight: var(--rbase-font-weight-bold) !important;
+}
+
+/* 垂直连接线 - 从父节点图标下延伸到最后一个子节点 */
+.orgChildrenWrapper {
+  position: relative;
+}
+
+.orgChildrenWrapper::before {
+  content: '';
+  position: absolute;
+  left: var(--line-left, 8px);
+  top: 0;
+  bottom: 0;
+  width: 1px;
+  background: #d9d9d9;
+  z-index: 0;
+}
+
+.orgItemIconWrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.orgExpandIcon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--rbase-color-text-tertiary);
+  width: 16px;
+  height: 16px;
+  font-size: 16px;
+}
+
+.orgCollapseIcon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--rbase-color-text-tertiary);
+  width: 16px;
+  height: 16px;
+  font-size: 16px;
+}
+
+.orgLeafIcon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--rbase-color-text-tertiary);
+  width: 16px;
+  height: 16px;
+  font-size: 16px;
+}
+
+.orgItemName {
+  flex: 1;
+  font-size: var(--rbase-font-size-body-small);
+  color: var(--rbase-color-text-secondary);
+  font-weight: var(--rbase-font-weight-regular);
+}
+
+.orgItemNameRoot {
+  font-size: var(--rbase-font-size-h4);
+  color: var(--rbase-color-text-primary);
+  font-weight: var(--rbase-font-weight-medium);
+}
+
+.orgItemCount {
+  color: var(--rbase-color-text-tertiary);
+  font-weight: var(--rbase-font-weight-regular);
+}
+
 /* ==================== 响应式 ==================== */
 @media (min-width: 768px) {
   .content {

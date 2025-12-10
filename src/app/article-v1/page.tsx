@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { Tag } from 'antd-mobile';
+import { Tag, Dialog, Popup, Tabs } from 'antd-mobile';
 import Image from 'next/image';
 import {
   RightOutline,
@@ -12,9 +12,12 @@ import {
 import styles from './page.module.css';
 
 export default function ArticleV1Page() {
-  const [aiTabKey, setAiTabKey] = useState('summary');
+  const [aiTabKey, setAiTabKey] = useState('cn');
   const [drawerVisible, setDrawerVisible] = useState(false);
   const [activeMenu, setActiveMenu] = useState('关键词');
+  const [aiTipVisible, setAiTipVisible] = useState(false);
+  const [aiReadPopupVisible, setAiReadPopupVisible] = useState(false);
+  const [aiReadType, setAiReadType] = useState('summary');
 
   const article = {
     type: "ARTICLE",
@@ -40,19 +43,54 @@ export default function ArticleV1Page() {
         { num: 2, title: "核心发现", content: "补充菊粉不仅能预防，还能逆转由HFCS引起的肝脏脂肪变性、纤维化和胰岛素抵抗，其关键在于重塑肠道菌群的功能，使其能主动清除膳食果糖。" },
         { num: 3, title: "小肠菌群清糖机制", content: "菊粉能特异性促进小肠菌群分解膳食果糖，从而显著减少果糖溢出至肝脏和结肠，从源头抑制肝脏从头脂肪生成（DNL）。" },
         { num: 4, title: "肝脏代谢重塑机制", content: "菊粉还将肝脏内的果糖代谢碳流从DNL转向丝氨酸和甘氨酸的从头合成，进而增强谷胱甘肽生成，有效对抗果糖诱导的肝脏脂质过氧化损伤。" },
-      ],
-      innovation: [
-        { num: 1, title: "创新点1", content: "首次系统揭示了膳食纤维菊粉通过重塑肠道菌群功能来清除膳食果糖的机制。" },
-      ],
-      popular: [
-        { num: 1, title: "通俗解读", content: "简单来说，这项研究发现吃菊粉可以帮助肠道里的好细菌把果糖吃掉，从而保护肝脏。" },
-      ],
-      background: [
-        { num: 1, title: "研究背景", content: "脂肪肝已成为全球最常见的慢性肝病之一，高果糖饮食被认为是重要诱因。" },
-      ],
-      method: [
-        { num: 1, title: "实验方法", content: "研究采用小鼠模型，通过16S rRNA测序、代谢组学分析等技术进行研究。" },
       ]
+    },
+    aiInterpretation: {
+      summary: {
+        title: '原文摘要',
+        cnContent: '人类微生物组在维持稳态及影响疾病发生发展中发挥关键作用，但其组成随地域、年龄和生活方式而显著变化。这些差异制约了广谱益生菌疗法的疗效，亟需发展更具个体化或区域适应性的干预策略。本文综述了广谱益生菌应用的局限性，着重强调宿主-微生物共适应、本地膳食习惯及生态背景的重要性。我们认为，益生菌设计必须兼顾微生物多样性、菌株水平的适应性以及功能冗余性，并探讨上述因素对定植成功率及治疗潜力的影响。最后，我们讨论如何将微生物组知识重新置于多元化的生态、文化及认知传统框架之中，以构建一种全球性、包容性的研究范式，从而推动兼具有效性与可及性的微生物组靶向疗法的发展。',
+        enContent: 'The human microbiome plays a crucial role in maintaining homeostasis and influencing disease development, yet its composition varies across geography, age, and lifestyle. These differences undermine the efficacy of broad-spectrum probiotic therapies, highlighting the need for more personalized or regionally adapted intervention strategies.'
+      },
+      innovation: {
+        title: '创新要点',
+        cnContent: '本研究首次系统揭示了膳食纤维菊粉通过重塑肠道菌群功能来清除膳食果糖的机制，为开发基于膳食纤维的脂肪肝预防和治疗策略提供了重要的理论基础。',
+        enContent: 'This study is the first to systematically reveal the mechanism by which dietary fiber inulin clears dietary fructose by reshaping gut microbiota function.'
+      },
+      popular: {
+        title: '科普解读',
+        cnContent: '简单来说，这项研究发现吃菊粉（一种膳食纤维）可以帮助肠道里的好细菌把果糖吃掉，从而保护肝脏，预防脂肪肝。这就像给肠道请来了一群"清洁工"，专门负责清理多余的糖分。',
+        enContent: 'Simply put, eating inulin (a dietary fiber) can help good bacteria in the gut consume fructose, thereby protecting the liver and preventing fatty liver disease.'
+      },
+      background: {
+        title: '研究背景',
+        cnContent: '脂肪肝已成为全球最常见的慢性肝病之一，高果糖饮食被认为是重要诱因。然而，目前缺乏有效的干预措施。膳食纤维作为一种天然的营养素，能够调节肠道菌群，可能对脂肪肝有积极作用。',
+        enContent: 'Fatty liver has become one of the most common chronic liver diseases worldwide, with high-fructose diet considered an important contributing factor.'
+      },
+      method: {
+        title: '研究方法',
+        cnContent: '研究采用小鼠模型，通过16S rRNA测序、代谢组学分析、同位素示踪等技术进行系统研究，结合肠道菌群移植实验验证菊粉的保护作用机制。',
+        enContent: 'The study used mouse models and conducted systematic research through 16S rRNA sequencing, metabolomics analysis, and isotope tracing techniques.'
+      },
+      prospect: {
+        title: '转化前景',
+        cnContent: '该研究为开发基于膳食纤维的脂肪肝预防和治疗策略提供了重要的理论基础，未来可能开发出针对性的益生元或益生菌制剂用于临床干预。',
+        enContent: 'This research provides an important theoretical basis for developing dietary fiber-based strategies for preventing and treating fatty liver disease.'
+      },
+      framework: {
+        title: '文章框架',
+        cnContent: '文章分为引言、方法、结果、讨论四个主要部分。引言部分阐述研究背景；方法部分详细描述实验设计；结果部分展示关键发现；讨论部分解释机制并展望应用前景。',
+        enContent: 'The article is divided into four main sections: introduction, methods, results, and discussion.'
+      },
+      figures: {
+        title: '图表解读',
+        cnContent: '图1展示了菊粉对小鼠肝脏脂肪含量的影响；图2揭示了肠道菌群组成的变化；图3说明了果糖代谢途径的改变；图4展示了关键菌种的作用机制。',
+        enContent: 'Figure 1 shows the effect of inulin on liver fat content in mice; Figure 2 reveals changes in gut microbiota composition.'
+      },
+      limitation: {
+        title: '局限性',
+        cnContent: '本研究主要基于小鼠模型，需要进一步的人体临床试验来验证结果的普适性。此外，不同个体的肠道菌群差异可能影响菊粉的效果，需要个体化的研究。',
+        enContent: 'This study is mainly based on mouse models and requires further human clinical trials to verify the universality of the results.'
+      }
     },
     figures: [
       { id: 1, label: "Fig.1" },
@@ -145,8 +183,33 @@ export default function ArticleV1Page() {
     ],
   };
 
-  const getCurrentAiContent = () => {
-    return article.aiSummary[aiTabKey as keyof typeof article.aiSummary] || [];
+  const openAiRead = (type: string) => {
+    setAiReadType(type);
+    setAiReadPopupVisible(true);
+    setAiTabKey('cn');
+  };
+
+  const getAiReadTitle = () => {
+    const typeMap: { [key: string]: string } = {
+      summary: '原文摘要',
+      innovation: '创新要点',
+      popular: '科普解读',
+      background: '研究背景',
+      method: '研究方法',
+      prospect: '转化前景',
+      framework: '文章框架',
+      figures: '图表解读',
+      limitation: '局限性'
+    };
+    return typeMap[aiReadType] || '';
+  };
+
+  const getCurrentAiReadContent = () => {
+    const content = article.aiInterpretation[aiReadType as keyof typeof article.aiInterpretation];
+    if (content && typeof content === 'object' && 'cnContent' in content && 'enContent' in content) {
+      return aiTabKey === 'cn' ? content.cnContent : content.enContent;
+    }
+    return '';
   };
 
   return (
@@ -173,7 +236,7 @@ export default function ArticleV1Page() {
           <div className={styles.articleMeta}>
             <Tag color="primary" fill="solid" className={styles.articleTypeTag}>{article.type}</Tag>
             <span className={styles.journalInfo}>{article.journal} <span className={styles.impactFactor}>[IF:{article.impactFactor}]</span></span>
-            {article.isOpenAccess && <Tag color="danger" fill="outline">OA</Tag>}
+            {article.isOpenAccess && <Tag color="danger" fill="outline" className={styles.oaTag}>OA</Tag>}
           </div>
 
           {/* 文章标题区 */}
@@ -214,7 +277,7 @@ export default function ArticleV1Page() {
             </div>
 
             <div className={styles.aiContent}>
-              {getCurrentAiContent().map((item, index) => (
+              {article.aiSummary.summary.map((item, index) => (
                 <div key={index} className={styles.aiItem}>
                   <div className={styles.aiNum}>{item.num}</div>
                   <div className={styles.aiItemContent}>
@@ -231,20 +294,20 @@ export default function ArticleV1Page() {
             <div className={styles.sectionHeader}>
               <div className={styles.aiReadTitleRow}>
                 <span className={styles.sectionTitle}>AI一键解读</span>
-                <Tag color="danger" fill="outline">OA</Tag>
+                <Tag color="danger" fill="outline" className={styles.oaTag}>OA</Tag>
               </div>
-              <span className={styles.aiReadTip}>ⓘ 说明</span>
+              <span className={styles.aiReadTip} onClick={() => setAiTipVisible(true)}>ⓘ 说明</span>
             </div>
             <div className={styles.aiReadGrid}>
-              <div className={styles.aiReadBtn}>原文摘要</div>
-              <div className={styles.aiReadBtn}>创新要点</div>
-              <div className={styles.aiReadBtn}>科普解读</div>
-              <div className={styles.aiReadBtn}>研究背景</div>
-              <div className={styles.aiReadBtn}>研究方法</div>
-              <div className={styles.aiReadBtn}>转化前景</div>
-              <div className={styles.aiReadBtn}>文章框架</div>
-              <div className={styles.aiReadBtn}>图表解读</div>
-              <div className={styles.aiReadBtn}>局限性</div>
+              <div className={styles.aiReadBtn} onClick={() => openAiRead('summary')}>原文摘要</div>
+              <div className={styles.aiReadBtn} onClick={() => openAiRead('innovation')}>创新要点</div>
+              <div className={styles.aiReadBtn} onClick={() => openAiRead('popular')}>科普解读</div>
+              <div className={styles.aiReadBtn} onClick={() => openAiRead('background')}>研究背景</div>
+              <div className={styles.aiReadBtn} onClick={() => openAiRead('method')}>研究方法</div>
+              <div className={styles.aiReadBtn} onClick={() => openAiRead('prospect')}>转化前景</div>
+              <div className={styles.aiReadBtn} onClick={() => openAiRead('framework')}>文章框架</div>
+              <div className={styles.aiReadBtn} onClick={() => openAiRead('figures')}>图表解读</div>
+              <div className={styles.aiReadBtn} onClick={() => openAiRead('limitation')}>局限性</div>
             </div>
           </div>
 
@@ -416,6 +479,56 @@ export default function ArticleV1Page() {
           </div>
         </div>
       )}
+
+      {/* AI一键解读说明弹窗 */}
+      <Dialog
+        visible={aiTipVisible}
+        content={
+          <div className={styles.aiTipContent}>
+            <div className={styles.aiTipItem}>
+              <span className={styles.aiTipNumber}>1、</span>
+              <span className={styles.aiTipText}>
+                <span className={styles.aiTipBlue}>蓝色框内容由AI自动生成</span>，大部分未经人工校对，可能存在错误，仅供参考。
+              </span>
+            </div>
+            <div className={styles.aiTipItem}>
+              <span className={styles.aiTipNumber}>2、</span>
+              <span className={styles.aiTipText}>
+                <span className={styles.aiTipGray}>灰色框暂无内容</span>，受限于原文非OA，AI未解读。欢迎您上传PDF，获取解读内容。
+              </span>
+            </div>
+          </div>
+        }
+        closeOnMaskClick
+        onClose={() => setAiTipVisible(false)}
+        title="AI一键解读"
+      />
+
+      {/* AI一键解读详情弹窗 */}
+      <Popup
+        visible={aiReadPopupVisible}
+        onMaskClick={() => setAiReadPopupVisible(false)}
+        position="bottom"
+        bodyStyle={{
+          height: '70vh',
+          borderRadius: '16px 16px 0 0',
+          overflow: 'hidden'
+        }}
+      >
+        <div className={styles.aiReadPopup}>
+          <div className={styles.aiReadHeader}>
+            <h3 className={styles.aiReadTitle}>AI解读 - {getAiReadTitle()}</h3>
+            <span className={styles.aiReadClose} onClick={() => setAiReadPopupVisible(false)}>×</span>
+          </div>
+          <Tabs activeKey={aiTabKey} onChange={setAiTabKey}>
+            <Tabs.Tab title="中文" key="cn" />
+            <Tabs.Tab title="原文" key="en" />
+          </Tabs>
+          <div className={styles.aiReadContent}>
+            {getCurrentAiReadContent()}
+          </div>
+        </div>
+      </Popup>
     </div>
   );
 }

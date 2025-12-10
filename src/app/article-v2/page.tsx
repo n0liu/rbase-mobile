@@ -42,10 +42,160 @@ export default function ArticleV2Page() {
   const [aiPopupContent, setAiPopupContent] = useState({ title: '', content: '' });
   const [aiTabKey, setAiTabKey] = useState('cn');
   const [activeFilters, setActiveFilters] = useState<string[]>(['0-5 (452)', '5-10 (311)', '10-15 (189)']);
+  const [leftPanelVisible, setLeftPanelVisible] = useState(false);
+  const [expandedNodes, setExpandedNodes] = useState<Set<string>>(new Set(['益生菌']));
+  const [selectedPath, setSelectedPath] = useState<string[]>(['益生菌']);
+  const [selectedNode, setSelectedNode] = useState<string>('益生菌');
 
   // 格式化数量显示
   const formatCount = (count: number) => {
     return count > 100 ? '100+' : count.toString();
+  };
+
+  // 切换节点展开/收起
+  const toggleNode = (nodeName: string) => {
+    const newExpanded = new Set(expandedNodes);
+    if (newExpanded.has(nodeName)) {
+      newExpanded.delete(nodeName);
+    } else {
+      newExpanded.add(nodeName);
+    }
+    setExpandedNodes(newExpanded);
+  };
+
+  // 树状数据结构
+  interface CategoryNode {
+    name: string;
+    count: number;
+    children?: CategoryNode[];
+  }
+
+  const categoryTree: CategoryNode[] = [
+    {
+      name: '益生菌',
+      count: 8162,
+      children: [
+        {
+          name: '食品用',
+          count: 3450,
+          children: [
+            {
+              name: '双歧杆菌属',
+              count: 870,
+              children: [
+                { name: '长双歧杆菌', count: 320 },
+                { name: '动物双歧杆菌', count: 250 }
+              ]
+            },
+            { name: '乳杆菌属', count: 1230 }
+          ]
+        },
+        { name: '婴幼儿菌株', count: 580 },
+        { name: '组合/SynCom', count: 310 },
+        { name: '保健品原料', count: 1800 },
+        { name: '新兴益生菌', count: 120 },
+        { name: '工程益生菌', count: 80 }
+      ]
+    }
+  ];
+
+  // 构建节点路径
+  const buildNodePath = (targetName: string, nodes: CategoryNode[], currentPath: string[] = []): string[] | null => {
+    for (const node of nodes) {
+      const newPath = [...currentPath, node.name];
+      if (node.name === targetName) {
+        return newPath;
+      }
+      if (node.children) {
+        const found = buildNodePath(targetName, node.children, newPath);
+        if (found) return found;
+      }
+    }
+    return null;
+  };
+
+  // 处理节点点击
+  const handleNodeClick = (node: CategoryNode, hasChildren: boolean) => {
+    if (hasChildren) {
+      toggleNode(node.name);
+    }
+    // 设置选中节点
+    setSelectedNode(node.name);
+    // 构建完整路径
+    const path = buildNodePath(node.name, categoryTree);
+    if (path) {
+      setSelectedPath(path);
+    }
+  };
+
+  // 递归渲染分类树节点
+  const renderCategoryNode = (node: CategoryNode, level: number = 0, isLast: boolean = false): React.ReactNode => {
+    const isExpanded = expandedNodes.has(node.name);
+    const hasChildren = node.children && node.children.length > 0;
+    const isLeaf = !hasChildren;
+    const isSelected = selectedNode === node.name;
+
+    return (
+      <div
+        key={node.name}
+        className={`${styles.orgNodeWrapper} ${isLast ? styles.orgNodeLast : ''}`}
+        style={{
+          '--line-left': `${level * 24 + 8}px`
+        } as React.CSSProperties}
+      >
+        <div
+          className={`${styles.orgItemChild} ${isSelected ? styles.orgItemSelected : ''}`}
+          style={{
+            paddingLeft: `calc(${level * 24}px)`,
+            cursor: 'pointer'
+          }}
+          onClick={() => handleNodeClick(node, hasChildren)}
+        >
+          <div className={styles.orgItemIconWrapper}>
+            {isLeaf ? (
+              // 叶子节点:只显示横线
+              <div className={styles.orgLeafIcon}>
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                  <line x1="4" y1="8" x2="12" y2="8" stroke="currentColor" strokeWidth="1.5"/>
+                </svg>
+              </div>
+            ) : isExpanded ? (
+              // 已展开:圆圈-号
+              <div className={styles.orgCollapseIcon}>
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                  <circle cx="8" cy="8" r="7" stroke="currentColor" strokeWidth="1.5" fill="none"/>
+                  <line x1="4" y1="8" x2="12" y2="8" stroke="currentColor" strokeWidth="1.5"/>
+                </svg>
+              </div>
+            ) : (
+              // 未展开:圆圈+号
+              <div className={styles.orgExpandIcon}>
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                  <circle cx="8" cy="8" r="7" stroke="currentColor" strokeWidth="1.5" fill="none"/>
+                  <line x1="4" y1="8" x2="12" y2="8" stroke="currentColor" strokeWidth="1.5"/>
+                  <line x1="8" y1="4" x2="8" y2="12" stroke="currentColor" strokeWidth="1.5"/>
+                </svg>
+              </div>
+            )}
+          </div>
+          <div className={level === 0 ? `${styles.orgItemName} ${styles.orgItemNameRoot}` : styles.orgItemName}>
+            {node.name} <span className={styles.orgItemCount}>({node.count})</span>
+          </div>
+        </div>
+        {isExpanded && hasChildren && (
+          <div
+            className={styles.orgChildrenWrapper}
+            style={{
+              '--line-left': `calc(${level * 24}px + 8px)`
+            } as React.CSSProperties}
+          >
+            {node.children!.map((child, index) =>
+              renderCategoryNode(child, level + 1, index === node.children!.length - 1)
+            )}
+          </div>
+        )}
+      </div>
+    );
   };
 
   const article = {
@@ -400,6 +550,7 @@ export default function ArticleV2Page() {
                   <div
                     key={item.id}
                     className={`${styles.menuItem} ${item.active ? styles.menuItemActive : ''}`}
+                    onClick={() => setLeftPanelVisible(true)}
                   >
                     <div className={styles.menuIcon}>{item.icon}</div>
                     <span className={styles.menuLabel}>{item.label}</span>
@@ -412,6 +563,7 @@ export default function ArticleV2Page() {
                   <div
                     key={item.id}
                     className={`${styles.menuItem} ${item.active ? styles.menuItemActive : ''}`}
+                    onClick={() => setLeftPanelVisible(true)}
                   >
                     <div className={styles.menuIcon}>{item.icon}</div>
                     <span className={styles.menuLabel}>{item.label}</span>
@@ -457,7 +609,7 @@ export default function ArticleV2Page() {
             {/* 筛选标签 */}
             {activeFilters.length > 0 && (
               <div className={styles.filterTags}>
-                <div className={styles.filterTagsLabel}>全部分类 &gt; 益生菌</div>
+                <div className={styles.filterTagsLabel}>全部分类 &gt; {selectedPath.join(' > ')}</div>
                 <div className={styles.activeFilters}>
                   {activeFilters.map((filter, idx) => (
                     <Tag
@@ -556,6 +708,26 @@ export default function ArticleV2Page() {
           </Tabs>
           <div className={styles.aiPopupContent}>
             {article.aiInterpretation.find(a => a.label === aiPopupContent.title)?.[aiTabKey === 'cn' ? 'cnContent' : 'enContent']}
+          </div>
+        </div>
+      </Popup>
+
+      {/* 左侧分类树面板 */}
+      <Popup
+        visible={leftPanelVisible}
+        onMaskClick={() => setLeftPanelVisible(false)}
+        position="left"
+        bodyStyle={{ width: '80vw', maxWidth: '300px' }}
+      >
+        <div className={styles.leftPanel}>
+          <div className={styles.leftPanelHeader}>
+            <span className={styles.leftPanelTitle}>分类导航</span>
+            <span className={styles.leftPanelClose} onClick={() => setLeftPanelVisible(false)}>×</span>
+          </div>
+          <div className={styles.leftPanelBody}>
+            <div className={styles.orgTree}>
+              {categoryTree.map(node => renderCategoryNode(node))}
+            </div>
           </div>
         </div>
       </Popup>
