@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useRef } from 'react';
-import { Tag, Dialog, Popup, Tabs } from 'antd-mobile';
+import { Tag, Dialog, Popup, Tabs, ErrorBlock } from 'antd-mobile';
 import Image from 'next/image';
 import {
   UnorderedListOutline,
@@ -135,22 +135,6 @@ export default function ArticleV1Page() {
   };
 
   const structureMenus = ['关键词', '临床试验', '治疗措施', '文章属性', '实验材料', '实验方法', '分析软件', '分子通路', '产出转化', '收录频道', '贡献者'];
-
-  // 治疗措施数据（卡片式）
-  const treatmentData = [
-    {
-      name: '菊粉',
-      indication: '脂肪肝',
-      method: '动物实验',
-      status: 'positive' as const,
-    },
-    {
-      name: '抗生素',
-      indication: '促纤',
-      method: '人体临床试验',
-      status: 'negative' as const,
-    },
-  ];
 
   const structureData: Record<string, { title: string; tags: string[] }[]> = {
     '关键词': [
@@ -425,6 +409,7 @@ export default function ArticleV1Page() {
             <span className={styles.drawerClose} onClick={() => setDrawerVisible(false)}>×</span>
           </div>
           <div className={styles.drawerBody}>
+            {/* 顶部菜单标签 */}
             <div className={styles.drawerMenu}>
               {structureMenus.map((menu) => (
                 <div
@@ -436,51 +421,31 @@ export default function ArticleV1Page() {
                 </div>
               ))}
             </div>
+            {/* 内容区域 */}
             <div className={styles.drawerContent}>
-              {activeMenu === '治疗措施' ? (
-                <>
-                  <div className={styles.drawerSectionTitle}>
-                    <span className={styles.drawerSectionBar}></span>
-                    <span>治疗与干预措施</span>
+              {structureData[activeMenu]?.map((section, idx) => {
+                // 根据最长标签长度决定列数：<=6字符用3列，否则用2列
+                const maxLen = Math.max(...section.tags.map(tag => tag.length));
+                const cols = maxLen <= 6 ? 3 : 2;
+                return (
+                  <div key={idx} className={styles.drawerSection}>
+                    <div className={styles.drawerSectionTitle}>
+                      <span className={styles.drawerSectionBar}></span>
+                      <span>{section.title}</span>
+                    </div>
+                    <div
+                      className={styles.drawerTagList}
+                      style={{ '--tag-cols': cols } as React.CSSProperties}
+                    >
+                      {section.tags.map((tag, tagIdx) => (
+                        <span key={tagIdx} className={styles.drawerTagItem}>{tag}</span>
+                      ))}
+                    </div>
                   </div>
-                  {treatmentData.map((item, idx) => (
-                    <div key={idx} className={styles.treatmentCard}>
-                      <div className={styles.treatmentHeader}>
-                        <span className={styles.treatmentTitle}>{item.name}</span>
-                        <span className={`${styles.treatmentStatus} ${item.status === 'positive' ? styles.treatmentStatusPositive : styles.treatmentStatusNegative}`}>
-                          {item.status === 'positive' ? '阳性' : '阴性'}
-                        </span>
-                      </div>
-                      <div className={styles.treatmentRow}>
-                        <span className={styles.treatmentLabel}>适应症</span>
-                        <span className={styles.treatmentValue}>{item.indication}</span>
-                      </div>
-                      <div className={styles.treatmentRow}>
-                        <span className={styles.treatmentLabel}>方法</span>
-                        <span className={styles.treatmentValue}>{item.method}</span>
-                      </div>
-                    </div>
-                  ))}
-                </>
-              ) : (
-                <>
-                  {structureData[activeMenu]?.map((section, idx) => (
-                    <div key={idx} className={styles.drawerSection}>
-                      <div className={styles.drawerSectionTitle}>
-                        <span className={styles.drawerSectionBar}></span>
-                        <span>{section.title}</span>
-                      </div>
-                      <div className={styles.drawerTags}>
-                        {section.tags.map((tag, tagIdx) => (
-                          <span key={tagIdx} className={styles.drawerTag}>{tag}</span>
-                        ))}
-                      </div>
-                    </div>
-                  ))}
-                  {(!structureData[activeMenu] || structureData[activeMenu].length === 0) && (
-                    <div className={styles.drawerEmpty}>暂无数据</div>
-                  )}
-                </>
+                );
+              })}
+              {(!structureData[activeMenu] || structureData[activeMenu].length === 0) && (
+                <ErrorBlock status="default" fullPage title="暂无数据" description="该分类下暂无内容" />
               )}
             </div>
           </div>

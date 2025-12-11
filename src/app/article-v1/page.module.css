@@ -880,76 +880,114 @@
 .drawerBody {
   flex: 1;
   display: flex;
+  flex-direction: column;
   overflow: hidden;
 }
 
 .drawerMenu {
-  width: 90px;
-  background: #f7f8fa;
-  overflow-y: auto;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: var(--rbase-spacing-xs);
+  padding: var(--rbase-spacing-md);
+  background: white;
+  border-bottom: 1px solid var(--rbase-color-border-light);
 }
 
 .drawerMenuItem {
-  padding: 16px 8px;
+  padding: var(--rbase-spacing-xs) 0;
+  font-size: var(--rbase-font-size-body-small);
+  color: var(--rbase-color-text-secondary);
+  background: var(--rbase-color-background-secondary);
+  border-radius: var(--rbase-radius-sm);
+  cursor: pointer;
   text-align: center;
-  font-size: 12px;
-  color: #666;
-  position: relative;
 }
 
 .drawerMenuItemActive {
-  background: white;
-  color: #1677ff;
-  font-weight: 600;
-}
-
-.drawerMenuItemActive::before {
-  content: '';
-  position: absolute;
-  left: 0;
-  top: 10px; 
-  bottom: 10px;
-  width: 3px;
-  background: #1677ff;
-  border-radius: 0 2px 2px 0;
+  background: var(--rbase-color-primary);
+  color: white;
+  font-weight: var(--rbase-font-weight-medium);
 }
 
 .drawerContent {
   flex: 1;
-  padding: 16px;
+  padding: var(--rbase-spacing-md);
   overflow-y: auto;
+  background: var(--rbase-color-background-secondary);
+  display: flex;
+  flex-direction: column;
+}
+
+.drawerContent :global(.adm-error-block-full-page) {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding-top: 0;
+  margin-top: -60px;
+}
+
+.drawerContent :global(.adm-error-block-full-page-title) {
+  font-size: var(--rbase-font-size-body);
+  font-weight: var(--rbase-font-weight-bold);
+  color: var(--rbase-color-text-primary);
+}
+
+.drawerContent :global(.adm-error-block-full-page-description) {
+  font-size: var(--rbase-font-size-body-small);
+  color: var(--rbase-color-text-tertiary);
+}
+
+.drawerSection {
+  margin-bottom: var(--rbase-spacing-md);
+  background: white;
+  border-radius: var(--rbase-radius-md);
+  padding: var(--rbase-spacing-md);
 }
 
 .drawerSectionTitle {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: var(--rbase-spacing-xs);
   font-size: var(--rbase-font-size-body);
   font-weight: var(--rbase-font-weight-bold);
   color: var(--rbase-color-text-primary);
-  margin-bottom: 12px;
+  margin-bottom: var(--rbase-spacing-sm);
 }
 
 .drawerSectionBar {
   width: 3px;
   height: 14px;
-  background: #1677ff;
+  background: var(--rbase-color-primary);
   border-radius: 2px;
 }
 
-.drawerTags {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
+.drawerTagList {
+  display: grid;
+  grid-template-columns: repeat(var(--tag-cols, 2), 1fr);
+  gap: var(--rbase-spacing-sm);
 }
 
-.drawerTag {
-  padding: 4px 12px;
-  background: #fff;
-  border: 1px solid #e0e0e0;
-  border-radius: 4px;
-  font-size: 12px;
-  color: #333;
+.drawerTagItem {
+  font-size: var(--rbase-font-size-body-small);
+  color: var(--rbase-color-text-secondary);
+  padding: var(--rbase-spacing-xs) 0;
+  cursor: pointer;
+  text-align: left;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.drawerTagItem::before {
+  content: '';
+  display: inline-block;
+  width: 4px;
+  height: 4px;
+  background: var(--rbase-color-text-quaternary);
+  border-radius: 50%;
+  margin-right: var(--rbase-spacing-sm);
+  vertical-align: middle;
 }
 
 .treatmentCard {
