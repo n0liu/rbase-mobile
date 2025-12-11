@@ -9,6 +9,7 @@ import {
 } from 'antd-mobile-icons';
 import AIInputBar from '@/components/layout/AIInputBar';
 import TopNavigationBar from '@/components/layout/TopNavigationBar';
+import RelatedSection from '@/components/RelatedSection';
 import styles from './page.module.css';
 import BackToTop from '@/components/BackToTop';
 
@@ -344,29 +345,13 @@ export default function ArticleV1Page() {
           </div>
 
           {/* 相关链接 */}
-          <div className={styles.section}>
-            <div className={styles.sectionHeader}>
-              <span className={styles.sectionTitle}>相关链接</span>
-              {article.links.length > 3 && (
-                <span className={styles.sectionMore}>更多</span>
-              )}
-            </div>
-            <div className={styles.linksGrid}>
-              {article.links.slice(0, 3).map((link, index) => (
-                <div key={index} className={styles.linkCard}>
-                  <div className={styles.linkIconBox}>
-                    <Image
-                      src={link.logo}
-                      alt={link.name}
-                      fill
-                      className={styles.linkLogo}
-                    />
-                  </div>
-                  <span className={styles.linkLabel}>{link.name}</span>
-                </div>
-              ))}
-            </div>
-          </div>
+          <RelatedSection
+            title="相关链接"
+            items={article.links}
+            maxDisplay={3}
+            onMoreClick={() => console.log('查看更多链接')}
+            onItemClick={(item) => console.log('点击链接:', item.name)}
+          />
 
           {/* 相关文章 */}
           <div className={styles.section}>
@@ -394,29 +379,13 @@ export default function ArticleV1Page() {
           </div>
 
           {/* 相关机构 */}
-          <div className={styles.section}>
-            <div className={styles.sectionHeader}>
-              <span className={styles.sectionTitle}>相关机构</span>
-              {article.institutions.length > 3 && (
-                <span className={styles.sectionMore}>更多</span>
-              )}
-            </div>
-            <div className={styles.linksGrid}>
-              {article.institutions.slice(0, 3).map((inst, index) => (
-                <div key={index} className={styles.linkCard}>
-                  <div className={styles.linkIconBox}>
-                    <Image
-                      src={inst.logo}
-                      alt={inst.name}
-                      fill
-                      className={styles.linkLogo}
-                    />
-                  </div>
-                  <span className={styles.linkLabel}>{inst.name}</span>
-                </div>
-              ))}
-            </div>
-          </div>
+          <RelatedSection
+            title="相关机构"
+            items={article.institutions}
+            maxDisplay={3}
+            onMoreClick={() => console.log('查看更多机构')}
+            onItemClick={(item) => console.log('点击机构:', item.name)}
+          />
 
           {/* 底部版权信息 */}
           <div className={styles.footer}>
