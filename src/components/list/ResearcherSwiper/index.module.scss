@@ -1,0 +1,88 @@
+.swiperSection {
+  background: white;
+}
+
+.swiper {
+  transition: height 0.3s ease;
+}
+
+.grid {
+  display: grid;
+  gap: var(--rbase-spacing-md);
+  padding: var(--rbase-spacing-md) var(--rbase-spacing-lg);
+}
+
+.gridSingleRow {
+  display: grid;
+  gap: var(--rbase-spacing-md);
+  padding: var(--rbase-spacing-md) var(--rbase-spacing-lg);
+}
+
+.gridItem {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--rbase-spacing-xs);
+  cursor: pointer;
+  transition: opacity 0.2s;
+
+  &:active {
+    opacity: 0.7;
+  }
+}
+
+.avatar {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid var(--rbase-color-border);
+}
+
+.name {
+  font-size: var(--rbase-font-size-caption);
+  color: var(--rbase-color-text-primary);
+  font-weight: var(--rbase-font-weight-medium);
+  text-align: center;
+  line-height: 1.3;
+  max-width: 100%;
+  word-break: break-word;
+}
+
+.moreButton {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: var(--rbase-color-background-secondary);
+  color: var(--rbase-color-text-secondary);
+}
+
+.moreIcon {
+  font-size: 24px;
+}
+
+.indicator {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  padding: var(--rbase-spacing-sm) 0;
+}
+
+.indicatorDot {
+  width: 20px;
+  height: 3px;
+  border-radius: 2px;
+  background: var(--rbase-color-border-strong);
+  transition: all 0.3s;
+}
+
+.indicatorDotActive {
+  width: 28px;
+  background: var(--rbase-color-primary);
+}

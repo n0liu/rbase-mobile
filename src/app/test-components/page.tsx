@@ -1,9 +1,11 @@
 'use client';
 
 import { useState } from 'react';
+import { Tag } from 'antd-mobile';
 import AIInputBar from '@/components/layout/AIInputBar';
 import TopNavigationBar from '@/components/layout/TopNavigationBar';
 import TreeView from '@/components/list/TreeView';
+import FilterDrawer from '@/components/drawers/FilterDrawer';
 import { TreeNode } from '@/components/list/TreeView/types';
 import styles from './page.module.scss';
 
@@ -13,6 +15,11 @@ export default function TestComponentsPage() {
   // TreeView 测试数据
   const [expandedNodes, setExpandedNodes] = useState<Set<string>>(new Set(['益生菌']));
   const [selectedNode, setSelectedNode] = useState<string>('益生菌');
+
+  // FilterDrawer 测试数据
+  const [drawerVisible, setDrawerVisible] = useState(false);
+  const [activeFilterMenu, setActiveFilterMenu] = useState('影响因子');
+  const [selectedFilters, setSelectedFilters] = useState<string[]>(['0-5 (452)', '5-10 (311)']);
 
   const treeData: TreeNode[] = [
     {
@@ -114,9 +121,45 @@ export default function TestComponentsPage() {
         </div>
 
         <div className={styles.section}>
+          <h2 className={styles.sectionTitle}>🎛️ FilterDrawer 筛选抽屉</h2>
+          <div className={styles.infoCard}>
+            <p style={{ marginBottom: '12px', color: 'var(--rbase-color-text-secondary)' }}>
+              当前菜单：<strong style={{ color: 'var(--rbase-color-primary)' }}>{activeFilterMenu}</strong>
+            </p>
+            <p style={{ marginBottom: '12px', color: 'var(--rbase-color-text-secondary)' }}>
+              已选筛选项：{selectedFilters.length > 0 ? selectedFilters.join(', ') : '无'}
+            </p>
+            <button
+              onClick={() => setDrawerVisible(true)}
+              style={{
+                padding: '12px 24px',
+                background: 'var(--rbase-color-primary)',
+                color: 'white',
+                border: 'none',
+                borderRadius: '8px',
+                fontSize: '14px',
+                cursor: 'pointer'
+              }}
+            >
+              打开筛选抽屉
+            </button>
+          </div>
+        </div>
+
+        <div className={styles.section}>
           <h2 className={styles.sectionTitle}>📝 组件说明</h2>
           <div className={styles.infoCard}>
-            <h3>TreeView 组件功能：</h3>
+            <h3>FilterDrawer 组件功能：</h3>
+            <ul>
+              <li>✅ 从右侧滑出</li>
+              <li>✅ 左侧垂直菜单栏</li>
+              <li>✅ 右侧可滚动内容区</li>
+              <li>✅ 菜单项激活状态（蓝色左边框）</li>
+              <li>✅ 关闭按钮</li>
+              <li>✅ 自定义宽度</li>
+              <li>✅ 基于 antd-mobile Popup 封装</li>
+            </ul>
+            <h3 style={{ marginTop: '16px' }}>TreeView 组件功能：</h3>
             <ul>
               <li>✅ 多层级嵌套结构</li>
               <li>✅ 展开/收起功能</li>
@@ -149,7 +192,23 @@ export default function TestComponentsPage() {
         <div className={styles.section}>
           <h2 className={styles.sectionTitle}>🎨 组件配置示例</h2>
           <div className={styles.codeBlock}>
-            <pre>{`// TreeView
+            <pre>{`// FilterDrawer
+<FilterDrawer
+  visible={drawerVisible}
+  onClose={() => setDrawerVisible(false)}
+  title="筛选条件"
+  menus={[
+    { key: 'if', label: '影响因子' },
+    { key: 'date', label: '发表日期' }
+  ]}
+  activeMenu={activeFilterMenu}
+  onMenuChange={setActiveFilterMenu}
+  width="80vw" // 可选，默认 80vw
+>
+  {/* 内容区域 */}
+</FilterDrawer>
+
+// TreeView
 <TreeView
   data={treeData}
   expandedNodes={expandedNodes}
@@ -184,6 +243,81 @@ export default function TestComponentsPage() {
         onSend={handleSend}
         onAIButtonClick={() => alert('AI问答按钮被点击')}
       />
+
+      {/* FilterDrawer 组件 */}
+      <FilterDrawer
+        visible={drawerVisible}
+        onClose={() => setDrawerVisible(false)}
+        title="筛选条件"
+        menus={[
+          { key: '影响因子', label: '影响因子' },
+          { key: '发表日期', label: '发表日期' },
+          { key: '健康效应', label: '健康效应' },
+          { key: '菌株/原料', label: '菌株/原料' }
+        ]}
+        activeMenu={activeFilterMenu}
+        onMenuChange={setActiveFilterMenu}
+      >
+        {activeFilterMenu === '影响因子' && (
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+            <h3 style={{ fontSize: '14px', fontWeight: 'bold', margin: 0 }}>影响因子</h3>
+            <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
+              {['0-5 (452)', '5-10 (311)', '10-15 (189)', '15-20 (98)', '20-30 (45)', '30+ (12)'].map((option) => (
+                <Tag
+                  key={option}
+                  color={selectedFilters.includes(option) ? 'primary' : 'default'}
+                  fill={selectedFilters.includes(option) ? 'solid' : 'outline'}
+                  onClick={() => {
+                    if (selectedFilters.includes(option)) {
+                      setSelectedFilters(selectedFilters.filter((f) => f !== option));
+                    } else {
+                      setSelectedFilters([...selectedFilters, option]);
+                    }
+                  }}
+                >
+                  {option}
+                </Tag>
+              ))}
+            </div>
+          </div>
+        )}
+        {activeFilterMenu === '发表日期' && (
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+            <h3 style={{ fontSize: '14px', fontWeight: 'bold', margin: 0 }}>发表日期</h3>
+            <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
+              {['2025 (156)', '2024 (892)', '2023 (1205)', '2022 (980)'].map((option) => (
+                <Tag key={option} color="default" fill="outline">
+                  {option}
+                </Tag>
+              ))}
+            </div>
+          </div>
+        )}
+        {activeFilterMenu === '健康效应' && (
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+            <h3 style={{ fontSize: '14px', fontWeight: 'bold', margin: 0 }}>健康效应</h3>
+            <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
+              {['免疫调节 (320)', '肠道健康 (280)', '代谢改善 (210)'].map((option) => (
+                <Tag key={option} color="default" fill="outline">
+                  {option}
+                </Tag>
+              ))}
+            </div>
+          </div>
+        )}
+        {activeFilterMenu === '菌株/原料' && (
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+            <h3 style={{ fontSize: '14px', fontWeight: 'bold', margin: 0 }}>菌株/原料</h3>
+            <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
+              {['乳酸菌 (450)', '双歧杆菌 (380)', '酵母菌 (120)'].map((option) => (
+                <Tag key={option} color="default" fill="outline">
+                  {option}
+                </Tag>
+              ))}
+            </div>
+          </div>
+        )}
+      </FilterDrawer>
     </div>
   );
 }

@@ -1,5 +1,6 @@
 'use client';
 
+import Image from 'next/image';
 import { Tag } from 'antd-mobile';
 import { SearchOutline, UnorderedListOutline } from 'antd-mobile-icons';
 import styles from './index.module.scss';
@@ -42,9 +43,11 @@ export default function TopNavigationBar({
             onClick={onSearchClick}
           />
         )}
-        <img
+        <Image
           src={userAvatar}
           alt="用户头像"
+          width={32}
+          height={32}
           className={styles.userAvatar}
           onClick={onUserClick}
         />
