@@ -1,12 +1,9 @@
 'use client';
 
 import { useState, useRef } from 'react';
-import { Tag, Dialog, Popup, Tabs, ErrorBlock } from 'antd-mobile';
+import { Tag, Dialog, Popup, Tabs, ErrorBlock, FloatingBubble } from 'antd-mobile';
 import Image from 'next/image';
-import {
-  UnorderedListOutline,
-  MoreOutline
-} from 'antd-mobile-icons';
+import { MoreOutline } from 'antd-mobile-icons';
 import AIInputBar from '@/components/layout/AIInputBar';
 import TopNavigationBar from '@/components/layout/TopNavigationBar';
 import RelatedSection from '@/components/RelatedSection';
@@ -382,11 +379,15 @@ export default function ArticleV1Page() {
         </div>
       </div>
 
-      {/* 更多信息按钮 - 悬浮 */}
-      <div className={styles.structureBtn} onClick={() => setDrawerVisible(true)}>
-        <UnorderedListOutline className={styles.structureIcon} />
-        <span>更多信息</span>
-      </div>
+      {/* 更多信息按钮 - 可拖动悬浮球 */}
+      <FloatingBubble
+        axis="xy"
+        magnetic="x"
+        className={styles.floatingBubble}
+        onClick={() => setDrawerVisible(true)}
+      >
+        <Image src="/icons/list-white.svg" alt="更多信息" width={24} height={24} className={styles.floatingBubbleIcon} />
+      </FloatingBubble>
 
       <BackToTop scrollContainerRef={scrollRef} bottomOffset={140} />
 
