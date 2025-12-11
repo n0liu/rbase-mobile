@@ -73,9 +73,8 @@ export default function TestComponentsPage() {
     <div className={styles.container}>
       {/* 顶部导航栏 */}
       <TopNavigationBar
-        tag="文献"
         onSearchClick={() => alert('搜索点击')}
-        onUserClick={() => alert('用户头像点击')}
+        onListClick={() => alert('列表点击')}
       />
 
       {/* 标题区 */}
