@@ -5,13 +5,13 @@ import { UpOutline } from 'antd-mobile-icons';
 interface BackToTopProps {
   scrollContainerRef?: React.RefObject<HTMLDivElement | null>;
   threshold?: number;
-  bottomOffset?: number; // Distance from bottom in px
+  position?: 'default' | 'high'; // default=80px, high=140px
 }
 
-export default function BackToTop({ 
-  scrollContainerRef, 
+export default function BackToTop({
+  scrollContainerRef,
   threshold = 300,
-  bottomOffset
+  position = 'default'
 }: BackToTopProps) {
   const [visible, setVisible] = useState(false);
 
@@ -38,16 +38,12 @@ export default function BackToTop({
     });
   };
 
-  const style: React.CSSProperties = {};
-  if (bottomOffset !== undefined) {
-    style.bottom = `${bottomOffset}px`;
-  }
+  const positionClass = position === 'high' ? styles.positionHigh : '';
 
   return (
     <div
-      className={`${styles.backTopBtn} ${visible ? styles.backTopBtnVisible : ''}`}
+      className={`${styles.backTopBtn} ${visible ? styles.backTopBtnVisible : ''} ${positionClass}`}
       onClick={scrollToTop}
-      style={style}
     >
       <UpOutline className={styles.icon} />
     </div>

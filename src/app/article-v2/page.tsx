@@ -885,7 +885,7 @@ export default function ArticleV2Page() {
           </div>
         </div>
       </Popup>
-      <BackToTop scrollContainerRef={scrollRef} threshold={200} bottomOffset={80} />
+      <BackToTop scrollContainerRef={scrollRef} threshold={200}  />
     </div>
   );
 }

@@ -1,0 +1,11 @@
+.floatingButton {
+  --initial-position-bottom: 200px;
+  --initial-position-right: 8px;
+  --edge-distance: 8px;
+  --z-index: 999;
+}
+
+.icon {
+  width: 24px;
+  height: 24px;
+}
