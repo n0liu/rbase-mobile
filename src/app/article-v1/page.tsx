@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { Tag, Dialog, Popup, Tabs, ErrorBlock, FloatingBubble } from 'antd-mobile';
 import Image from 'next/image';
 import { MoreOutline } from 'antd-mobile-icons';
@@ -18,6 +18,11 @@ export default function ArticleV1Page() {
   const [aiTipVisible, setAiTipVisible] = useState(false);
   const [aiReadPopupVisible, setAiReadPopupVisible] = useState(false);
   const [aiReadType, setAiReadType] = useState('summary');
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   const article = {
     type: "ARTICLE",
@@ -380,14 +385,16 @@ export default function ArticleV1Page() {
       </div>
 
       {/* 更多信息按钮 - 可拖动悬浮球 */}
-      <FloatingBubble
-        axis="xy"
-        magnetic="x"
-        className={styles.floatingBubble}
-        onClick={() => setDrawerVisible(true)}
-      >
-        <Image src="/icons/list-white.svg" alt="更多信息" width={24} height={24} className={styles.floatingBubbleIcon} />
-      </FloatingBubble>
+      {mounted && (
+        <FloatingBubble
+          axis="xy"
+          magnetic="x"
+          className={styles.floatingBubble}
+          onClick={() => setDrawerVisible(true)}
+        >
+          <Image src="/icons/list-white.svg" alt="更多信息" width={24} height={24} className={styles.floatingBubbleIcon} />
+        </FloatingBubble>
+      )}
 
       <BackToTop scrollContainerRef={scrollRef} bottomOffset={140} />
 

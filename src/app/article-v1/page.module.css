@@ -227,6 +227,8 @@
   cursor: pointer;
   margin-left: var(--rbase-spacing-sm);
   opacity: 0.5;
+  width: 16px;
+  height: 16px;
 }
 
 
@@ -309,6 +311,8 @@
 }
 
 .teamIcon {
+  width: 14px;
+  height: 14px;
   opacity: 0.8;
 }
 
@@ -420,6 +424,8 @@
 }
 
 .editIcon {
+  width: 14px;
+  height: 14px;
   opacity: 0.8;
 }
 
@@ -702,6 +708,13 @@
   gap: 8px;
 }
 
+.refreshIcon {
+  width: 14px;
+  height: 14px;
+  cursor: pointer;
+  opacity: 0.6;
+}
+
 .relatedList {
   display: flex;
   flex-direction: column;
@@ -811,6 +824,8 @@
 }
 
 .footerLogo {
+  width: 200px;
+  height: 40px;
   opacity: 0.5;
   margin-bottom: 16px;
   filter: grayscale(100%);
