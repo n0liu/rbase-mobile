@@ -10,6 +10,11 @@ const nextConfig: NextConfig = {
         hostname: 'pics-xldkp-com.oss-cn-qingdao.aliyuncs.com',
         pathname: '/**',
       },
+      {
+        protocol: 'https',
+        hostname: 'cdn.mr-gut.cn',
+        pathname: '/**',
+      },
     ],
   },
   reactStrictMode: false,

@@ -1,0 +1,8 @@
+<svg viewBox="0 0 40 48" xmlns="http://www.w3.org/2000/svg">
+  <!-- Document outline -->
+  <path d="M4 0 L26 0 L36 10 L36 48 L4 48 Z" fill="white" stroke="#e53e3e" stroke-width="1.5"/>
+  <!-- Folded corner -->
+  <path d="M26 0 L26 10 L36 10" fill="#fee2e2" stroke="#e53e3e" stroke-width="1.5"/>
+  <!-- PDF text -->
+  <text x="20" y="32" font-family="Arial, sans-serif" font-size="10" font-weight="bold" fill="#e53e3e" text-anchor="middle">PDF</text>
+</svg>

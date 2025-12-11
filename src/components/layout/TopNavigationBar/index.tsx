@@ -1,20 +1,15 @@
 'use client';
 
 import Image from 'next/image';
-import { Tag } from 'antd-mobile';
-import { SearchOutline, UnorderedListOutline } from 'antd-mobile-icons';
 import styles from './index.module.scss';
 import { TopNavigationBarProps } from './types';
 
 export default function TopNavigationBar({
-  tag,
   leftIcon,
   onLeftIconClick,
   onSearchClick,
   onListClick,
-  userAvatar = 'https://pics-xldkp-com.oss-cn-qingdao.aliyuncs.com/users/default_avatar.png',
-  onUserClick,
-  showListIcon = false,
+  showListIcon = true,
   showSearchIcon = true,
 }: TopNavigationBarProps) {
   return (
@@ -25,32 +20,35 @@ export default function TopNavigationBar({
             {leftIcon}
           </div>
         )}
-        <span className={styles.logoR}>R</span>
-        <span className={styles.logoDot}>•</span>
-        <span className={styles.logoText}>base</span>
-        <Tag className={styles.docTag}>{tag}</Tag>
+        <Image
+          src="https://pics-xldkp-com.oss-cn-qingdao.aliyuncs.com/images/rbase/logo2.png"
+          alt="Rbase Logo"
+          width={120}
+          height={40}
+          className={styles.logo}
+        />
       </div>
       <div className={styles.topRight}>
-        {showListIcon && (
-          <UnorderedListOutline
-            className={styles.topIcon}
-            onClick={onListClick}
-          />
-        )}
         {showSearchIcon && (
-          <SearchOutline
+          <Image
+            src="/icons/search.svg"
+            alt="search"
+            width={22}
+            height={22}
             className={styles.topIcon}
             onClick={onSearchClick}
           />
         )}
-        <Image
-          src={userAvatar}
-          alt="用户头像"
-          width={32}
-          height={32}
-          className={styles.userAvatar}
-          onClick={onUserClick}
-        />
+        {showListIcon && (
+          <Image
+            src="/icons/menu.svg"
+            alt="menu"
+            width={22}
+            height={22}
+            className={styles.topIcon}
+            onClick={onListClick}
+          />
+        )}
       </div>
     </div>
   );

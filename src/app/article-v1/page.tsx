@@ -4,11 +4,11 @@ import { useState, useRef } from 'react';
 import { Tag, Dialog, Popup, Tabs } from 'antd-mobile';
 import Image from 'next/image';
 import {
-  RightOutline,
-  SearchOutline,
-  UnorderedListOutline
+  UnorderedListOutline,
+  MoreOutline
 } from 'antd-mobile-icons';
 import AIInputBar from '@/components/layout/AIInputBar';
+import TopNavigationBar from '@/components/layout/TopNavigationBar';
 import styles from './page.module.css';
 import BackToTop from '@/components/BackToTop';
 
@@ -122,10 +122,14 @@ export default function ArticleV1Page() {
       }
     ],
     institutions: [
-      { abbr: "CAU", name: "中国农业大学食品科学与营养工程学院" },
-      { abbr: "AMMS", name: "军事科学院军事医学研究院" },
-      { abbr: "IOZ,CAS", name: "中国科学院动物研究所" },
-      { abbr: "CBS,CAU", name: "中国农业大学生物学院" },
+      { logo: "https://cdn.mr-gut.cn/rbase_2408/institution_detail/logo/20250905/54d64a4dcf7b41b8b774b16ce6ad456d.png", name: "南京医科大学康达学院" },
+      { logo: "https://cdn.mr-gut.cn/rbase_2408/institution_detail/logo/20250701/b9ca05f28dbc45b698ed69adb6c112a1.png", name: "华中农业大学植物科学技术学院" },
+      { logo: "https://cdn.mr-gut.cn/rbase_2408/institution_detail/logo/20251031/d44d86f0060c435285143c293992af61.png", name: "上海承葛生物科技有限公司" },
+      { logo: "https://cdn.mr-gut.cn/rbase_2408/institution_detail/logo/20250905/54d64a4dcf7b41b8b774b16ce6ad456d.png", name: "南京医科大学康达学院" },
+    ],
+    links: [
+      { logo: "https://cdn.mr-gut.cn/rbase_2408/journals/publisher/Taylor and Francis.png", name: "出版社原文" },
+      { logo: "https://pics-xldkp-com.oss-cn-qingdao.aliyuncs.com/images/rbase/pdf-icon2.png", name: "PDF下载" },
     ],
   };
 
@@ -217,77 +221,103 @@ export default function ArticleV1Page() {
   return (
     <div className={styles.container}>
       {/* 顶部导航 */}
-      <div className={styles.topBar}>
-        <div className={styles.topLeft}>
-          <span className={styles.logoR}>R</span>
-          <span className={styles.logoDot}>•</span>
-          <span className={styles.logoText}>base</span>
-          <Tag className={styles.docTag}>文献</Tag>
-        </div>
-        <div className={styles.topRight}>
-          <SearchOutline className={styles.topIcon} />
-          <img src="https://pics-xldkp-com.oss-cn-qingdao.aliyuncs.com/users/default_avatar.png" alt="用户头像" className={styles.userAvatar} />
-        </div>
-      </div>
+      <TopNavigationBar
+        onSearchClick={() => {}}
+        onListClick={() => {}}
+      />
 
       {/* 可滚动内容区 */}
       <div className={styles.scrollArea} ref={scrollRef}>
         <div className={styles.content}>
 
-          {/* 文章元信息 */}
-          <div className={styles.articleMeta}>
-            <Tag color="primary" fill="solid" className={styles.articleTypeTag}>{article.type}</Tag>
-            <span className={styles.journalInfo}>{article.journal} <span className={styles.impactFactor}>[IF:{article.impactFactor}]</span></span>
-            {article.isOpenAccess && <Tag color="danger" fill="outline" className={styles.oaTag}>OA</Tag>}
-          </div>
-
-          {/* 文章标题区 */}
+              {/* 1. Hero Section (Clean) */}
           <div className={styles.titleSection}>
+            
+            <div className={styles.journalRow}>
+              <span className={styles.journalName}>{article.journal}</span>
+              <span className={styles.ifTag}>IF: {article.impactFactor}</span>
+            </div>
+
             <h1 className={styles.titleCn}>{article.titleCn}</h1>
-            <p className={styles.subtitleCn}>{article.subtitleCn}</p>
             <p className={styles.titleEn}>{article.titleEn}</p>
-            <div className={styles.titleFooter}>
-              <span className={styles.doiText}>{article.source}.{article.publishDate}; doi:{article.doi.substring(0, 6)}...</span>
-              <div className={styles.titleActions}>
-                <Image src="/icons/share.svg" alt="分享" width={18} height={18} className={styles.actionIcon} />
-                <Image src="/icons/star.svg" alt="收藏" width={18} height={18} className={styles.actionIcon} />
-              </div>
+            
+            <div className={styles.citationRow}>
+              {article.journal}.{article.publishDate};17(1):{article.doi.split('/').pop()}.doi:{article.doi}.
+              <Image src="/icons/copy.svg" alt="copy" width={16} height={16} className={styles.actionIcon} />
+              <Image src="/icons/share.svg" alt="share" width={16} height={16} className={styles.actionIcon} />
+              <Image src="/icons/quote.svg" alt="quote" width={16} height={16} className={styles.actionIcon} />
+              <Image src="/icons/star.svg" alt="star" width={16} height={16} className={styles.actionIcon} />
+            </div>
+            
+          </div>
+            
+          {/* 2. Author Box (Clean Grid) */}
+          <div className={styles.authorBox}>
+            <div className={styles.authorHeader}>
+              <span className={styles.authorTitle}>主要作者</span>
+              <span className={styles.authorViewAll}>
+                <Image src="/icons/team.svg" alt="team" width={14} height={14} className={styles.teamIcon} />
+                全部
+              </span>
+            </div>
+            <div className={styles.authorGrid}>
+              {(() => {
+                const MAX_DISPLAY = 10;
+                const showMoreButton = article.authors.length > MAX_DISPLAY;
+                const displayAuthors = showMoreButton 
+                  ? article.authors.slice(0, MAX_DISPLAY - 1) 
+                  : article.authors.slice(0, MAX_DISPLAY);
+
+                return (
+                  <>
+                    {displayAuthors.map((author, index) => (
+                      <div key={index} className={styles.authorItem}>
+                        <img src={author.avatar} alt={author.name} className={styles.authorAvatar} />
+                        <span className={styles.authorName}>{author.name}</span>
+                      </div>
+                    ))}
+                    {showMoreButton && (
+                      <div className={styles.authorItem} onClick={() => { /* Handle view all */ }}>
+                        <div className={styles.moreAuthorsBtn}><MoreOutline /></div>
+                        <span className={styles.moreAuthorsText}>更多</span>
+                      </div>
+                    )}
+                  </>
+                );
+              })()}
             </div>
           </div>
 
-          {/* 主要作者 */}
-          <div className={styles.section}>
-            <div className={styles.sectionHeader}>
-              <span className={styles.sectionTitle}>主要作者</span>
-              <span className={styles.sectionMore}>全部 <RightOutline fontSize={12} /></span>
-            </div>
-            <div className={styles.authorScroll}>
-              {article.authors.map((author, index) => (
-                <div key={index} className={styles.authorItem}>
-                  <img src={author.avatar} alt={author.name} className={styles.authorAvatar} />
-                  <span className={styles.authorName}>{author.name}</span>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          {/* AI要点总结 */}
+          {/* 3. Timeline Content (Originally AI Summary) */}
           <div className={styles.aiSection}>
             <div className={styles.aiHeader}>
               <span className={styles.aiTitle}>AI要点总结</span>
-              <span className={styles.aiGenerated}>● AI 生成</span>
+              <span className={styles.aiCorrect}>
+                <Image src="/icons/edit.svg" alt="edit" width={14} height={14} className={styles.editIcon} />
+                纠错
+              </span>
             </div>
-
             <div className={styles.aiContent}>
               {article.aiSummary.summary.map((item, index) => (
                 <div key={index} className={styles.aiItem}>
-                  <div className={styles.aiNum}>{item.num}</div>
+                  <div className={styles.aiNum}>
+                     {/* Using Icon placeholders based on index, or simple numbers for V1 */}
+                     {index === 0 && <span style={{fontSize: 14}}>🔬</span>}
+                     {index === 1 && <span style={{fontSize: 14}}>💡</span>}
+                     {index === 2 && <span style={{fontSize: 14}}>⚔️</span>}
+                     {index === 3 && <span style={{fontSize: 14}}>🧬</span>}
+                     {index >= 4 && <span>{item.num}</span>}
+                  </div>
                   <div className={styles.aiItemContent}>
                     <div className={styles.aiItemTitle}>{item.title}</div>
                     <div className={styles.aiItemText}>{item.content}</div>
                   </div>
                 </div>
               ))}
+            </div>
+            <div className={styles.aiDisclaimer}>
+              <span className={styles.aiDisclaimerIcon}>ⓘ</span>
+              AI内容可能存在错误，仅供参考，欢迎纠错！
             </div>
           </div>
 
@@ -317,25 +347,24 @@ export default function ArticleV1Page() {
           <div className={styles.section}>
             <div className={styles.sectionHeader}>
               <span className={styles.sectionTitle}>相关链接</span>
+              {article.links.length > 3 && (
+                <span className={styles.sectionMore}>更多</span>
+              )}
             </div>
             <div className={styles.linksGrid}>
-              <div className={styles.linkCard}>
-                <div className={styles.linkIconBox}>
-                  <div className={styles.bmcLogo}>
-                    <span className={styles.bmcIcon}>◀</span>
-                    <span className={styles.bmcText}>BMC</span>
+              {article.links.slice(0, 3).map((link, index) => (
+                <div key={index} className={styles.linkCard}>
+                  <div className={styles.linkIconBox}>
+                    <Image
+                      src={link.logo}
+                      alt={link.name}
+                      fill
+                      className={styles.linkLogo}
+                    />
                   </div>
-                  <span className={styles.bmcSub}>Part of Springer Nature</span>
+                  <span className={styles.linkLabel}>{link.name}</span>
                 </div>
-                <span className={styles.linkLabel}>出版社原文</span>
-              </div>
-              <div className={styles.linkCard}>
-                <div className={styles.linkIconBox}>
-                  <div className={styles.pdfIcon}>PDF</div>
-                  <Tag color="danger" fill="outline" className={styles.oaSmall}>OA</Tag>
-                </div>
-                <span className={styles.linkLabel}>PDF下载</span>
-              </div>
+              ))}
             </div>
           </div>
 
@@ -368,12 +397,22 @@ export default function ArticleV1Page() {
           <div className={styles.section}>
             <div className={styles.sectionHeader}>
               <span className={styles.sectionTitle}>相关机构</span>
+              {article.institutions.length > 3 && (
+                <span className={styles.sectionMore}>更多</span>
+              )}
             </div>
-            <div className={styles.institutionsGrid}>
-              {article.institutions.map((inst, index) => (
-                <div key={index} className={styles.institutionCard}>
-                  <div className={styles.institutionAbbr}>{inst.abbr}</div>
-                  <div className={styles.institutionName}>{inst.name}</div>
+            <div className={styles.linksGrid}>
+              {article.institutions.slice(0, 3).map((inst, index) => (
+                <div key={index} className={styles.linkCard}>
+                  <div className={styles.linkIconBox}>
+                    <Image
+                      src={inst.logo}
+                      alt={inst.name}
+                      fill
+                      className={styles.linkLogo}
+                    />
+                  </div>
+                  <span className={styles.linkLabel}>{inst.name}</span>
                 </div>
               ))}
             </div>
@@ -390,10 +429,10 @@ export default function ArticleV1Page() {
         </div>
       </div>
 
-      {/* 结构化解读按钮 - 悬浮 */}
+      {/* 更多信息按钮 - 悬浮 */}
       <div className={styles.structureBtn} onClick={() => setDrawerVisible(true)}>
         <UnorderedListOutline className={styles.structureIcon} />
-        <span>结构化解读</span>
+        <span>更多信息</span>
       </div>
 
       <BackToTop scrollContainerRef={scrollRef} bottomOffset={140} />
@@ -404,7 +443,7 @@ export default function ArticleV1Page() {
         onAIButtonClick={() => console.log('AI按钮点击')}
       />
 
-      {/* 结构化解读抽屉 */}
+      {/* 更多信息抽屉 */}
       <Popup
         visible={drawerVisible}
         onMaskClick={() => setDrawerVisible(false)}
@@ -413,7 +452,7 @@ export default function ArticleV1Page() {
       >
         <div className={styles.drawer}>
           <div className={styles.drawerHeader}>
-            <span className={styles.drawerTitle}>结构化解读</span>
+            <span className={styles.drawerTitle}>更多信息</span>
             <span className={styles.drawerClose} onClick={() => setDrawerVisible(false)}>×</span>
           </div>
           <div className={styles.drawerBody}>
