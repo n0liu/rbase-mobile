@@ -8,6 +8,8 @@ import TopNavigationBar from '@/components/layout/TopNavigationBar';
 import RelatedSection from '@/components/RelatedSection';
 import FloatingButton from '@/components/FloatingButton';
 import SectionTitle from '@/components/SectionTitle';
+import SvgIcon from '@/components/SvgIcon';
+import { getArticleTypeColor } from '@/constants/articleType';
 import styles from './page.module.css';
 import BackToTop from '@/components/BackToTop';
 
@@ -32,11 +34,11 @@ export default function ArticleV1Page() {
     publishDate: "2025-9-1",
     source: "Gut Microbes",
     authors: [
-      { name: "张发明", avatar: "https://pics-xldkp-com.oss-cn-qingdao.aliyuncs.com/users/default_avatar.png" },
-      { name: "T. Borody", avatar: "https://pics-xldkp-com.oss-cn-qingdao.aliyuncs.com/users/default_avatar.png" },
-      { name: "A. Khoruts", avatar: "https://pics-xldkp-com.oss-cn-qingdao.aliyuncs.com/users/default_avatar.png" },
-      { name: "C. Kelly", avatar: "https://pics-xldkp-com.oss-cn-qingdao.aliyuncs.com/users/default_avatar.png" },
-      { name: "Z. Kassam", avatar: "https://pics-xldkp-com.oss-cn-qingdao.aliyuncs.com/users/default_avatar.png" },
+      { name: "张发明", avatar: "https://pics-xldkp-com.oss-cn-qingdao.aliyuncs.com/users/default_avatar.png", isCorresponding: true },
+      { name: "T. Borody", avatar: "https://pics-xldkp-com.oss-cn-qingdao.aliyuncs.com/users/default_avatar.png", isCorresponding: false },
+      { name: "A. Khoruts", avatar: "https://pics-xldkp-com.oss-cn-qingdao.aliyuncs.com/users/default_avatar.png", isCorresponding: false },
+      { name: "C. Kelly", avatar: "https://pics-xldkp-com.oss-cn-qingdao.aliyuncs.com/users/default_avatar.png", isCorresponding: true },
+      { name: "Z. Kassam", avatar: "https://pics-xldkp-com.oss-cn-qingdao.aliyuncs.com/users/default_avatar.png", isCorresponding: false },
     ],
     aiSummary: {
       summary: [
@@ -103,21 +105,35 @@ export default function ArticleV1Page() {
         journal: "Gut Microbes",
         impact: "12.2",
         titleCn: "Science：用化学遗传学方法，解析健康与疾病中的菌群机制（综述）",
-        titleEn: "How do bacterial infections in bowel cancer affect the immune system and DNA damage?"
+        authors: [
+          { name: "高福", isCorresponding: false },
+          { name: "曹雪涛", isCorresponding: false },
+          { name: "George F. Gao", isCorresponding: false },
+          { name: "Xuetao Cao", isCorresponding: true },
+          { name: "Shi-Hua Wang", isCorresponding: true },
+        ]
       },
       {
         type: "News & Views",
         journal: "Gut Microbes",
         impact: "12.2",
         titleCn: "Nature Reviews：FMT和益生菌干预预后考虑潜在风险",
-        titleEn: "How do bacterial infections in bowel cancer affect the immune system and DNA damage?"
+        authors: [
+          { name: "张发明", isCorresponding: false },
+          { name: "T. Borody", isCorresponding: true },
+        ]
       },
       {
         type: "Article",
         journal: "Gut Microbes",
         impact: "12.2",
         titleCn: "艾克/何真/毛仁/来书Cell子刊：菌群如何影响克罗恩病中的'爬行脂肪'形成?",
-        titleEn: "How do bacterial infections in bowel cancer affect the immune system and DNA damage?"
+        authors: [
+          { name: "艾克", isCorresponding: false },
+          { name: "何真", isCorresponding: false },
+          { name: "毛仁", isCorresponding: false },
+          { name: "来书", isCorresponding: true },
+        ]
       }
     ],
     institutions: [
@@ -226,10 +242,11 @@ export default function ArticleV1Page() {
           <div className={styles.titleSection}>
             
             <div className={styles.journalRow}>
-              <span className={styles.articleTypeTag}>{article.type}</span>
-              <span className={styles.journalSeparator}>&gt;</span>
-              <span className={styles.journalName}>{article.journal}</span>
-              <span className={styles.ifTagBracket}>[IF:{article.impactFactor}]</span>
+              <div className={styles.journalInfo}>
+                <span className={styles.journalName}>{article.journal}</span>
+                <span className={styles.articleType}>{article.type}</span>
+              </div>
+              <span className={styles.ifTag}>IF: {article.impactFactor}</span>
             </div>
 
             <h1 className={styles.titleCn}>{article.titleCn}</h1>
@@ -259,17 +276,22 @@ export default function ArticleV1Page() {
             </SectionTitle>
             <div className={styles.authorGrid}>
               {(() => {
-                const MAX_DISPLAY = 10;
+                const MAX_DISPLAY = 8;
                 const showMoreButton = article.authors.length > MAX_DISPLAY;
-                const displayAuthors = showMoreButton 
-                  ? article.authors.slice(0, MAX_DISPLAY - 1) 
+                const displayAuthors = showMoreButton
+                  ? article.authors.slice(0, MAX_DISPLAY - 1)
                   : article.authors.slice(0, MAX_DISPLAY);
 
                 return (
                   <>
                     {displayAuthors.map((author, index) => (
                       <div key={index} className={styles.authorItem}>
-                        <img src={author.avatar} alt={author.name} className={styles.authorAvatar} />
+                        <div className={styles.authorAvatarWrapper}>
+                          <img src={author.avatar} alt={author.name} className={styles.authorAvatar} />
+                          {author.isCorresponding && (
+                            <SvgIcon name="email" className={styles.correspondingIcon} />
+                          )}
+                        </div>
                         <span className={styles.authorName}>{author.name}</span>
                       </div>
                     ))}
@@ -370,12 +392,20 @@ export default function ArticleV1Page() {
               {article.relatedArticles.map((item, index) => (
                 <div key={index} className={styles.relatedItem}>
                   <div className={styles.relatedMeta}>
-                    <span className={styles.relatedType}>{item.type}</span>
+                    <span className={styles.relatedType} style={{ color: getArticleTypeColor(item.type) }}>{item.type}</span>
                     <span className={styles.relatedArrow}>›</span>
                     <span className={styles.relatedJournal}>{item.journal} <span className={styles.impactFactor}>[IF:{item.impact}]</span></span>
                   </div>
                   <div className={styles.relatedTitleCn}>{item.titleCn}</div>
-                  <div className={styles.relatedTitleEn}>{item.titleEn}</div>
+                  <div className={styles.relatedAuthors}>
+                    {item.authors.map((author, idx) => (
+                      <span key={idx} className={styles.relatedAuthor}>
+                        {idx > 0 && ', '}
+                        {author.name}
+                        {author.isCorresponding && <SvgIcon name="email" className={styles.authorMailIcon} />}
+                      </span>
+                    ))}
+                  </div>
                 </div>
               ))}
             </div>

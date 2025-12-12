@@ -92,30 +92,17 @@
   background: white;
 }
 
-.articleTypeTag {
-  font-size: 11px !important;
-  padding: 2px 6px !important;
-  border-radius: 4px !important;
-  font-weight: 600 !important;
-  color: #1677ff !important;
-  background: rgba(22, 119, 255, 0.1) !important;
-  border: none !important;
-}
-
 .oaTag {
-  font-size: 10px !important;
-  padding: 2px 5px !important;
-  border-radius: 4px !important;
-  color: #ff4d4f !important;
-  background: rgba(255, 77, 79, 0.1) !important;
-  border: 1px solid rgba(255, 77, 79, 0.2) !important;
+  font-size: var(--rbase-font-size-caption);
+  padding: 2px 5px;
+  border-radius: var(--rbase-radius-xs);
+  color: var(--rbase-color-danger);
+  background: rgba(255, 77, 79, 0.1);
+  border: 1px solid rgba(255, 77, 79, 0.2);
   line-height: 1;
 }
 
-.journalInfo {
-  font-size: 13px;
-  font-weight: 600;
-  color: #1677ff;
+.oldJournalInfo {
   display: flex;
   align-items: center;
   gap: 6px;
@@ -144,34 +131,35 @@
 .journalRow {
   position: relative;
   display: flex;
-  align-items: center;
-  gap: 4px;
+  align-items: flex-start;
+  justify-content: space-between;
   margin-bottom: var(--rbase-spacing-sm);
 }
 
-.articleTypeTag {
-  font-size: var(--rbase-font-size-caption);
-  font-weight: var(--rbase-font-weight-medium);
-  color: var(--rbase-color-white);
-  background: var(--rbase-color-success);
-  padding: 2px 8px;
-  border-radius: var(--rbase-radius-xs);
-}
-
-.journalSeparator {
-  font-size: var(--rbase-font-size-body-small);
-  color: var(--rbase-color-text-tertiary);
+.journalInfo {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
 }
 
 .journalName {
-  font-size: var(--rbase-font-size-body-small);
+  font-size: var(--rbase-font-size-body);
   font-weight: var(--rbase-font-weight-bold);
   color: var(--rbase-color-primary);
 }
 
-.ifTagBracket {
-  color: var(--rbase-color-text-tertiary);
+.articleType {
   font-size: var(--rbase-font-size-caption);
+  color: var(--rbase-color-text-tertiary);
+}
+
+.ifTag {
+  font-size: var(--rbase-font-size-caption);
+  font-weight: var(--rbase-font-weight-medium);
+  color: var(--rbase-color-success);
+  padding: 4px 12px;
+  border: 1px solid var(--rbase-color-success);
+  border-radius: var(--rbase-radius-md);
 }
 
 .textOriginal {
@@ -192,11 +180,14 @@
 }
 
 .titleEn {
-  font-size: 15px;
-  color: #555;
+  font-size: var(--rbase-font-size-body-small);
+  color: var(--rbase-color-text-secondary);
   line-height: 1.5;
-  margin-bottom: 8px; /* Reduced to connect with DOI */
-  font-weight: 400;
+  margin-bottom: var(--rbase-spacing-xs);
+  font-weight: var(--rbase-font-weight-regular);
+  font-style: italic;
+  padding-left: var(--rbase-spacing-sm);
+  border-left: 1px solid var(--rbase-color-text-quaternary);
 }
 
 .doiRow {
@@ -349,9 +340,8 @@
 /* ==================== 作者区域 (Refined Grid) ==================== */
 .authorGrid {
   display: grid;
-  grid-template-columns: repeat(5, 1fr);
-  justify-content: space-between;
-  row-gap: var(--rbase-spacing-sm);
+  grid-template-columns: repeat(4, 1fr);
+  row-gap: var(--rbase-spacing-md);
   width: 100%;
 }
 
@@ -359,13 +349,29 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 8px;
-  width: 52px; 
+  gap: var(--rbase-spacing-xs);
+}
+
+.authorAvatarWrapper {
+  position: relative;
+  width: 56px;
+  height: 56px;
+}
+
+.correspondingIcon {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  width: 12px;
+  height: 12px;
+  color: var(--rbase-color-primary);
+  background-color: white;
+  padding-left: 2px;
 }
 
 .authorAvatar {
-  width: 48px; 
-  height: 48px;
+  width: 56px;
+  height: 56px;
   border-radius: 50%;
   object-fit: cover;
   border: 1px solid #f0f0f0; /* Light border for separation on white */
@@ -374,8 +380,8 @@
 }
 
 .authorName {
-  font-size: 11px;
-  color: #333;
+  font-size:  var(--rbase-font-size-caption) ;
+  color: var(--rbase-color-text-primary);
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -385,16 +391,16 @@
 }
 
 .moreAuthorsBtn {
-  width: 48px; 
-  height: 48px;
+  width: 56px;
+  height: 56px;
   border-radius: 50%;
-  background: #f7f8fa;
+  background: var(--rbase-color-background-secondary);
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #1677ff;
+  color: var(--rbase-color-primary);
   font-size: 20px;
-  border: 1px solid #f0f0f0;
+  border: 1px solid var(--rbase-color-border);
   cursor: pointer;
 }
 
@@ -471,7 +477,7 @@
   position: relative;
   display: flex;
   flex-direction: column;
-  gap: 32px; /* Space between timeline items */
+  gap: var(--rbase-spacing-lg); /* Space between timeline items */
 }
 
 /* The Continuous Vertical Line */
@@ -482,7 +488,7 @@
   bottom: 0;
   left: 11px; /* Center of 24px icon */
   width: 1px;
-  background: #f0f0f0;
+  background: var(--rbase-color-text-quaternary);
   z-index: 0;
 }
 
@@ -748,12 +754,15 @@
 .relatedList {
   display: flex;
   flex-direction: column;
-  gap: var(--rbase-spacing-md);
 }
 
 .relatedItem {
-  padding-bottom: var(--rbase-spacing-md);
-  border-bottom: 1px solid var(--rbase-color-border-light);
+  padding: var(--rbase-spacing-md) 0;
+  border-bottom: 1px solid var(--rbase-color-border);
+}
+
+.relatedItem:first-child {
+  padding-top: 0;
 }
 
 .relatedItem:last-child {
@@ -793,14 +802,24 @@
   margin-bottom: var(--rbase-spacing-xs);
 }
 
-.relatedTitleEn {
+.relatedAuthors {
   font-size: var(--rbase-font-size-caption);
-  color: var(--rbase-color-text-secondary);
+  color: var(--rbase-color-text-tertiary);
   line-height: 1.4;
-  display: -webkit-box;
-  -webkit-line-clamp: 2;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
+  margin-top: var(--rbase-spacing-xs);
+}
+
+.relatedAuthor {
+  white-space: nowrap;
+}
+
+.authorMailIcon {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  margin-left: 2px;
+  vertical-align: middle;
+  color: var(--rbase-color-primary);
 }
 
 /* ==================== 相关机构 ==================== */

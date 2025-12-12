@@ -3,11 +3,12 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
-    "build": "next build",
+    "dev": "tsx scripts/build-icons.ts && next dev",
+    "build": "tsx scripts/build-icons.ts && next build",
     "start": "next start",
     "lint": "eslint",
-    "build:tokens": "tsx scripts/build-tokens.ts"
+    "build:tokens": "tsx scripts/build-tokens.ts",
+    "build:icons": "tsx scripts/build-icons.ts"
   },
   "dependencies": {
     "antd-mobile": "^5.41.1",

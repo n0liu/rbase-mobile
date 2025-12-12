@@ -2,7 +2,7 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: var(--rbase-spacing-md);
+  margin-bottom: var(--rbase-spacing-lg);
 }
 
 .title {
