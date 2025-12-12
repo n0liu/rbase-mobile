@@ -888,15 +888,15 @@
 
 .drawerMenu {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: var(--rbase-spacing-xs);
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--rbase-spacing-sm);
   padding: var(--rbase-spacing-md);
   background: white;
   border-bottom: 1px solid var(--rbase-color-border-light);
 }
 
 .drawerMenuItem {
-  padding: var(--rbase-spacing-xs) 0;
+  padding: var(--rbase-spacing-sm) var(--rbase-spacing-xs);
   font-size: var(--rbase-font-size-body-small);
   color: var(--rbase-color-text-secondary);
   background: var(--rbase-color-background-secondary);
