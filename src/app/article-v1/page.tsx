@@ -4,10 +4,10 @@ import { useState, useRef } from 'react';
 import { Tag, Dialog, Popup, Tabs, ErrorBlock } from 'antd-mobile';
 import Image from 'next/image';
 import { MoreOutline } from 'antd-mobile-icons';
-import AIInputBar from '@/components/layout/AIInputBar';
 import TopNavigationBar from '@/components/layout/TopNavigationBar';
 import RelatedSection from '@/components/RelatedSection';
 import FloatingButton from '@/components/FloatingButton';
+import SectionTitle from '@/components/SectionTitle';
 import styles from './page.module.css';
 import BackToTop from '@/components/BackToTop';
 
@@ -137,38 +137,40 @@ export default function ArticleV1Page() {
   const structureData: Record<string, { title: string; tags: string[] }[]> = {
     '关键词': [
       { title: '核心', tags: ['菊粉', '益生菌', '小肠', '果糖', '脂肪肝', '膳食纤维'] },
-      { title: '原文', tags: ['肠道菌群', 'hepatic steatosis', '期刊 | Nature Metabolism'] },
-      { title: 'AI', tags: ['代谢功能障碍', 'B. acidifaciens', '谷胱甘肽', '肝脏脂质过氧化'] },
+      { title: '原文', tags: ['肠道菌群', 'hepatic steatosis', '期刊 | Nature Metabolism', '膳食纤维', '从头脂肪生成', '高果糖糖浆', 'MASLD', '代谢组学', '同位素示踪'] },
+      { title: 'AI', tags: ['代谢功能障碍', 'B. acidifaciens', '谷胱甘肽', '肝脏脂质过氧化', '酶免疫组抗'] },
+      { title: '人工', tags: ['菌群移植', '产酸拟杆菌', '益菌素', '甘氨酸'] },
       { title: 'MeSH', tags: ['Fructose', 'Inulin', 'Fatty Liver', 'Probiotics'] },
     ],
-    '临床试验': [
-      { title: '临床试验信息', tags: ['发起机构', 'BIT', '分类', '交叉设计', '状态', '双盲', '研究中心', '单中心', '入组', '婴幼儿', '干预措施', '油酸性', '试验分期', '非药物试验', '阳性', '7天', '适应症', '日期/进展状态', 'ChiCTR2500109434', '斯坦福大学露西帕卡德儿童医院（批准号：IRB#58644）', '哥伦比亚大学动物实验伦理和规范委员会（批准号：APLAC-34186）'] },
+    '临床试验': [],
+    '治疗措施': [
+      { title: '治疗与干预措施', tags: ['菊粉', '脂肪肝', '动物实验', '阳性', '抗生素', '便秘', '人体临床试验', '阴性'] },
     ],
     '文章属性': [
-      { title: '文章属性', tags: ['研究类型', '干预性研究', '干预类型', 'TG-基础研究', '动物研究', '转化', '药物开发', '大类学科', '医学', '小类学科', '肠道微生物', '学科', '国首份NSFC8888888（中国）', 'NIH666666（美国）'] },
+      { title: '文章属性', tags: ['研究类型', '干预性研究', '研究等级', '动物研究', '转化方向', '药物开发', '大类学科', '医学', '小类学科', '传染病学', '外科', '研究基金', '国自然NSFC8888888（中国）', 'NIH666666（美国）'] },
     ],
     '实验材料': [
-      { title: '实验/试验材料和对象', tags: ['动物', '小鼠', '小鼠', '293T', '细胞系', '产酸拟杆菌', '动物双歧杆菌Bb-12', '婴导婴乳杆菌60'] },
+      { title: '实验/试验材料和对象', tags: ['模型', '小鼠', '部位', '肝脏', '小肠', '细胞', '293T', '细菌类', '产酸拟杆菌', '动物双歧杆菌Bb-12', '鼠李糖乳杆菌GG'] },
     ],
     '实验方法': [
-      { title: '实验方法', tags: ['16S rDNA测序', '液相色谱-串联质谱（LC-MS）', '逆转录定量聚合酶链式反应（qPCR）', 'RNA序列分析（RNA-seq）', '16S rRNA基因扩增子测序分析（16S）', '质谱成像技术', '苏木精-伊红染色（H&E）', '超声心动图（EchoMS）', '脂肪酸氧化（FAO）', '油红O染色和脂肪酸', '线粒体DNA分析（mtDNA）', '蛋白质免疫印迹（ELISA）'] },
+      { title: '实验方法', tags: ['16S rDNA测序', '液相色谱-质谱联用（LC-MS）', '逆转录定量聚合酶链式反应（qPCR）', 'RNA序列分析（RNA-seq）', '16S rRNA基因扩增子测序分析（16S）', '同位素示踪', '组织学分析', '苏木精-伊红染色（H&E）', '三色染色', '免疫荧光成像', '间接免疫', '回波磁共振成像（EchoMRI）', '脂肪酸氧化（FAO）', '线粒体和脂肪分离', '线粒体', '线粒体DNA分析（mtDNA）', '蛋白质蛋白酶抑制', '酶联免疫吸附测定（ELISA）'] },
     ],
     '分析软件': [
-      { title: '分析方法/软件', tags: ['图分析', '双侧精确统计方法', 'SPSS', 'QIIME2'] },
+      { title: '分析方法/软件', tags: ['回归分析', '贝叶斯统计方法', 'SPSS', 'QIIME2'] },
     ],
     '分子通路': [
-      { title: '分子/通路', tags: ['信号通路', '脂肪酸', 'PD-1', 'CTLA-4', '生物学通路', 'JAK-STAT'] },
+      { title: '分子/通路', tags: ['生化分子', '谷胱甘肽', '短链脂肪酸', '果糖', '抗生素', '配点/靶分子', 'PD-1', 'CTLA-4', '生物学通路', 'JAK-STAT'] },
     ],
     '产出转化': [
-      { title: '产出与转化', tags: ['研究资源', '中国健康人益生菌基库', '相关产品', '短链乳酸', '优乐C乳酸菌固体饮料', '重要中药', '科研仪器', '震平中药饮片', '刘书博论文'] },
+      { title: '产出与转化', tags: ['研究资源', '中国健康人益生菌菌库', '相关产品', '冠益乳酸奶', '优益C乳酸菌饮料', '优益C益生菌固体饮料', '相关企业', '蒙牛乳业', '科拓生物', '华润江中', '相关品牌', '蒙牛', '优益C', '益适优', '尚品'] },
     ],
     '收录频道': [
-      { title: '热心肠日报', tags: ['肠道菌（组）', '营养', '消化系统疾病', '代谢', '果糖', '脂X病', '国家自然科学基金委员会（NSFC）', '美国国立卫生研究院（NIH）'] },
-      { title: '全球益生菌/益生元循证数据库（HOPE）', tags: ['益生菌', '益生元', '膳食纤维', '血糖', '发酵食品', '肥胖', '双歧杆菌'] },
-      { title: '保健食品循证库', tags: ['药食同源', '虫草素', '扩充', '植物提取物', '肥胖'] },
+      { title: '热心肠日报', tags: ['微生物（组）', '营养', '消化系统疾病', '治疗', '免疫', '医药协议'] },
+      { title: '全球益生菌/益生元循证数据库（HOPE）', tags: ['益生菌', '益生元', '膳食纤维', '合生制剂', '发酵食品', '后生元'] },
+      { title: '保健食品循证库', tags: ['药食同源', '保生元', '扩展', '植物提取物', '技术方法', '元一健康'] },
     ],
     '贡献者': [
-      { title: '内容贡献者', tags: ['白细胞组_007', 'PaperSlayer_泽', '医学传奇故事', '艾忆瑾帛Dy_Li', 'FMT小神兽儿', '国家药监局_Wang', '熊实习的Jane', '营养研究5527'] },
+      { title: '内容贡献者', tags: ['白细胞战_007', 'PaperSlayer_张', '医学僧不是和尚', '爱吃烧烤的Dr_Li', 'FMT冲锋队员', '细胞观察员-Wang', '熬夜写论述的me', '菌群研究员9527'] },
     ],
   };
 
@@ -238,13 +240,16 @@ export default function ArticleV1Page() {
             
           {/* 2. Author Box (Clean Grid) */}
           <div className={styles.authorBox}>
-            <div className={styles.authorHeader}>
-              <span className={styles.authorTitle}>主要作者</span>
-              <span className={styles.authorViewAll}>
-                <Image src="/icons/team.svg" alt="team" width={14} height={14} className={styles.teamIcon} />
-                全部
-              </span>
-            </div>
+            <SectionTitle
+              extra={
+                <span className={styles.authorViewAll}>
+                  <Image src="/icons/team.svg" alt="team" width={14} height={14} className={styles.teamIcon} />
+                  全部
+                </span>
+              }
+            >
+              主要作者
+            </SectionTitle>
             <div className={styles.authorGrid}>
               {(() => {
                 const MAX_DISPLAY = 10;
@@ -275,13 +280,16 @@ export default function ArticleV1Page() {
 
           {/* 3. Timeline Content (Originally AI Summary) */}
           <div className={styles.aiSection}>
-            <div className={styles.aiHeader}>
-              <span className={styles.aiTitle}>AI要点总结</span>
-              <span className={styles.aiCorrect}>
-                <Image src="/icons/edit.svg" alt="edit" width={14} height={14} className={styles.editIcon} />
-                纠错
-              </span>
-            </div>
+            <SectionTitle
+              extra={
+                <span className={styles.aiCorrect}>
+                  <Image src="/icons/edit.svg" alt="edit" width={14} height={14} className={styles.editIcon} />
+                  纠错
+                </span>
+              }
+            >
+              AI要点总结
+            </SectionTitle>
             <div className={styles.aiContent}>
               {article.aiSummary.summary.map((item, index) => (
                 <div key={index} className={styles.aiItem}>
@@ -308,13 +316,14 @@ export default function ArticleV1Page() {
 
           {/* AI一键解读 */}
           <div className={styles.section}>
-            <div className={styles.sectionHeader}>
-              <div className={styles.aiReadTitleRow}>
-                <span className={styles.sectionTitle}>AI一键解读</span>
+            <SectionTitle
+              extra={<span className={styles.aiReadTip} onClick={() => setAiTipVisible(true)}>ⓘ 说明</span>}
+            >
+              <span className={styles.aiReadTitleRow}>
+                AI一键解读
                 <Tag color="danger" fill="outline" className={styles.oaTag}>OA</Tag>
-              </div>
-              <span className={styles.aiReadTip} onClick={() => setAiTipVisible(true)}>ⓘ 说明</span>
-            </div>
+              </span>
+            </SectionTitle>
             <div className={styles.aiReadGrid}>
               <div className={styles.aiReadBtn} onClick={() => openAiRead('summary')}>原文摘要</div>
               <div className={styles.aiReadBtn} onClick={() => openAiRead('innovation')}>创新要点</div>
@@ -339,14 +348,17 @@ export default function ArticleV1Page() {
 
           {/* 相关文章 */}
           <div className={styles.section}>
-            <div className={styles.sectionHeader}>
-              <span className={styles.sectionTitle}>相关文章</span>
-              <div className={styles.relatedTags}>
-                <span className={styles.tagLink}>细菌感染</span>
-                <span className={styles.tagLink}>DNA损伤</span>
-                <Image src="/icons/refresh.svg" alt="刷新" width={14} height={14} className={styles.refreshIcon} />
-              </div>
-            </div>
+            <SectionTitle
+              extra={
+                <div className={styles.relatedTags}>
+                  <span className={styles.tagLink}>细菌感染</span>
+                  <span className={styles.tagLink}>DNA损伤</span>
+                  <Image src="/icons/refresh.svg" alt="刷新" width={14} height={14} className={styles.refreshIcon} />
+                </div>
+              }
+            >
+              相关文章
+            </SectionTitle>
             <div className={styles.relatedList}>
               {article.relatedArticles.map((item, index) => (
                 <div key={index} className={styles.relatedItem}>
@@ -389,11 +401,6 @@ export default function ArticleV1Page() {
 
       <BackToTop scrollContainerRef={scrollRef} position="high" />
 
-      {/* 底部 AI 问答栏 */}
-      <AIInputBar
-        onSend={(text) => console.log('发送:', text)}
-        onAIButtonClick={() => console.log('AI按钮点击')}
-      />
 
       {/* 更多信息抽屉 */}
       <Popup
@@ -444,7 +451,12 @@ export default function ArticleV1Page() {
                 );
               })}
               {(!structureData[activeMenu] || structureData[activeMenu].length === 0) && (
-                <ErrorBlock status="default" fullPage title="暂无数据" description="该分类下暂无内容" />
+                <ErrorBlock
+                  image="https://pics-xldkp-com.oss-cn-qingdao.aliyuncs.com/images/rbase/none.png"
+                  fullPage
+                  title="暂无数据"
+                  description="该分类下暂无内容"
+                />
               )}
             </div>
           </div>
@@ -480,11 +492,7 @@ export default function ArticleV1Page() {
         visible={aiReadPopupVisible}
         onMaskClick={() => setAiReadPopupVisible(false)}
         position="bottom"
-        bodyStyle={{
-          height: '70vh',
-          borderRadius: '16px 16px 0 0'
-        }}
-        destroyOnClose={false}
+        bodyStyle={{ height: '70vh', borderRadius: '16px 16px 0 0' }}
       >
         <div className={styles.aiReadPopup}>
           <div className={styles.aiReadHeader}>

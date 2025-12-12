@@ -1,0 +1,32 @@
+.container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: var(--rbase-spacing-md);
+}
+
+.title {
+  font-size: var(--rbase-font-size-body);
+  font-weight: var(--rbase-font-weight-bold);
+  color: var(--rbase-color-text-primary);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.title::before {
+  content: '';
+  display: block;
+  width: 4px;
+  height: 16px;
+  background: var(--rbase-color-primary);
+  border-radius: 2px;
+}
+
+.extra {
+  display: flex;
+  align-items: center;
+  gap: var(--rbase-spacing-xs);
+  font-size: var(--rbase-font-size-body-small);
+  color: var(--rbase-color-text-tertiary);
+}
