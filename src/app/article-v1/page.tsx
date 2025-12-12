@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useRef } from 'react';
-import { Tag, Dialog, Popup, Tabs, ErrorBlock } from 'antd-mobile';
+import { Tag, Dialog, Popup, ErrorBlock } from 'antd-mobile';
 import Image from 'next/image';
 import { MoreOutline } from 'antd-mobile-icons';
 import TopNavigationBar from '@/components/layout/TopNavigationBar';
@@ -13,12 +13,12 @@ import BackToTop from '@/components/BackToTop';
 
 export default function ArticleV1Page() {
   const scrollRef = useRef<HTMLDivElement>(null);
-  const [aiTabKey, setAiTabKey] = useState('cn');
   const [drawerVisible, setDrawerVisible] = useState(false);
   const [activeMenu, setActiveMenu] = useState('关键词');
   const [aiTipVisible, setAiTipVisible] = useState(false);
   const [aiReadPopupVisible, setAiReadPopupVisible] = useState(false);
   const [aiReadType, setAiReadType] = useState('summary');
+  const [activeAnchor, setActiveAnchor] = useState('cn');
 
   const article = {
     type: "ARTICLE",
@@ -177,7 +177,6 @@ export default function ArticleV1Page() {
   const openAiRead = (type: string) => {
     setAiReadType(type);
     setAiReadPopupVisible(true);
-    setAiTabKey('cn');
   };
 
   const getAiReadTitle = () => {
@@ -198,9 +197,17 @@ export default function ArticleV1Page() {
   const getCurrentAiReadContent = () => {
     const content = article.aiInterpretation[aiReadType as keyof typeof article.aiInterpretation];
     if (content && typeof content === 'object' && 'cnContent' in content && 'enContent' in content) {
-      return aiTabKey === 'cn' ? content.cnContent : content.enContent;
+      return { cnContent: content.cnContent, enContent: content.enContent };
     }
-    return '';
+    return { cnContent: '', enContent: '' };
+  };
+
+  const scrollToAnchor = (id: string, anchor: string) => {
+    setActiveAnchor(anchor);
+    const element = document.getElementById(id);
+    if (element) {
+      element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
   };
 
   return (
@@ -499,12 +506,33 @@ export default function ArticleV1Page() {
             <h3 className={styles.aiReadTitle}>AI解读 - {getAiReadTitle()}</h3>
             <span className={styles.aiReadClose} onClick={() => setAiReadPopupVisible(false)}>×</span>
           </div>
-          <Tabs activeKey={aiTabKey} onChange={setAiTabKey}>
-            <Tabs.Tab title="中文" key="cn" />
-            <Tabs.Tab title="原文" key="en" />
-          </Tabs>
+          <div className={styles.aiReadAnchorNav}>
+            <span
+              className={`${styles.aiReadAnchorBtn} ${activeAnchor === 'cn' ? styles.aiReadAnchorBtnActive : ''}`}
+              onClick={() => scrollToAnchor('ai-read-cn', 'cn')}
+            >
+              中文
+            </span>
+            <span
+              className={`${styles.aiReadAnchorBtn} ${activeAnchor === 'en' ? styles.aiReadAnchorBtnActive : ''}`}
+              onClick={() => scrollToAnchor('ai-read-en', 'en')}
+            >
+              原文
+            </span>
+          </div>
           <div className={styles.aiReadContent}>
-            {getCurrentAiReadContent()}
+            <div id="ai-read-cn" className={styles.aiReadSection}>
+              <div className={styles.aiReadSectionTitle}>中文</div>
+              <div className={styles.aiReadSectionContent}>
+                {getCurrentAiReadContent().cnContent}
+              </div>
+            </div>
+            <div id="ai-read-en" className={styles.aiReadSection}>
+              <div className={styles.aiReadSectionTitle}>原文</div>
+              <div className={styles.aiReadSectionContent}>
+                {getCurrentAiReadContent().enContent}
+              </div>
+            </div>
           </div>
         </div>
       </Popup>
