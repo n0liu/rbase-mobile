@@ -4,25 +4,25 @@
 import { FC } from 'react';
 
 export const ArrowDownIcon = () => (
-  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="#0066ff" stroke- stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14" /><path d="m19 12-7 7-7-7" /></svg>
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="#0066ff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14" /><path d="m19 12-7 7-7-7" /></svg>
 );
 
 export const CopyIcon = () => (
-  <svg viewBox="0 0 24 24" fill="none" stroke="#666666" stroke- stroke-linecap="round" stroke-linejoin="round" xmlns="http://www.w3.org/2000/svg">
-  <rect x="8" y="8" rx="2" ry="2" />
+  <svg viewBox="0 0 24 24" fill="none" stroke="#666666" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" xmlns="http://www.w3.org/2000/svg">
+  <rect width="14" height="14" x="8" y="8" rx="2" ry="2" />
   <path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2" />
 </svg>
 );
 
 export const EditIcon = () => (
-  <svg viewBox="0 0 24 24" fill="none" stroke="#999999" stroke- stroke-linecap="round" stroke-linejoin="round" xmlns="http://www.w3.org/2000/svg">
+  <svg viewBox="0 0 24 24" fill="none" stroke="#999999" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" xmlns="http://www.w3.org/2000/svg">
   <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" />
   <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z" />
 </svg>
 );
 
 export const EllipsisIcon = () => (
-  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke- stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="1" /><circle cx="19" cy="12" r="1" /><circle cx="5" cy="12" r="1" /></svg>
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="1" /><circle cx="19" cy="12" r="1" /><circle cx="5" cy="12" r="1" /></svg>
 );
 
 export const EmailIcon = () => (
@@ -38,9 +38,9 @@ export const ListPrimaryIcon = () => (
   <circle cx="10" cy="12" r="3" fill="#1677ff"/>
   <circle cx="10" cy="24" r="3" fill="#1677ff"/>
   <circle cx="10" cy="36" r="3" fill="#1677ff"/>
-  <rect x="18" y="10" rx="2" fill="#1677ff"/>
-  <rect x="18" y="22" rx="2" fill="#1677ff"/>
-  <rect x="18" y="34" rx="2" fill="#1677ff"/>
+  <rect x="18" y="10" width="24" height="4" rx="2" fill="#1677ff"/>
+  <rect x="18" y="22" width="24" height="4" rx="2" fill="#1677ff"/>
+  <rect x="18" y="34" width="24" height="4" rx="2" fill="#1677ff"/>
 </svg>
 );
 
@@ -49,9 +49,9 @@ export const ListWhiteIcon = () => (
   <circle cx="10" cy="12" r="3" fill="white"/>
   <circle cx="10" cy="24" r="3" fill="white"/>
   <circle cx="10" cy="36" r="3" fill="white"/>
-  <rect x="18" y="10" rx="2" fill="white"/>
-  <rect x="18" y="22" rx="2" fill="white"/>
-  <rect x="18" y="34" rx="2" fill="white"/>
+  <rect x="18" y="10" width="24" height="4" rx="2" fill="white"/>
+  <rect x="18" y="22" width="24" height="4" rx="2" fill="white"/>
+  <rect x="18" y="34" width="24" height="4" rx="2" fill="white"/>
 </svg>
 );
 
@@ -61,25 +61,25 @@ export const MenuIcon = () => (
 
 export const PdfIcon = () => (
   <svg viewBox="0 0 40 48" xmlns="http://www.w3.org/2000/svg">
-  <path d="M4 0 L26 0 L36 10 L36 48 L4 48 Z" fill="white" stroke="#e53e3e" stroke-/>
-  <path d="M26 0 L26 10 L36 10" fill="#fee2e2" stroke="#e53e3e" stroke-/>
+  <path d="M4 0 L26 0 L36 10 L36 48 L4 48 Z" fill="white" stroke="#e53e3e" stroke-width="1.5"/>
+  <path d="M26 0 L26 10 L36 10" fill="#fee2e2" stroke="#e53e3e" stroke-width="1.5"/>
   <text x="20" y="32" font-family="Arial, sans-serif" font-size="10" font-weight="bold" fill="#e53e3e" text-anchor="middle">PDF</text>
 </svg>
 );
 
 export const QuoteIcon = () => (
-  <svg viewBox="0 0 24 24" fill="none" stroke="#666666" stroke- stroke-linecap="round" stroke-linejoin="round" xmlns="http://www.w3.org/2000/svg">
+  <svg viewBox="0 0 24 24" fill="none" stroke="#666666" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" xmlns="http://www.w3.org/2000/svg">
   <path d="M3 21c3 0 7-1 7-8V5c0-1.25-.75-2-2-2H4c-1.25 0-2 .75-2 2v6c0 7 4 8 7 8Z" />
   <path d="M15 21c3 0 7-1 7-8V5c0-1.25-.75-2-2-2h-4c-1.25 0-2 .75-2 2v6c0 7 4 8 7 8Z" />
 </svg>
 );
 
 export const RefreshCircleIcon = () => (
-  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="#999999" stroke- stroke-linecap="round" stroke-linejoin="round"><path d="M21 12c.552 0 1.005-.449.95-.998a10 10 0 0 0-8.953-8.951c-.55-.055-.998.398-.998.95v8a1 1 0 0 0 1 1z" /><path d="M21.21 15.89A10 10 0 1 1 8 2.83" /></svg>
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="#999999" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12c.552 0 1.005-.449.95-.998a10 10 0 0 0-8.953-8.951c-.55-.055-.998.398-.998.95v8a1 1 0 0 0 1 1z" /><path d="M21.21 15.89A10 10 0 1 1 8 2.83" /></svg>
 );
 
 export const RefreshIcon = () => (
-  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="#999999" stroke- stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-9-9c2.52 0 4.93 1 6.74 2.74L21 8" /><path d="M21 3v5h-5" /></svg>
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="#999999" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-9-9c2.52 0 4.93 1 6.74 2.74L21 8" /><path d="M21 3v5h-5" /></svg>
 );
 
 export const SearchIcon = () => (
@@ -87,18 +87,17 @@ export const SearchIcon = () => (
 );
 
 export const ShareIcon = () => (
-  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="#999999" stroke- stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3" /><circle cx="6" cy="12" r="3" /><circle cx="18" cy="19" r="3" /><line x1="8.59" x2="15.42" y1="13.51" y2="17.49" /><line x1="15.41" x2="8.59" y1="6.51" y2="10.49" /></svg>
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="#999999" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3" /><circle cx="6" cy="12" r="3" /><circle cx="18" cy="19" r="3" /><line x1="8.59" x2="15.42" y1="13.51" y2="17.49" /><line x1="15.41" x2="8.59" y1="6.51" y2="10.49" /></svg>
 );
 
 export const StarIcon = () => (
-  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="#999999" stroke- stroke-linecap="round" stroke-linejoin="round"><path d="M11.525 2.295a.53.53 0 0 1 .95 0l2.31 4.679a2.123 2.123 0 0 0 1.595 1.16l5.166.756a.53.53 0 0 1 .294.904l-3.736 3.638a2.123 2.123 0 0 0-.611 1.878l.882 5.14a.53.53 0 0 1-.771.56l-4.618-2.428a2.122 2.122 0 0 0-1.973 0L6.396 21.01a.53.53 0 0 1-.77-.56l.881-5.139a2.122 2.122 0 0 0-.611-1.879L2.16 9.795a.53.53 0 0 1 .294-.906l5.165-.755a2.122 2.122 0 0 0 1.597-1.16z" /></svg>
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="#999999" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11.525 2.295a.53.53 0 0 1 .95 0l2.31 4.679a2.123 2.123 0 0 0 1.595 1.16l5.166.756a.53.53 0 0 1 .294.904l-3.736 3.638a2.123 2.123 0 0 0-.611 1.878l.882 5.14a.53.53 0 0 1-.771.56l-4.618-2.428a2.122 2.122 0 0 0-1.973 0L6.396 21.01a.53.53 0 0 1-.77-.56l.881-5.139a2.122 2.122 0 0 0-.611-1.879L2.16 9.795a.53.53 0 0 1 .294-.906l5.165-.755a2.122 2.122 0 0 0 1.597-1.16z" /></svg>
 );
 
 export const TaylorFrancisIcon = () => (
   <svg viewBox="0 0 120 50" xmlns="http://www.w3.org/2000/svg">
   <g fill="#1a365d">
-    <path d="M10 35 L2    25 L2     40 L10 40 L10 35 Z" fill="#1a365d"/>        
-    <path d="M10 25 L2    20 L2     30 L10 30 L10 25 Z" fill="#1a365d"/>    
+    <path d="M10 35 L25 35 L25 25 L17.5 15 L10 25 Z" fill="#1a365d"/>
     <path d="M12 27 L23 27 L23 33 L12 33 Z" fill="white"/>
     <ellipse cx="17.5" cy="38" rx="10" ry="3" fill="#1a365d"/>
     <text x="32" y="22" font-family="Georgia, serif" font-size="11" font-weight="bold" fill="#1a365d">Taylor &amp; Francis</text>
@@ -108,7 +107,7 @@ export const TaylorFrancisIcon = () => (
 );
 
 export const TeamIcon = () => (
-  <svg viewBox="0 0 24 24" fill="none" stroke="#999999" stroke- stroke-linecap="round" stroke-linejoin="round" xmlns="http://www.w3.org/2000/svg">
+  <svg viewBox="0 0 24 24" fill="none" stroke="#999999" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" xmlns="http://www.w3.org/2000/svg">
   <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" />
   <circle cx="9" cy="7" r="4" />
   <path d="M22 21v-2a4 4 0 0 0-3-3.87" />

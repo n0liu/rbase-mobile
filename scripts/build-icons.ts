@@ -22,9 +22,11 @@ function toKeyName(filename: string): string {
 function processSvgContent(content: string): string {
   // 移除 XML 声明
   content = content.replace(/<\?xml[^?]*\?>/g, '');
-  // 移除 width 和 height 属性
-  content = content.replace(/\s*width="[^"]*"/g, '');
-  content = content.replace(/\s*height="[^"]*"/g, '');
+  // 移除 HTML 注释（JSX 不支持）
+  content = content.replace(/<!--[\s\S]*?-->/g, '');
+  // 移除 svg 标签上的 width 和 height 属性（不影响 stroke-width 等）
+  content = content.replace(/<svg([^>]*)\s+width="[^"]*"/g, '<svg$1');
+  content = content.replace(/<svg([^>]*)\s+height="[^"]*"/g, '<svg$1');
   // 移除 xmlns:xlink
   content = content.replace(/\s*xmlns:xlink="[^"]*"/g, '');
   // 添加 fill="currentColor"（如果没有的话）
@@ -38,6 +40,9 @@ function processSvgContent(content: string): string {
   content = content.replace(/<line([^>]*)>\s*<\/line>/g, '<line$1 />');
   content = content.replace(/<polygon([^>]*)>\s*<\/polygon>/g, '<polygon$1 />');
   content = content.replace(/<polyline([^>]*)>\s*<\/polyline>/g, '<polyline$1 />');
+  content = content.replace(/<text([^>]*)>\s*<\/text>/g, '<text$1 />');
+  // 移除多余的空白行
+  content = content.replace(/\n\s*\n/g, '\n');
 
   return content.trim();
 }
