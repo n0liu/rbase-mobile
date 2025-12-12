@@ -122,7 +122,7 @@
 }
 
 .impactFactor {
-  color: var(--rbase-color-success);
+  color: var(--rbase-color-text-tertiary);
   font-size: var(--rbase-font-size-caption);
 }
 
@@ -782,7 +782,7 @@
 
 .relatedJournal {
   font-size: var(--rbase-font-size-caption);
-  color: var(--rbase-color-text-secondary);
+  color: var(--rbase-color-primary);
 }
 
 .relatedTitleCn {
