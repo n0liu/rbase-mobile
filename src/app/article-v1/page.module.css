@@ -123,11 +123,8 @@
 }
 
 .impactFactor {
-  background: rgba(82, 196, 26, 0.1);
-  color: #52c41a;
-  padding: 1px 4px;
-  border-radius: 3px;
-  font-size: 11px;
+  color: var(--rbase-color-success);
+  font-size: var(--rbase-font-size-caption);
 }
 
 /* ==================== 文章标题区 ==================== */
@@ -148,31 +145,34 @@
 .journalRow {
   position: relative;
   display: flex;
-  align-items: flex-end;
-  gap: 12px;
-  margin-bottom: 12px;
-  padding-left: 0; /* Reset indentation */
-  min-height: 24px;
+  align-items: center;
+  gap: 4px;
+  margin-bottom: var(--rbase-spacing-sm);
+}
+
+.articleTypeTag {
+  font-size: var(--rbase-font-size-caption);
+  font-weight: var(--rbase-font-weight-medium);
+  color: var(--rbase-color-white);
+  background: var(--rbase-color-success);
+  padding: 2px 8px;
+  border-radius: var(--rbase-radius-xs);
+}
+
+.journalSeparator {
+  font-size: var(--rbase-font-size-body-small);
+  color: var(--rbase-color-text-tertiary);
 }
 
 .journalName {
-  font-size: 14px;
-  font-weight: 700;
-  color: #1677ff;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-  line-height: 1;
+  font-size: var(--rbase-font-size-body-small);
+  font-weight: var(--rbase-font-weight-bold);
+  color: var(--rbase-color-primary);
 }
 
-.ifTag {
-  background: #e6fffb;
-  color: #13c2c2; 
-  font-size: 11px;
-  padding: 1px 6px; /* Slightly smaller padding */
-  border-radius: 4px;
-  font-weight: 600;
-  border: 1px solid rgba(19, 194, 194, 0.2);
-  line-height: 1.2;
+.ifTagBracket {
+  color: var(--rbase-color-text-tertiary);
+  font-size: var(--rbase-font-size-caption);
 }
 
 .textOriginal {
@@ -705,7 +705,14 @@
 .relatedTags {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: var(--rbase-spacing-sm);
+}
+
+.tagLink {
+  font-size: var(--rbase-font-size-body-small);
+  font-weight: var(--rbase-font-weight-medium);
+  color: var(--rbase-color-primary);
+  cursor: pointer;
 }
 
 .refreshIcon {
@@ -718,12 +725,12 @@
 .relatedList {
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: var(--rbase-spacing-md);
 }
 
 .relatedItem {
-  padding-bottom: 16px;
-  border-bottom: 1px solid #f0f0f0;
+  padding-bottom: var(--rbase-spacing-md);
+  border-bottom: 1px solid var(--rbase-color-border-light);
 }
 
 .relatedItem:last-child {
@@ -735,46 +742,37 @@
   display: flex;
   align-items: center;
   flex-wrap: wrap;
-  gap: 8px;
-  margin-bottom: 8px;
+  gap: var(--rbase-spacing-sm);
+  margin-bottom: var(--rbase-spacing-sm);
 }
 
 .relatedType {
-  font-size: 11px;
-  font-weight: 700;
-  color: #1677ff;
+  font-size: var(--rbase-font-size-caption);
+  font-weight: var(--rbase-font-weight-bold);
+  color: var(--rbase-color-primary);
 }
 
 .relatedArrow {
-  font-size: 10px;
-  color: #ccc;
+  font-size: var(--rbase-font-size-caption);
+  color: var(--rbase-color-text-quaternary);
 }
 
 .relatedJournal {
-  font-size: 11px;
-  color: #666;
-  font-family: "SF Mono", "Roboto Mono", monospace;
-}
-
-.relatedIf {
-  font-size: 11px;
-  color: #52c41a;
-  background: #f6ffed;
-  padding: 1px 4px;
-  border-radius: 2px;
+  font-size: var(--rbase-font-size-caption);
+  color: var(--rbase-color-text-secondary);
 }
 
 .relatedTitleCn {
-  font-size: 16px;
-  font-weight: 700;
-  color: #1a1a1a;
+  font-size: var(--rbase-font-size-body);
+  font-weight: var(--rbase-font-weight-bold);
+  color: var(--rbase-color-text-primary);
   line-height: 1.5;
-  margin-bottom: 6px;
+  margin-bottom: var(--rbase-spacing-xs);
 }
 
 .relatedTitleEn {
-  font-size: 13px;
-  color: #888;
+  font-size: var(--rbase-font-size-caption);
+  color: var(--rbase-color-text-secondary);
   line-height: 1.4;
   display: -webkit-box;
   -webkit-line-clamp: 2;

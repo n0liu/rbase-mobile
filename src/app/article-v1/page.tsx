@@ -217,8 +217,10 @@ export default function ArticleV1Page() {
           <div className={styles.titleSection}>
             
             <div className={styles.journalRow}>
+              <span className={styles.articleTypeTag}>{article.type}</span>
+              <span className={styles.journalSeparator}>&gt;</span>
               <span className={styles.journalName}>{article.journal}</span>
-              <span className={styles.ifTag}>IF: {article.impactFactor}</span>
+              <span className={styles.ifTagBracket}>[IF:{article.impactFactor}]</span>
             </div>
 
             <h1 className={styles.titleCn}>{article.titleCn}</h1>
