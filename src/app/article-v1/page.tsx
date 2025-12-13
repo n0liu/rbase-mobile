@@ -15,6 +15,7 @@ import BackToTop from '@/components/BackToTop';
 
 export default function ArticleV1Page() {
   const scrollRef = useRef<HTMLDivElement>(null);
+  const drawerContentRef = useRef<HTMLDivElement>(null);
   const [drawerVisible, setDrawerVisible] = useState(false);
   const [activeMenu, setActiveMenu] = useState('关键词');
   const [aiTipVisible, setAiTipVisible] = useState(false);
@@ -223,6 +224,18 @@ export default function ArticleV1Page() {
     const element = document.getElementById(id);
     if (element) {
       element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  };
+
+  // 抽屉菜单锚点滚动
+  const scrollToDrawerSection = (menu: string) => {
+    setActiveMenu(menu);
+    const sectionId = `drawer-section-${menu}`;
+    const element = document.getElementById(sectionId);
+    if (element && drawerContentRef.current) {
+      const container = drawerContentRef.current;
+      const offsetTop = element.offsetTop - container.offsetTop;
+      container.scrollTo({ top: offsetTop, behavior: 'smooth' });
     }
   };
 
@@ -452,49 +465,50 @@ export default function ArticleV1Page() {
             <span className={styles.drawerClose} onClick={() => setDrawerVisible(false)}>×</span>
           </div>
           <div className={styles.drawerBody}>
-            {/* 顶部菜单标签 */}
+            {/* 顶部菜单标签 - 只显示有数据的分类 */}
             <div className={styles.drawerMenu}>
-              {structureMenus.map((menu) => (
-                <div
-                  key={menu}
-                  className={`${styles.drawerMenuItem} ${activeMenu === menu ? styles.drawerMenuItemActive : ''}`}
-                  onClick={() => setActiveMenu(menu)}
-                >
-                  {menu}
-                </div>
-              ))}
-            </div>
-            {/* 内容区域 */}
-            <div className={styles.drawerContent}>
-              {structureData[activeMenu]?.map((section, idx) => {
-                // 根据最长标签长度决定列数：<=6字符用3列，否则用2列
-                const maxLen = Math.max(...section.tags.map(tag => tag.length));
-                const cols = maxLen <= 6 ? 3 : 2;
-                return (
-                  <div key={idx} className={styles.drawerSection}>
-                    <div className={styles.drawerSectionTitle}>
-                      <span className={styles.drawerSectionBar}></span>
-                      <span>{section.title}</span>
-                    </div>
-                    <div
-                      className={styles.drawerTagList}
-                      style={{ '--tag-cols': cols } as React.CSSProperties}
-                    >
-                      {section.tags.map((tag, tagIdx) => (
-                        <span key={tagIdx} className={styles.drawerTagItem}>{tag}</span>
-                      ))}
-                    </div>
+              {structureMenus
+                .filter((menu) => structureData[menu]?.length > 0)
+                .map((menu) => (
+                  <div
+                    key={menu}
+                    className={`${styles.drawerMenuItem} ${activeMenu === menu ? styles.drawerMenuItemActive : ''}`}
+                    onClick={() => scrollToDrawerSection(menu)}
+                  >
+                    {menu}
                   </div>
-                );
-              })}
-              {(!structureData[activeMenu] || structureData[activeMenu].length === 0) && (
-                <ErrorBlock
-                  image="https://pics-xldkp-com.oss-cn-qingdao.aliyuncs.com/images/rbase/none.png"
-                  fullPage
-                  title="暂无数据"
-                  description="该分类下暂无内容"
-                />
-              )}
+                ))}
+            </div>
+            {/* 内容区域 - 只显示有数据的分类 */}
+            <div className={styles.drawerContent} ref={drawerContentRef}>
+              {structureMenus
+                .filter((menu) => structureData[menu]?.length > 0)
+                .map((menu) => (
+                  <div key={menu} id={`drawer-section-${menu}`} className={styles.drawerCategorySection}>
+                    <div className={styles.drawerCategoryTitle}>{menu}</div>
+                    {structureData[menu].map((section, idx) => {
+                      // 根据最长标签长度决定列数：<=6字符用3列，否则用2列
+                      const maxLen = Math.max(...section.tags.map(tag => tag.length));
+                      const cols = maxLen <= 6 ? 3 : 2;
+                      return (
+                        <div key={idx} className={styles.drawerSection}>
+                          <div className={styles.drawerSectionTitle}>
+                            <span className={styles.drawerSectionBar}></span>
+                            <span>{section.title}</span>
+                          </div>
+                          <div
+                            className={styles.drawerTagList}
+                            style={{ '--tag-cols': cols } as React.CSSProperties}
+                          >
+                            {section.tags.map((tag, tagIdx) => (
+                              <span key={tagIdx} className={styles.drawerTagItem}>{tag}</span>
+                            ))}
+                          </div>
+                        </div>
+                      );
+                    })}
+                  </div>
+                ))}
             </div>
           </div>
         </div>

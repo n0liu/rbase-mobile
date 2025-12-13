@@ -1034,6 +1034,33 @@
   vertical-align: middle;
 }
 
+/* 抽屉分类区块样式 */
+.drawerCategorySection {
+  margin-bottom: var(--rbase-spacing-xl);
+}
+
+.drawerCategorySection:last-child {
+  margin-bottom: 0;
+}
+
+.drawerCategoryTitle {
+  font-size: var(--rbase-font-size-body);
+  font-weight: var(--rbase-font-weight-bold);
+  color: var(--rbase-color-primary);
+  margin-bottom: var(--rbase-spacing-sm);
+  padding-bottom: var(--rbase-spacing-xs);
+  border-bottom: 1px solid var(--rbase-color-primary-light);
+}
+
+.drawerEmptySection {
+  font-size: var(--rbase-font-size-body-small);
+  color: var(--rbase-color-text-tertiary);
+  text-align: center;
+  padding: var(--rbase-spacing-lg);
+  background: white;
+  border-radius: var(--rbase-radius-md);
+}
+
 .treatmentCard {
   border: 1px solid #f0f0f0;
   border-radius: 8px;
