@@ -3,41 +3,18 @@
 import { useState, useRef } from 'react';
 import { Tag, Popup, Tabs } from 'antd-mobile';
 import Image from 'next/image';
-import { useRouter } from 'next/navigation';
 import {
-  RightOutline,
   StarOutline,
-  LeftOutline,
-  SearchOutline,
-  UserOutline,
-  FileOutline,
-  LinkOutline,
-  EyeOutline,
-  ContentOutline,
   SendOutline,
-  MoreOutline,
   FilterOutline,
-  DownOutline,
-  UpOutline,
-  CloseOutline,
-  AppstoreOutline,
-  SetOutline,
-  TagOutline,
-  InformationCircleOutline,
-  CheckCircleOutline,
-  BillOutline,
-  TransportQRcodeOutline,
-  TeamOutline,
-  GlobalOutline,
-  UnorderedListOutline,
-  AppOutline,
-  ShopbagOutline
+  CloseOutline
 } from 'antd-mobile-icons';
+import TopNavigationBar from '@/components/layout/TopNavigationBar';
+import CategoryGrid from '@/components/CategoryGrid';
+import { CategoryItem } from '@/components/CategoryGrid/types';
 import styles from './page.module.css';
-import BackToTop from '@/components/BackToTop';
 
 export default function ArticleV2Page() {
-  const router = useRouter();
   const scrollRef = useRef<HTMLDivElement>(null);
   const [leftPanelVisible, setLeftPanelVisible] = useState(false);
   const [filterPanelVisible, setFilterPanelVisible] = useState(false);
@@ -199,21 +176,18 @@ export default function ArticleV2Page() {
     type: "Article",
     journal: "Nature Metabolism",
     impactFactor: "20.8",
-    isOpenAccess: true,
     titleCn: "Nature子刊：菊粉促益生菌→小肠耗果糖→拯救脂肪肝",
-    subtitleCn: "膳食纤维诱导的肠道菌群清除膳食中的果糖，并逆转脂肪肝",
     titleEn: "Dietary fibre-adapted gut microbiome clears dietary fructose and reverses hepatic steatosis",
     doi: "10.1038/s43587-025-00947-6",
     publishDate: "2025-9-1",
-    source: "Gut Microbes",
     coverImage: "https://pics-xldkp-com.oss-cn-qingdao.aliyuncs.com/images/rxcgw/home-1.png",
     authors: [
-      { name: "张发明", initial: "张", color: "#0066ff", isCorresponding: true },
-      { name: "T. Borody", initial: "B", color: "#5fca96", isCorresponding: false },
-      { name: "A. Khoruts", initial: "K", color: "#ff7b00", isCorresponding: true },
-      { name: "C. Kelly", initial: "C", color: "#9333ea", isCorresponding: false },
-      { name: "Z. Kassam", initial: "Z", color: "#0066ff", isCorresponding: false },
-      { name: "J. Keller", initial: "J", color: "#5fca96", isCorresponding: false },
+      { name: "张发明", isCorresponding: true },
+      { name: "T. Borody", isCorresponding: false },
+      { name: "A. Khoruts", isCorresponding: true },
+      { name: "C. Kelly", isCorresponding: false },
+      { name: "Z. Kassam", isCorresponding: false },
+      { name: "J. Keller", isCorresponding: false },
     ],
     aiSummary: [
       { title: "研究设计与方法", content: "该研究通过小鼠模型，结合同位素示踪、代谢组学和微生物组移植等技术，探究膳食纤维菊粉对高果葡糖浆（HFCS）诱导的代谢功能障碍相关脂肪性肝病（MASLD）的干预效果与机制。" },
@@ -305,15 +279,19 @@ export default function ArticleV2Page() {
   };
 
   // 分类菜单数据
-  const categoryMenus = [
-    { id: 'probiotics', label: '益生菌', count: 8162, active: true, icon: <AppOutline /> },
-    { id: 'lbp', label: '药品/LBP', count: 450, icon: <CheckCircleOutline /> },
-    { id: 'prebiotics', label: '益生元/纤维', count: 980, icon: <UnorderedListOutline /> },
-    { id: 'postbiotics', label: '后生元', count: 230, icon: <UnorderedListOutline /> },
-    { id: 'synbiotics', label: '合生制剂', count: 410, icon: <SetOutline /> },
-    { id: 'fermented', label: '发酵食品', count: 760, icon: <AppstoreOutline /> },
-    { id: 'patent', label: '专利', count: 5721, icon: <FileOutline /> },
-    { id: 'product', label: '产品', count: 1500, icon: <ShopbagOutline /> },
+  const categoryMenus: CategoryItem[] = [
+    { id: 'category-table', label: '分类表', count: 0, icon: 'https://pics-xldkp-com.oss-cn-qingdao.aliyuncs.com/images/hope/icons/1.svg?20230511' },
+    { id: 'food-use', label: '食品用', count: 0, icon: 'https://pics-xldkp-com.oss-cn-qingdao.aliyuncs.com/images/hope/icons/2.svg?20230511' },
+    { id: 'infant-strains', label: '婴幼儿菌株', count: 0, icon: 'https://pics-xldkp-com.oss-cn-qingdao.aliyuncs.com/images/hope/icons/3.svg?20230511' },
+    { id: 'lbp', label: '药品/LBP', count: 0, icon: 'https://pics-xldkp-com.oss-cn-qingdao.aliyuncs.com/images/hope/icons/4.svg?20230511' },
+    { id: 'syncom', label: '组合/SynCom', count: 0, icon: 'https://pics-xldkp-com.oss-cn-qingdao.aliyuncs.com/images/hope/icons/5.svg?20230511' },
+    { id: 'health-material', label: '保健品原料', count: 0, icon: 'https://pics-xldkp-com.oss-cn-qingdao.aliyuncs.com/images/hope/icons/6.svg?20230511' },
+    { id: 'ngp', label: '二代益生菌', count: 0, icon: 'https://pics-xldkp-com.oss-cn-qingdao.aliyuncs.com/images/hope/icons/7.svg?20230511' },
+    { id: 'potential', label: '潜在益生菌', count: 0, icon: 'https://pics-xldkp-com.oss-cn-qingdao.aliyuncs.com/images/hope/icons/8.svg?20230511' },
+    { id: 'engineered', label: '工程益生菌', count: 0, icon: 'https://pics-xldkp-com.oss-cn-qingdao.aliyuncs.com/images/hope/icons/9.svg?20230511' },
+    { id: 'agriculture', label: '农业用', count: 0, icon: 'https://pics-xldkp-com.oss-cn-qingdao.aliyuncs.com/images/hope/icons/10.svg?20230511' },
+    { id: 'technology', label: '益生菌技术', count: 0, icon: 'https://pics-xldkp-com.oss-cn-qingdao.aliyuncs.com/images/hope/icons/11.svg?20230511' },
+    { id: 'people-org', label: '人物/机构', count: 0, icon: 'https://pics-xldkp-com.oss-cn-qingdao.aliyuncs.com/images/hope/icons/12.svg?20230511' },
   ];
 
   // 筛选数据
@@ -485,51 +463,20 @@ export default function ArticleV2Page() {
     },
   ];
 
-  // 打开AI解读弹窗
-  const openAiPopup = (item: typeof article.aiInterpretation[0]) => {
-    setAiPopupContent({ title: item.label, content: '' });
-    setAiPopupVisible(true);
-    // 找到对应内容
-    const found = article.aiInterpretation.find(a => a.key === item.key);
-    if (found) {
-      setAiPopupContent({ title: found.label, content: aiTabKey === 'cn' ? found.cnContent : found.enContent });
-    }
-  };
-
-  // 渲染链接图标
-  const renderLinkIcon = (iconType: string, color: string) => {
-    const iconStyle = { color, fontSize: 28 };
-    switch (iconType) {
-      case 'link': return <LinkOutline style={iconStyle} />;
-      case 'file': return <FileOutline style={iconStyle} />;
-      case 'eye': return <EyeOutline style={iconStyle} />;
-      case 'content': return <ContentOutline style={iconStyle} />;
-      default: return <FileOutline style={iconStyle} />;
-    }
-  };
-
   return (
     <div className={styles.container}>
       {/* 顶部导航 */}
-      <div className={styles.topBar}>
-        <div className={styles.topLeft}>
-          <span className={styles.logoR}>R</span>
-          <span className={styles.logoDot}>•</span>
-          <span className={styles.logoText}>base</span>
-          <Tag className={styles.docTag}>HOPE</Tag>
-        </div>
-        <div className={styles.topRight}>
-          <SearchOutline className={styles.topIcon} />
-          <img src="https://pics-xldkp-com.oss-cn-qingdao.aliyuncs.com/users/default_avatar.png" alt="用户头像" className={styles.userAvatar} />
-        </div>
-      </div>
+      <TopNavigationBar
+        onSearchClick={() => {}}
+        onListClick={() => {}}
+      />
 
       {/* 可滚动内容区 */}
       <div className={styles.scrollArea} ref={scrollRef}>
         <div className={styles.content}>
           {/* 期刊封面 */}
           <div className={styles.coverSection}>
-            <img src={article.coverImage} alt={article.journal} className={styles.coverImage} />
+            <Image src={article.coverImage} alt={article.journal} fill className={styles.coverImage} />
             <div className={styles.coverOverlay}>
               <div className={styles.coverText}>
                 <h1 className={styles.coverTitleCn}>全球益生菌/益生元循证知识库</h1>
@@ -540,36 +487,11 @@ export default function ArticleV2Page() {
           </div>
 
           {/* 两行宫格菜单 */}
-          <div className={styles.menuSection}>
-            <div className={styles.menuScroll}>
-              <div className={styles.menuGrid}>
-                {categoryMenus.slice(0, 4).map((item) => (
-                  <div
-                    key={item.id}
-                    className={`${styles.menuItem} ${item.active ? styles.menuItemActive : ''}`}
-                    onClick={() => setLeftPanelVisible(true)}
-                  >
-                    <div className={styles.menuIcon}>{item.icon}</div>
-                    <span className={styles.menuLabel}>{item.label}</span>
-                    <span className={styles.menuCount}>({item.count})</span>
-                  </div>
-                ))}
-              </div>
-              <div className={styles.menuGrid}>
-                {categoryMenus.slice(4, 8).map((item) => (
-                  <div
-                    key={item.id}
-                    className={`${styles.menuItem} ${item.active ? styles.menuItemActive : ''}`}
-                    onClick={() => setLeftPanelVisible(true)}
-                  >
-                    <div className={styles.menuIcon}>{item.icon}</div>
-                    <span className={styles.menuLabel}>{item.label}</span>
-                    <span className={styles.menuCount}>({item.count})</span>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </div>
+          <CategoryGrid
+            items={categoryMenus}
+            onItemClick={() => setLeftPanelVisible(true)}
+            scrollContainerRef={scrollRef}
+          />
 
           {/* 文献列表区域 */}
           <div className={styles.listSection}>
@@ -885,7 +807,6 @@ export default function ArticleV2Page() {
           </div>
         </div>
       </Popup>
-      <BackToTop scrollContainerRef={scrollRef} threshold={200}  />
     </div>
   );
 }

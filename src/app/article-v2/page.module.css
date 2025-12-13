@@ -5,100 +5,16 @@
   background-color: var(--rbase-color-background);
 }
 
-/* ==================== 顶部导航栏 ==================== */
-.topBar {
-  flex-shrink: 0;
-  height: 56px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 0 var(--rbase-spacing-lg);
-  background: white;
-  border-bottom: 1px solid var(--rbase-color-border);
-}
-
-.topLeft {
-  display: flex;
-  align-items: center;
-  gap: var(--rbase-spacing-xs);
-}
-
-.backBtn {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 32px;
-  height: 32px;
-  font-size: 18px;
-  color: var(--rbase-color-text-primary);
-  cursor: pointer;
-}
-
-.logoR {
-  font-size: 22px;
-  font-weight: var(--rbase-font-weight-bold);
-  color: var(--rbase-color-primary);
-}
-
-.logoDot {
-  font-size: 22px;
-  font-weight: var(--rbase-font-weight-bold);
-  color: var(--rbase-color-accent);
-  margin: 0 2px;
-}
-
-.logoText {
-  font-size: 22px;
-  font-weight: var(--rbase-font-weight-bold);
-  color: var(--rbase-color-text-primary);
-}
-
-.docTag {
-  margin-left: var(--rbase-spacing-sm);
-  font-size: 11px !important;
-  padding: 2px 8px !important;
-  background: transparent !important;
-  color: var(--rbase-color-primary) !important;
-  border: 1px solid var(--rbase-color-primary) !important;
-  border-radius: 4px !important;
-}
-
-.topRight {
-  display: flex;
-  align-items: center;
-  gap: var(--rbase-spacing-md);
-}
-
-.topIcon {
-  font-size: 22px;
-  color: var(--rbase-color-text-primary);
-}
-
-.userAvatar {
-  width: 32px;
-  height: 32px;
-  border-radius: 50%;
-  object-fit: cover;
-}
-
 /* ==================== 可滚动内容区 ==================== */
 .scrollArea {
   flex: 1;
   overflow-y: auto;
   -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
 }
 
 .scrollArea::-webkit-scrollbar {
-  width: 4px;
-}
-
-.scrollArea::-webkit-scrollbar-track {
-  background: var(--rbase-color-background-tertiary);
-}
-
-.scrollArea::-webkit-scrollbar-thumb {
-  background: var(--rbase-color-border-strong);
-  border-radius: 2px;
+  display: none;
 }
 
 .content {
@@ -174,68 +90,6 @@
 .followBtn:active {
   opacity: 0.8;
   transform: scale(0.96);
-}
-
-/* ==================== 两行宫格菜单 ==================== */
-.menuSection {
-  background: white;
-  padding: var(--rbase-spacing-md) var(--rbase-spacing-md);
-}
-
-.menuScroll {
-  display: flex;
-  flex-direction: column;
-  gap: var(--rbase-spacing-sm);
-}
-
-.menuGrid {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: var(--rbase-spacing-sm);
-}
-
-.menuItem {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  padding: var(--rbase-spacing-sm) var(--rbase-spacing-xs);
-  background: var(--rbase-color-background-secondary);
-  border-radius: var(--rbase-radius-md);
-  cursor: pointer;
-  transition: all 0.2s;
-}
-
-.menuItem:active {
-  background: var(--rbase-color-background-tertiary);
-  transform: scale(0.96);
-}
-
-.menuItemActive {
-  background: rgba(0, 102, 255, 0.08);
-}
-
-.menuItemActive .menuLabel {
-  color: var(--rbase-color-primary);
-  font-weight: var(--rbase-font-weight-medium);
-}
-
-.menuIcon {
-  font-size: 20px;
-  color: var(--rbase-color-primary);
-  margin-bottom: 4px;
-}
-
-.menuLabel {
-  font-size: var(--rbase-font-size-caption);
-  color: var(--rbase-color-text-primary);
-  white-space: nowrap;
-}
-
-.menuCount {
-  font-size: 10px;
-  color: var(--rbase-color-text-tertiary);
-  margin-top: 2px;
 }
 
 /* ==================== 文献列表区域 ==================== */

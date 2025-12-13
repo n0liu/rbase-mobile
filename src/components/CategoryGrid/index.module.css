@@ -1,0 +1,101 @@
+.menuSection {
+  background: white;
+  padding: var(--rbase-spacing-lg) var(--rbase-spacing-md);
+  position: relative;
+  z-index: 100;
+}
+
+.menuGrid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: var(--rbase-spacing-lg);
+}
+
+.menuGrid + .menuGrid {
+  margin-top: var(--rbase-spacing-xl);
+}
+
+.expandedOverlay {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 100%;
+  z-index: 99;
+}
+
+.expandedContent {
+  background: white;
+  padding: 0 var(--rbase-spacing-md) var(--rbase-spacing-lg);
+  position: relative;
+  z-index: 2;
+  pointer-events: auto;
+  transform: scaleY(0);
+  transform-origin: top;
+  opacity: 0;
+  transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  border-radius: 0 0 var(--rbase-radius-lg) var(--rbase-radius-lg);
+}
+
+.expandedContent.show {
+  transform: scaleY(1);
+  opacity: 1;
+}
+
+.overlayMask {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.3);
+  z-index: 50;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.overlayMask.show {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.menuItem {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.menuItem:active {
+  opacity: 0.7;
+}
+
+.menuIconCircle {
+  width: 56px;
+  height: 56px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.menuIconCircle img {
+  width: 36px;
+  height: 36px;
+  object-fit: contain;
+}
+
+.menuIconCircle svg {
+  width: 16px;
+  height: 16px;
+  color: var(--rbase-color-text-tertiary);
+}
+
+.menuLabel {
+  font-size: var(--rbase-font-size-body-small);
+  color: var(--rbase-color-text-primary);
+  text-align: center;
+  line-height: 1.3;
+  word-break: keep-all;
+}
