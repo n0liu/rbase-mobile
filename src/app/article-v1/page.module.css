@@ -5,70 +5,6 @@
   background-color: white;
 }
 
-/* ==================== 顶部导航栏 ==================== */
-.topBar {
-  flex-shrink: 0;
-  height: 56px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 0 16px;
-  background: white;
-  border-bottom: 1px solid #f0f0f0;
-}
-
-.topLeft {
-  display: flex;
-  align-items: center;
-}
-
-.logoR {
-  font-size: 22px;
-  font-weight: 700;
-  color: #1677ff;
-}
-
-.logoDot {
-  font-size: 22px;
-  font-weight: 700;
-  color: #faad14;
-  margin: 0 2px;
-}
-
-.logoText {
-  font-size: 22px;
-  font-weight: 700;
-  color: #1a1a1a;
-}
-
-.docTag {
-  margin-left: 8px;
-  font-size: 11px !important;
-  padding: 2px 8px !important;
-  background: #e6f7ff !important;
-  color: #1677ff !important;
-  border: none !important;
-  border-radius: 4px !important;
-}
-
-.topRight {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-}
-
-.topIcon {
-  font-size: 22px;
-  color: #333;
-}
-
-.userAvatar {
-  width: 32px;
-  height: 32px;
-  border-radius: 50%;
-  object-fit: cover;
-}
-
 /* ==================== 可滚动内容区 ==================== */
 .scrollArea {
   flex: 1;
@@ -79,44 +15,6 @@
 
 .scrollArea::-webkit-scrollbar {
   display: none;
-}
-
-
-/* ==================== 文章元信息 ==================== */
-.articleMeta {
-  display: flex;
-  align-items: center;
-  flex-wrap: wrap;
-  gap: 8px;
-  padding: 16px 20px 8px;
-  background: white;
-}
-
-.oaTag {
-  font-size: var(--rbase-font-size-caption);
-  padding: 2px 5px;
-  border-radius: var(--rbase-radius-xs);
-  color: var(--rbase-color-danger);
-  background: rgba(255, 77, 79, 0.1);
-  border: 1px solid rgba(255, 77, 79, 0.2);
-  line-height: 1;
-}
-
-.oldJournalInfo {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-}
-
-.impactFactor {
-  color: var(--rbase-color-text-tertiary);
-  font-size: var(--rbase-font-size-caption);
-}
-
-/* ==================== 文章标题区 ==================== */
-.titleSection {
-  padding: 8px 20px 20px;
-  background: white;
 }
 
 /* ==================== 1. Hero / Title Section (Clean Style) ==================== */
@@ -162,13 +60,9 @@
   border-radius: var(--rbase-radius-md);
 }
 
-.textOriginal {
-  font-size: 12px;
-  color: #999;
-  font-weight: 500;
-  padding-left: 0; /* Reset indentation */
-  margin-bottom: 16px; 
-  line-height: 1;
+.impactFactor {
+  color: var(--rbase-color-text-tertiary);
+  font-size: var(--rbase-font-size-caption);
 }
 
 .titleCn {
@@ -190,10 +84,6 @@
   border-left: 1px solid var(--rbase-color-text-quaternary);
 }
 
-.doiRow {
-  display: none; /* Deprecated */
-}
-
 .citationRow {
   font-size: var(--rbase-font-size-caption);
   color: var(--rbase-color-text-tertiary);
@@ -202,13 +92,6 @@
   margin-bottom: var(--rbase-spacing-lg);
   padding-bottom: var(--rbase-spacing-lg);
   border-bottom: 1px dashed var(--rbase-color-border-light);
-}
-
-.inlineIcon {
-  display: inline-block;
-  vertical-align: middle;
-  margin-left: 4px;
-  margin-right: 12px; /* Space before actions */
 }
 
 .actionIcon {
@@ -221,51 +104,12 @@
   height: 16px;
 }
 
-
-/* If the SVGs are black/grey by default, this might be enough. 
-   If they need tinting, we'd need filters or proper SVG fill controlling. 
-   Assuming SVGs are colored as needed or black. */
-
-/* ==================== 通用区块 (Restored) ==================== */
+/* ==================== 通用区块 ==================== */
 .section {
   padding: 24px 20px;
   background: white;
   border-top: 8px solid #f7f8fa; /* Thick divider to restart flow */
   overflow: hidden;
-}
-
-.sectionHeader {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-bottom: 16px;
-}
-
-.sectionTitle {
-  font-size: var(--rbase-font-size-body);
-  font-weight: var(--rbase-font-weight-bold);
-  color: var(--rbase-color-text-primary);
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-
-.sectionTitle::before {
-  content: '';
-  display: block;
-  width: 4px;
-  height: 16px;
-  background: var(--rbase-color-primary);
-  border-radius: 2px;
-}
-
-.sectionMore {
-  display: flex;
-  align-items: center;
-  gap: 2px;
-  font-size: var(--rbase-font-size-body-small);
-  color: var(--rbase-color-text-tertiary);
-  cursor: pointer;
 }
 
 /* ==================== 2. Author Section (Clean Flat Style) ==================== */
@@ -276,31 +120,6 @@
   border-bottom: 1px dashed var(--rbase-color-border-light);
   border-radius: 0;
   box-shadow: none;
-}
-
-.authorHeader {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: var(--rbase-spacing-lg);
-}
-
-.authorTitle {
-  font-size: var(--rbase-font-size-body);
-  font-weight: var(--rbase-font-weight-bold);
-  color: var(--rbase-color-text-primary);
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-
-.authorTitle::before {
-  content: '';
-  display: block;
-  width: 4px;
-  height: 16px;
-  background: var(--rbase-color-primary);
-  border-radius: 2px;
 }
 
 .authorViewAll {
@@ -316,25 +135,6 @@
   width: 14px;
   height: 14px;
   opacity: 0.8;
-}
-
-.metaRow {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 12px;
-  font-size: 12px;
-  color: #999;
-  margin-top: 16px;
-  padding-top: 16px;
-  border-top: 1px dashed #f0f0f0;
-  font-family: "SF Mono", "Roboto Mono", monospace;
-}
-
-.metaRowFirst {
-  margin-top: 0;
-  padding-top: 0;
-  border-top: none;
 }
 
 /* ==================== 作者区域 (Refined Grid) ==================== */
@@ -415,32 +215,6 @@
   padding: 0 var(--rbase-spacing-lg) 40px;
   background: white;
   border-top: none;
-}
-
-.aiHeader {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: var(--rbase-spacing-md) 0;
-  margin-bottom: var(--rbase-spacing-md);
-}
-
-.aiTitle {
-  font-size: var(--rbase-font-size-body);
-  font-weight: var(--rbase-font-weight-bold);
-  color: var(--rbase-color-text-primary);
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-
-.aiTitle::before {
-  content: '';
-  display: block;
-  width: 4px;
-  height: 16px;
-  background: var(--rbase-color-primary);
-  border-radius: 2px;
 }
 
 .aiCorrect {
@@ -616,120 +390,6 @@
   line-height: 1.2;
 }
 
-/* ==================== 相关链接 ==================== */
-.linksGrid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: var(--rbase-spacing-sm);
-  width: 100%;
-  min-width: 0;
-}
-
-.linkCard {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  min-width: 0;
-}
-
-.linkIconBox {
-  width: 100%;
-  height: 44px;
-  position: relative;
-  background: white;
-  border: 1px solid var(--rbase-color-border);
-  border-radius: var(--rbase-radius-md);
-}
-
-.linkLogo {
-  object-fit: contain;
-}
-
-.linkLabel {
-  font-size: var(--rbase-font-size-caption);
-  color: var(--rbase-color-text-secondary);
-  text-align: center;
-  margin-top: var(--rbase-spacing-xs);
-  width: 100%;
-  word-break: break-word;
-  line-height: 1.3;
-}
-
-.linkIconBoxMore {
-  width: 100%;
-  height: 44px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: var(--rbase-color-background-tertiary);
-  border: 1px solid var(--rbase-color-border);
-  border-radius: var(--rbase-radius-md);
-}
-
-.moreText {
-  font-size: var(--rbase-font-size-body);
-  font-weight: var(--rbase-font-weight-medium);
-  color: var(--rbase-color-text-secondary);
-}
-
-
-.bmcLogo {
-  display: flex;
-  flex-direction: column; /* Stack logo and text */
-  align-items: center;
-  justify-content: center;
-  gap: 4px;
-}
-
-.bmcIcon {
-  color: #52c41a;
-  font-size: 0; /* Hide default icon text scaling */
-}
-
-/* Simulating the BMC Logo Text */
-.bmcText {
-  font-size: 16px;
-  font-weight: 800;
-  color: #1a1a1a;
-  line-height: 1;
-}
-
-.bmcSub {
-  font-size: 9px;
-  color: #52c41a;
-  margin-top: 2px;
-  font-weight: 500;
-}
-
-.pdfIcon {
-  width: 36px;
-  height: 44px;
-  background: white; /* Paper look */
-  border: 1px solid #ff4d4f;
-  border-radius: 4px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 11px;
-  font-weight: 700;
-  color: #ff4d4f;
-  box-shadow: 2px 2px 0 rgba(255, 77, 79, 0.1);
-}
-
-.oaSmall {
-  position: absolute;
-  top: 8px;
-  right: 8px;
-  font-size: 9px !important;
-  height: 16px;
-  line-height: 14px;
-  padding: 0 4px !important;
-  color: #ff4d4f;
-  border: 1px solid #ff4d4f;
-  border-radius: 2px;
-}
-
-
 /* ==================== 相关文章 ==================== */
 .relatedTags {
   display: flex;
@@ -822,38 +482,6 @@
   color: var(--rbase-color-primary);
 }
 
-/* ==================== 相关机构 ==================== */
-.institutionsGrid {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 12px;
-}
-
-.institutionCard {
-  padding: 16px;
-  background: #f7f8fa;
-  border-radius: 8px;
-  text-align: center;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  min-height: 80px;
-}
-
-.institutionAbbr {
-  font-size: 15px;
-  font-weight: 700;
-  color: #1677ff;
-  margin-bottom: 6px;
-}
-
-.institutionName {
-  font-size: 11px;
-  color: #666;
-  line-height: 1.3;
-}
-
 /* ==================== 底部 ==================== */
 .footer {
   padding: 40px 20px;
@@ -879,13 +507,6 @@
 .footerLicense {
   font-size: 10px;
   color: #bbb;
-}
-
-/* ==================== 悬浮结构化按钮 ==================== */
-.floatingBubble {
-  --initial-position-bottom: 200px;
-  --initial-position-right: 8px;
-  --edge-distance: 8px;
 }
 
 .floatingBubbleIcon {
@@ -1050,63 +671,6 @@
   margin-bottom: var(--rbase-spacing-sm);
   padding-bottom: var(--rbase-spacing-xs);
   border-bottom: 1px solid var(--rbase-color-primary-light);
-}
-
-.drawerEmptySection {
-  font-size: var(--rbase-font-size-body-small);
-  color: var(--rbase-color-text-tertiary);
-  text-align: center;
-  padding: var(--rbase-spacing-lg);
-  background: white;
-  border-radius: var(--rbase-radius-md);
-}
-
-.treatmentCard {
-  border: 1px solid #f0f0f0;
-  border-radius: 8px;
-  padding: 12px;
-  margin-bottom: 12px;
-}
-
-.treatmentHeader {
-  display: flex;
-  justify-content: space-between;
-  margin-bottom: 8px;
-}
-
-.treatmentTitle {
-  font-weight: 700;
-}
-
-.treatmentStatus {
-  font-size: 10px;
-  padding: 2px 6px;
-  border-radius: 4px;
-}
-
-.treatmentStatusPositive {
-  background: #f6ffed;
-  color: #52c41a;
-}
-
-.treatmentStatusNegative {
-  background: #fff1f0;
-  color: #ff4d4f;
-}
-
-.treatmentRow {
-  display: flex;
-  font-size: 12px;
-  margin-bottom: 4px;
-}
-
-.treatmentLabel {
-  width: 60px;
-  color: #999;
-}
-
-.treatmentValue {
-  color: #333;
 }
 
 /* AI Popups */

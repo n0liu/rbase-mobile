@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useRef } from 'react';
-import { Tag, Dialog, Popup, ErrorBlock } from 'antd-mobile';
+import { Tag, Dialog, Popup } from 'antd-mobile';
 import Image from 'next/image';
 import { MoreOutline } from 'antd-mobile-icons';
 import TopNavigationBar from '@/components/layout/TopNavigationBar';
@@ -27,13 +27,10 @@ export default function ArticleV1Page() {
     type: "ARTICLE",
     journal: "Nature Metabolism",
     impactFactor: "20.8",
-    isOpenAccess: true,
     titleCn: "Nature子刊：菊粉促益生菌→小肠耗果糖→拯救脂肪肝",
-    subtitleCn: "膳食纤维诱导的肠道菌群清除膳食中的果糖，并逆转脂肪肝",
     titleEn: "Dietary fibre-adapted gut microbiome clears dietary fructose and reverses hepatic steatosis",
     doi: "10.1038/s43587-025-00947-6",
     publishDate: "2025-9-1",
-    source: "Gut Microbes",
     authors: [
       { name: "张发明", avatar: "https://pics-xldkp-com.oss-cn-qingdao.aliyuncs.com/users/default_avatar.png", isCorresponding: true },
       { name: "T. Borody", avatar: "https://pics-xldkp-com.oss-cn-qingdao.aliyuncs.com/users/default_avatar.png", isCorresponding: false },
@@ -96,10 +93,6 @@ export default function ArticleV1Page() {
         enContent: 'This study is mainly based on mouse models and requires further human clinical trials to verify the universality of the results.'
       }
     },
-    figures: [
-      { id: 1, label: "Fig.1" },
-      { id: 2, label: "Fig.2" },
-    ],
     relatedArticles: [
       {
         type: "Review",
@@ -300,7 +293,7 @@ export default function ArticleV1Page() {
                     {displayAuthors.map((author, index) => (
                       <div key={index} className={styles.authorItem}>
                         <div className={styles.authorAvatarWrapper}>
-                          <img src={author.avatar} alt={author.name} className={styles.authorAvatar} />
+                          <Image src={author.avatar} alt={author.name} width={56} height={56} className={styles.authorAvatar} />
                           {author.isCorresponding && (
                             <SvgIcon name="email" className={styles.correspondingIcon} />
                           )}
