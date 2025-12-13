@@ -3,15 +3,14 @@
 import { useState, useRef } from 'react';
 import { Tag, Popup, Tabs } from 'antd-mobile';
 import Image from 'next/image';
-import {
-  FilterOutline,
-  CloseOutline
-} from 'antd-mobile-icons';
+import { FilterOutline } from 'antd-mobile-icons';
 import TopNavigationBar from '@/components/layout/TopNavigationBar';
+import CoverBanner from '@/components/layout/CoverBanner';
 import CategoryGrid from '@/components/CategoryGrid';
 import { CategoryItem } from '@/components/CategoryGrid/types';
 import TabBar from '@/components/TabBar';
 import { TabItem } from '@/components/TabBar/types';
+import ActiveFilterTags from '@/components/ActiveFilterTags';
 import styles from './page.module.css';
 import BackToTop from '@/components/BackToTop';
 
@@ -477,16 +476,15 @@ export default function ArticleV2Page() {
       <div className={styles.scrollArea} ref={scrollRef}>
         <div className={styles.content}>
           {/* 期刊封面 */}
-          <div className={styles.coverSection}>
-            <Image src={article.coverImage} alt={article.journal} fill className={styles.coverImage} />
-            <div className={styles.coverOverlay}>
-              <div className={styles.coverText}>
-                <h1 className={styles.coverTitleCn}>全球益生菌/益生元循证知识库</h1>
-                <p className={styles.coverTitleEn}>The Global Evidence-based Database for Health Outcomes of Pro/PrEbiotics</p>
-              </div>
-              <button className={styles.followBtn}>+ 关注</button>
-            </div>
-          </div>
+          <CoverBanner
+            imageUrl={article.coverImage}
+            title="全球益生菌/益生元循证知识库"
+            subtitle="The Global Evidence-based Database for Health Outcomes of Pro/PrEbiotics"
+            showFollowBtn={true}
+            followBtnText="+ 关注"
+            onFollow={() => {}}
+            height="200px"
+          />
 
           {/* 两行宫格菜单 */}
           <CategoryGrid
@@ -521,26 +519,15 @@ export default function ArticleV2Page() {
             />
 
             {/* 筛选标签 */}
-            {activeFilters.length > 0 && (
-              <div className={styles.filterTags}>
-                <div className={styles.filterTagsLabel}>全部分类 &gt; {selectedPath.join(' > ')}</div>
-                <div className={styles.activeFilters}>
-                  {activeFilters.map((filter, idx) => (
-                    <Tag
-                      key={idx}
-                      color="primary"
-                      className={styles.activeFilterTag}
-                      onClick={() => {
-                        setActiveFilters(activeFilters.filter((_, i) => i !== idx));
-                      }}
-                    >
-                      {filter}
-                      <CloseOutline className={styles.filterTagClose} />
-                    </Tag>
-                  ))}
-                </div>
-              </div>
-            )}
+            <ActiveFilterTags
+              label="全部分类"
+              showBreadcrumb={true}
+              breadcrumbPath={selectedPath}
+              filters={activeFilters}
+              onRemove={(filter) => {
+                setActiveFilters(activeFilters.filter(f => f !== filter));
+              }}
+            />
 
             {/* 文献卡片列表 */}
             <div className={styles.articleList}>
