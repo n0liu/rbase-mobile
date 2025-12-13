@@ -1,0 +1,45 @@
+.tabBar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--rbase-spacing-md) var(--rbase-spacing-lg);
+  border-bottom: 1px solid var(--rbase-color-border);
+  position: relative;
+  background: white;
+}
+
+.tabs {
+  display: flex;
+  align-items: center;
+  gap: var(--rbase-spacing-lg);
+}
+
+.tab {
+  font-size: var(--rbase-font-size-body);
+  color: var(--rbase-color-text-tertiary);
+  cursor: pointer;
+  position: relative;
+  padding-bottom: var(--rbase-spacing-xs);
+  white-space: nowrap;
+}
+
+.tabActive {
+  color: var(--rbase-color-primary);
+  font-weight: var(--rbase-font-weight-medium);
+}
+
+.tabActive::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: calc(-1 * var(--rbase-spacing-lg));
+  height: 2px;
+  background-color: var(--rbase-color-primary);
+}
+
+.extra {
+  display: flex;
+  align-items: center;
+  gap: var(--rbase-spacing-md);
+}

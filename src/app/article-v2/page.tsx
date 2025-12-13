@@ -4,15 +4,16 @@ import { useState, useRef } from 'react';
 import { Tag, Popup, Tabs } from 'antd-mobile';
 import Image from 'next/image';
 import {
-  StarOutline,
-  SendOutline,
   FilterOutline,
   CloseOutline
 } from 'antd-mobile-icons';
 import TopNavigationBar from '@/components/layout/TopNavigationBar';
 import CategoryGrid from '@/components/CategoryGrid';
 import { CategoryItem } from '@/components/CategoryGrid/types';
+import TabBar from '@/components/TabBar';
+import { TabItem } from '@/components/TabBar/types';
 import styles from './page.module.css';
+import BackToTop from '@/components/BackToTop';
 
 export default function ArticleV2Page() {
   const scrollRef = useRef<HTMLDivElement>(null);
@@ -26,11 +27,6 @@ export default function ArticleV2Page() {
   const [expandedNodes, setExpandedNodes] = useState<Set<string>>(new Set(['益生菌']));
   const [selectedPath, setSelectedPath] = useState<string[]>(['益生菌']);
   const [selectedNode, setSelectedNode] = useState<string>('益生菌');
-
-  // 格式化数量显示
-  const formatCount = (count: number) => {
-    return count > 100 ? '100+' : count.toString();
-  };
 
   // 切换节点展开/收起
   const toggleNode = (nodeName: string) => {
@@ -368,6 +364,12 @@ export default function ArticleV2Page() {
 
   // 文献列表数据
   const [activeListTab, setActiveListTab] = useState<'literature' | 'patent'>('literature');
+
+  const listTabs: TabItem[] = [
+    { key: 'literature', label: '文献', count: 12409 },
+    { key: 'patent', label: '专利', count: 5721 },
+  ];
+
   const articleList = [
     {
       id: 1,
@@ -496,34 +498,27 @@ export default function ArticleV2Page() {
           {/* 文献列表区域 */}
           <div className={styles.listSection}>
             {/* Tab 栏 */}
-            <div className={styles.listTabBar}>
-              <div className={styles.listTabs}>
-                <div
-                  className={`${styles.listTab} ${activeListTab === 'literature' ? styles.listTabActive : ''}`}
-                  onClick={() => setActiveListTab('literature')}
-                >
-                  文献 ({formatCount(12409)})
-                </div>
-                <div
-                  className={`${styles.listTab} ${activeListTab === 'patent' ? styles.listTabActive : ''}`}
-                  onClick={() => setActiveListTab('patent')}
-                >
-                  专利 ({formatCount(5721)})
-                </div>
-              </div>
-              <div className={styles.analysisBtn}>
-                <Image src="/icons/refresh-circle.svg" alt="数据分析" width={18} height={18} className={styles.analysisIcon} />
-              </div>
-              <div className={styles.listTabActions}>
-                <div className={styles.sortBtn}>
-                  发表时间
-                  <Image src="/icons/arrow-down.svg" alt="排序" width={12} height={12} className={styles.sortIcon} />
-                </div>
-                <div className={styles.filterBtn} onClick={() => setFilterPanelVisible(true)}>
-                  <FilterOutline className={styles.filterIcon} />
-                </div>
-              </div>
-            </div>
+            <TabBar
+              items={listTabs}
+              activeKey={activeListTab}
+              onChange={(key) => setActiveListTab(key as 'literature' | 'patent')}
+              extra={
+                <>
+                  <div className={styles.analysisBtn}>
+                    <Image src="/icons/refresh-circle.svg" alt="数据分析" width={18} height={18} className={styles.analysisIcon} />
+                  </div>
+                  <div className={styles.listTabActions}>
+                    <div className={styles.sortBtn}>
+                      发表时间
+                      <Image src="/icons/arrow-down.svg" alt="排序" width={12} height={12} className={styles.sortIcon} />
+                    </div>
+                    <div className={styles.filterBtn} onClick={() => setFilterPanelVisible(true)}>
+                      <FilterOutline className={styles.filterIcon} />
+                    </div>
+                  </div>
+                </>
+              }
+            />
 
             {/* 筛选标签 */}
             {activeFilters.length > 0 && (
@@ -574,7 +569,7 @@ export default function ArticleV2Page() {
                         <span key={idx} className={styles.authorItem}>
                           {author.name}
                           {author.isCorresponding && (
-                            <Image src="/icons/mail.svg" alt="通讯作者" width={8} height={8} className={styles.mailIcon} />
+                            <Image src="/icons/email.svg" alt="通讯作者" width={8} height={8} className={styles.mailIcon} />
                           )}
                           {idx < item.authors.length - 1 && ' | '}
                         </span>
@@ -594,18 +589,6 @@ export default function ArticleV2Page() {
             </div>
           </div>
 
-        </div>
-      </div>
-
-      {/* 底部 AI 问答栏 */}
-      <div className={styles.bottomBar}>
-        <div className={styles.aiButton}>
-          <StarOutline />
-          <span>AI问答</span>
-        </div>
-        <div className={styles.inputWrapper}>
-          <input type="text" placeholder="输入问题，对话权威文献" className={styles.inputField} />
-          <div className={styles.sendButton}><SendOutline /></div>
         </div>
       </div>
 
@@ -807,6 +790,7 @@ export default function ArticleV2Page() {
           </div>
         </div>
       </Popup>
+      <BackToTop scrollContainerRef={scrollRef} threshold={200}  />
     </div>
   );
 }

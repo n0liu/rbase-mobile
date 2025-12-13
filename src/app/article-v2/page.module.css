@@ -98,45 +98,6 @@
   margin-top: var(--rbase-spacing-sm);
 }
 
-.listTabBar {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: var(--rbase-spacing-md) var(--rbase-spacing-lg);
-  border-bottom: 1px solid var(--rbase-color-border);
-  position: relative;
-}
-
-.listTabs {
-  display: flex;
-  align-items: center;
-  gap: var(--rbase-spacing-lg);
-}
-
-.listTab {
-  font-size: var(--rbase-font-size-body);
-  color: var(--rbase-color-text-tertiary);
-  cursor: pointer;
-  position: relative;
-  padding-bottom: var(--rbase-spacing-xs);
-  white-space: nowrap;
-}
-
-.listTabActive {
-  color: var(--rbase-color-primary);
-  font-weight: var(--rbase-font-weight-medium);
-}
-
-.listTabActive::after {
-  content: '';
-  position: absolute;
-  left: 0;
-  right: 0;
-  bottom: calc(-1 * var(--rbase-spacing-md) - 1px);
-  height: 2px;
-  background-color: var(--rbase-color-primary);
-}
-
 .analysisBtn {
   display: flex;
   align-items: center;
@@ -733,70 +694,6 @@
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
   overflow: hidden;
-}
-
-/* ==================== 底部栏 ==================== */
-.bottomBar {
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  display: flex;
-  align-items: center;
-  gap: var(--rbase-spacing-sm);
-  padding: var(--rbase-spacing-sm) var(--rbase-spacing-md);
-  background: white;
-  border-top: 1px solid var(--rbase-color-border);
-  box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.06);
-  z-index: 100;
-}
-
-.aiButton {
-  display: flex;
-  align-items: center;
-  gap: var(--rbase-spacing-xs);
-  padding: var(--rbase-spacing-sm) var(--rbase-spacing-md);
-  background: var(--rbase-color-accent);
-  color: white;
-  border-radius: var(--rbase-radius-button);
-  font-size: var(--rbase-font-size-body-small);
-  font-weight: var(--rbase-font-weight-medium);
-  cursor: pointer;
-  flex-shrink: 0;
-}
-
-.inputWrapper {
-  flex: 1;
-  display: flex;
-  align-items: center;
-  background: var(--rbase-color-background-secondary);
-  border-radius: var(--rbase-radius-button);
-  padding: 0 var(--rbase-spacing-sm);
-  border: 1px solid var(--rbase-color-border);
-}
-
-.inputField {
-  flex: 1;
-  border: none;
-  background: transparent;
-  padding: var(--rbase-spacing-sm) 0;
-  font-size: var(--rbase-font-size-body-small);
-  color: var(--rbase-color-text-primary);
-  outline: none;
-}
-
-.inputField::placeholder {
-  color: var(--rbase-color-text-tertiary);
-}
-
-.sendButton {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 32px;
-  height: 32px;
-  color: var(--rbase-color-primary);
-  cursor: pointer;
 }
 
 /* ==================== 右侧抽屉 ==================== */
