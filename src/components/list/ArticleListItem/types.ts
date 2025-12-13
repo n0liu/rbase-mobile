@@ -6,11 +6,12 @@ export interface Author {
 }
 
 export interface Article {
-  /** 日期信息 */
-  date: {
-    day: string;
-    month: string;
-  };
+  /** 文章ID */
+  id: number;
+  /** 日期-日 */
+  day: string;
+  /** 日期-月 */
+  month: string;
   /** 期刊名 */
   journal: string;
   /** 影响因子 */
@@ -20,13 +21,15 @@ export interface Article {
   /** 英文标题 */
   titleEn: string;
   /** 文章类型 */
-  type?: string; // 'Review' | 'Article' | 'Commentary' 等
+  type: string; // 'Review' | 'Article' | 'Commentary' 等
+  /** 发表日期（底部显示） */
+  date: string;
+  /** DOI */
+  doi?: string;
   /** 作者列表 */
   authors: Author[];
   /** 关键词列表 */
   keywords: string[];
-  /** 发表日期（底部显示） */
-  publishDate?: string;
 }
 
 export interface ArticleListItemProps {

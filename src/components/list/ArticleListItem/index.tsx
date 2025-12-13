@@ -1,7 +1,8 @@
 'use client';
 
+import { useState, useRef, useEffect } from 'react';
 import { Tag } from 'antd-mobile';
-import { MoreOutline } from 'antd-mobile-icons';
+import { MoreOutline, DownOutline, UpOutline } from 'antd-mobile-icons';
 import styles from './index.module.scss';
 import { ArticleListItemProps } from './types';
 
@@ -11,12 +12,29 @@ export default function ArticleListItem({
   onClick,
   onMoreClick
 }: ArticleListItemProps) {
+  const [keywordsExpanded, setKeywordsExpanded] = useState(false);
+  const [hasOverflow, setHasOverflow] = useState(false);
+  const keywordsRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const checkOverflow = () => {
+      if (keywordsRef.current) {
+        const element = keywordsRef.current;
+        // 检查内容高度是否超过容器高度（1行），增加5px容差
+        setHasOverflow(element.scrollHeight > element.clientHeight + 5);
+      }
+    };
+
+    checkOverflow();
+    window.addEventListener('resize', checkOverflow);
+    return () => window.removeEventListener('resize', checkOverflow);
+  }, [article.keywords]);
   return (
     <div className={styles.articleItem} onClick={onClick}>
       {/* 左侧日期 */}
       <div className={styles.articleDate}>
-        <span className={styles.articleDay}>{article.date.day}</span>
-        <span className={styles.articleMonth}>{article.date.month}</span>
+        <span className={styles.articleDay}>{article.day}</span>
+        <span className={styles.articleMonth}>{article.month}</span>
       </div>
 
       {/* 右侧内容 */}
@@ -67,8 +85,6 @@ export default function ArticleListItem({
               {author.name}
               {author.isCorresponding && (
                 <svg
-                  width="8"
-                  height="8"
                   viewBox="0 0 8 8"
                   fill="none"
                   className={styles.mailIcon}
@@ -77,22 +93,39 @@ export default function ArticleListItem({
                   <path d="M1 2L4 4L7 2" stroke="currentColor" strokeWidth="0.5" />
                 </svg>
               )}
-              {idx < article.authors.length - 1 && ' | '}
+              {idx < article.authors.length - 1 && '，'}
             </span>
           ))}
         </div>
 
-        {/* 底部：关键词 + 发表日期 */}
-        <div className={styles.articleBottom}>
-          <div className={styles.articleKeywords}>
+        {/* DOI 和日期 */}
+        <div className={styles.articleMeta}>
+          {article.doi && <span className={styles.doiText}>DOI: {article.doi}</span>}
+          <span className={styles.dateText}>{article.date}</span>
+        </div>
+
+        {/* 底部：关键词 */}
+        <div className={styles.keywordsWrapper}>
+          <div
+            ref={keywordsRef}
+            className={`${styles.articleKeywords} ${keywordsExpanded ? styles.expanded : ''}`}
+          >
             {article.keywords.map((kw, idx) => (
               <Tag key={idx} color="primary" fill="outline" className={styles.keywordTag}>
                 {kw}
               </Tag>
             ))}
           </div>
-          {article.publishDate && (
-            <span className={styles.articleDate2}>{article.publishDate}</span>
+          {hasOverflow && (
+            <span
+              className={styles.expandBtn}
+              onClick={(e) => {
+                e.stopPropagation();
+                setKeywordsExpanded(!keywordsExpanded);
+              }}
+            >
+              {keywordsExpanded ? <UpOutline /> : <DownOutline />}
+            </span>
           )}
         </div>
       </div>

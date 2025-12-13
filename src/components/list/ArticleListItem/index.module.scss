@@ -113,7 +113,7 @@
   font-size: var(--rbase-font-size-caption);
   color: var(--rbase-color-text-secondary);
   line-height: 1.5;
-  margin-bottom: var(--rbase-spacing-md);
+  margin-bottom: var(--rbase-spacing-sm);
 
   .authorItem {
     display: inline;
@@ -124,29 +124,71 @@
   display: inline-block;
   vertical-align: middle;
   margin-left: 2px;
+  width: 8px;
+  height: 8px;
   color: var(--rbase-color-primary);
 }
 
-.articleBottom {
+.articleMeta {
   display: flex;
-  align-items: flex-end;
+  align-items: center;
   justify-content: space-between;
   gap: var(--rbase-spacing-sm);
+  font-size: var(--rbase-font-size-caption);
+  color: var(--rbase-color-text-tertiary);
+  margin-bottom: var(--rbase-spacing-sm);
+}
+
+.doiText {
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.dateText {
+  flex-shrink: 0;
+  white-space: nowrap;
+}
+
+.keywordsWrapper {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--rbase-spacing-xs);
+  margin-top: var(--rbase-spacing-md);
 }
 
 .articleKeywords {
   display: flex;
   flex-wrap: wrap;
-  gap: var(--rbase-spacing-xs);
+  gap: var(--rbase-spacing-sm) var(--rbase-spacing-xs);
+  align-items: center;
   flex: 1;
+  max-height: 20px; /* 严格限制1行高度 */
+  overflow: hidden;
+
+  &.expanded {
+    max-height: none;
+  }
 }
 
 .keywordTag {
   font-size: 10px !important;
 }
 
-.articleDate2 {
-  font-size: var(--rbase-font-size-caption);
-  color: var(--rbase-color-text-tertiary);
+.expandBtn {
+  font-size: 14px;
+  color: var(--rbase-color-primary);
+  cursor: pointer;
+  padding: 4px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   white-space: nowrap;
+  user-select: none;
+  flex-shrink: 0;
+
+  &:active {
+    opacity: 0.6;
+  }
 }

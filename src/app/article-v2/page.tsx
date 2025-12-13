@@ -13,6 +13,8 @@ import { TabItem } from '@/components/TabBar/types';
 import ActiveFilterTags from '@/components/ActiveFilterTags';
 import TreeView from '@/components/list/TreeView';
 import { TreeNode } from '@/components/list/TreeView/types';
+import ArticleListItem from '@/components/list/ArticleListItem';
+import { Article } from '@/components/list/ArticleListItem/types';
 import styles from './page.module.css';
 import BackToTop from '@/components/BackToTop';
 
@@ -298,7 +300,7 @@ export default function ArticleV2Page() {
     { key: 'patent', label: '专利', count: 5721 },
   ];
 
-  const articleList = [
+  const articleList: Article[] = [
     {
       id: 1,
       day: '15',
@@ -309,6 +311,7 @@ export default function ArticleV2Page() {
       titleEn: 'A Randomized, Controlled Trial of Bifidobacterium longum BB536 for Improving Gut Health and Immune Function in the Elderly',
       type: 'Article',
       date: '2025-10-15',
+      doi: '10.1080/19490976.2025.2345678',
       authors: [
         { name: 'Jun-Yao Xu', isCorresponding: false },
         { name: '陈欢', isCorresponding: false },
@@ -329,6 +332,7 @@ export default function ArticleV2Page() {
       titleEn: 'Metagenomic analysis reveals the effects of inulin-type prebiotics on gut microbial structure and metabolites in obese individuals and something...',
       type: 'Article',
       date: '2025-10-08',
+      doi: '10.1186/s40168-025-01234-5',
       authors: [
         { name: '汪芳宏', isCorresponding: false },
         { name: '蓝灿辉', isCorresponding: true },
@@ -348,11 +352,12 @@ export default function ArticleV2Page() {
       titleEn: 'Lactobacillus rhamnosus GG alleviates anxiety-like behavior in mice by modulating the gut-brain axis',
       type: 'Article',
       date: '2025-09-29',
+      doi: '10.1007/s00203-025-04606-7',
       authors: [
         { name: 'Bradley G Fitzgerald', isCorresponding: false },
         { name: 'Matthew T Sorbara', isCorresponding: true },
       ],
-      keywords: ['精神益生菌', 'LGG'],
+      keywords: ['精神益生菌', 'LGG', '后生元', '嗜黏蛋白阿克曼氏菌', '预防急性移植物抗宿主病'],
     },
     {
       id: 4,
@@ -364,6 +369,7 @@ export default function ArticleV2Page() {
       titleEn: 'Selective shaping of the infant gut microbiome by human milk oligosaccharides (HMOs)',
       type: 'Commentary',
       date: '2025-09-15',
+      doi: '10.1038/s41396-025-01567-8',
       authors: [
         { name: 'Xianyun Gao', isCorresponding: false },
         { name: 'Yiyu Jin', isCorresponding: false },
@@ -384,6 +390,7 @@ export default function ArticleV2Page() {
       titleEn: 'Applications and challenges of live biotherapeutic products (LBPs) in the treatment of inflammatory bowel disease (IBD)',
       type: 'Review',
       date: '2025-09-01',
+      doi: '10.1016/j.chom.2025.08.012',
       authors: [
         { name: 'Siqi Hua', isCorresponding: false },
         { name: '朱波', isCorresponding: true },
@@ -460,47 +467,14 @@ export default function ArticleV2Page() {
 
             {/* 文献卡片列表 */}
             <div className={styles.articleList}>
-              {articleList.map((item) => (
-                <div key={item.id} className={styles.articleItem}>
-                  <div className={styles.articleDate}>
-                    <span className={styles.articleDay}>{item.day}</span>
-                    <span className={styles.articleMonth}>{item.month}</span>
-                  </div>
-                  <div className={styles.articleMain}>
-                    <div className={styles.articleHeader}>
-                      <span className={`${styles.articleType} ${item.type === 'Review' ? styles.typeReview : item.type === 'Commentary' ? styles.typeCommentary : ''}`}>
-                        {item.type}
-                      </span>
-                      <span className={styles.headerSeparator}>›</span>
-                      <span className={styles.articleJournal}>{item.journal}</span>
-                      <span className={styles.articleIF}>[IF:{item.impactFactor}]</span>
-                      <div className={styles.articleMore}>
-                        <Image src="/icons/ellipsis.svg" alt="更多" width={16} height={16} className={styles.moreIcon} />
-                      </div>
-                    </div>
-                    <h3 className={styles.articleTitleCn}>{item.titleCn}</h3>
-                    <p className={styles.articleTitleEn}>{item.titleEn}</p>
-                    <div className={styles.articleAuthors}>
-                      {item.authors.map((author, idx) => (
-                        <span key={idx} className={styles.authorItem}>
-                          {author.name}
-                          {author.isCorresponding && (
-                            <Image src="/icons/email.svg" alt="通讯作者" width={8} height={8} className={styles.mailIcon} />
-                          )}
-                          {idx < item.authors.length - 1 && ' | '}
-                        </span>
-                      ))}
-                    </div>
-                    <div className={styles.articleBottom}>
-                      <div className={styles.articleKeywords}>
-                        {item.keywords.map((kw, idx) => (
-                          <Tag key={idx} color="primary" fill="outline" className={styles.keywordTag}>{kw}</Tag>
-                        ))}
-                      </div>
-                      <span className={styles.articleDate2}>{item.date}</span>
-                    </div>
-                  </div>
-                </div>
+              {articleList.map((article) => (
+                <ArticleListItem
+                  key={article.id}
+                  article={article}
+                  showMoreIcon={true}
+                  onClick={() => {}}
+                  onMoreClick={() => {}}
+                />
               ))}
             </div>
           </div>
