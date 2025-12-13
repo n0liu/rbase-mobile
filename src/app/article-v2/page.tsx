@@ -11,6 +11,8 @@ import { CategoryItem } from '@/components/CategoryGrid/types';
 import TabBar from '@/components/TabBar';
 import { TabItem } from '@/components/TabBar/types';
 import ActiveFilterTags from '@/components/ActiveFilterTags';
+import TreeView from '@/components/list/TreeView';
+import { TreeNode } from '@/components/list/TreeView/types';
 import styles from './page.module.css';
 import BackToTop from '@/components/BackToTop';
 
@@ -39,13 +41,7 @@ export default function ArticleV2Page() {
   };
 
   // 树状数据结构
-  interface CategoryNode {
-    name: string;
-    count: number;
-    children?: CategoryNode[];
-  }
-
-  const categoryTree: CategoryNode[] = [
+  const categoryTree: TreeNode[] = [
     {
       name: '益生菌',
       count: 8162,
@@ -75,7 +71,7 @@ export default function ArticleV2Page() {
   ];
 
   // 构建节点路径
-  const buildNodePath = (targetName: string, nodes: CategoryNode[], currentPath: string[] = []): string[] | null => {
+  const buildNodePath = (targetName: string, nodes: TreeNode[], currentPath: string[] = []): string[] | null => {
     for (const node of nodes) {
       const newPath = [...currentPath, node.name];
       if (node.name === targetName) {
@@ -90,10 +86,7 @@ export default function ArticleV2Page() {
   };
 
   // 处理节点点击
-  const handleNodeClick = (node: CategoryNode, hasChildren: boolean) => {
-    if (hasChildren) {
-      toggleNode(node.name);
-    }
+  const handleNodeClick = (node: TreeNode) => {
     // 设置选中节点
     setSelectedNode(node.name);
     // 构建完整路径
@@ -101,70 +94,6 @@ export default function ArticleV2Page() {
     if (path) {
       setSelectedPath(path);
     }
-  };
-
-  // 递归渲染分类树节点
-  const renderCategoryNode = (node: CategoryNode, level: number = 0, isLast: boolean = false): React.ReactNode => {
-    const isExpanded = expandedNodes.has(node.name);
-    const hasChildren = Boolean(node.children && node.children.length > 0);
-    const isLeaf = !hasChildren;
-    const isSelected = selectedNode === node.name;
-
-    return (
-      <div
-        key={node.name}
-        className={`${styles.orgNodeWrapper} ${isLast ? styles.orgNodeLast : ''}`}
-        style={{
-          '--node-level': level
-        } as React.CSSProperties}
-      >
-        <div
-          className={`${styles.orgItemChild} ${isSelected ? styles.orgItemSelected : ''}`}
-          style={{
-            '--node-level': level
-          } as React.CSSProperties}
-          onClick={() => handleNodeClick(node, hasChildren)}
-        >
-          <div className={styles.orgItemIconWrapper}>
-            {isLeaf ? (
-              // 叶子节点:只显示横线
-              <div className={styles.orgLeafIcon}>
-                <svg viewBox="0 0 16 16" fill="none">
-                  <line x1="4" y1="8" x2="12" y2="8" stroke="currentColor" strokeWidth="1.5"/>
-                </svg>
-              </div>
-            ) : isExpanded ? (
-              // 已展开:圆圈-号
-              <div className={styles.orgCollapseIcon}>
-                <svg viewBox="0 0 16 16" fill="none">
-                  <circle cx="8" cy="8" r="7" stroke="currentColor" strokeWidth="1.5" fill="none"/>
-                  <line x1="4" y1="8" x2="12" y2="8" stroke="currentColor" strokeWidth="1.5"/>
-                </svg>
-              </div>
-            ) : (
-              // 未展开:圆圈+号
-              <div className={styles.orgExpandIcon}>
-                <svg viewBox="0 0 16 16" fill="none">
-                  <circle cx="8" cy="8" r="7" stroke="currentColor" strokeWidth="1.5" fill="none"/>
-                  <line x1="4" y1="8" x2="12" y2="8" stroke="currentColor" strokeWidth="1.5"/>
-                  <line x1="8" y1="4" x2="8" y2="12" stroke="currentColor" strokeWidth="1.5"/>
-                </svg>
-              </div>
-            )}
-          </div>
-          <div className={level === 0 ? `${styles.orgItemName} ${styles.orgItemNameRoot}` : styles.orgItemName}>
-            {node.name} <span className={styles.orgItemCount}>({node.count})</span>
-          </div>
-        </div>
-        {isExpanded && hasChildren && (
-          <div className={styles.orgChildrenWrapper}>
-            {node.children!.map((child, index) =>
-              renderCategoryNode(child, level + 1, index === node.children!.length - 1)
-            )}
-          </div>
-        )}
-      </div>
-    );
   };
 
   const article = {
@@ -614,9 +543,14 @@ export default function ArticleV2Page() {
             <span className={styles.leftPanelClose} onClick={() => setLeftPanelVisible(false)}>×</span>
           </div>
           <div className={styles.leftPanelBody}>
-            <div className={styles.orgTree}>
-              {categoryTree.map(node => renderCategoryNode(node))}
-            </div>
+            <TreeView
+              data={categoryTree}
+              expandedNodes={expandedNodes}
+              selectedNode={selectedNode}
+              onToggle={toggleNode}
+              onNodeClick={handleNodeClick}
+              levelIndent={16}
+            />
           </div>
         </div>
       </Popup>
