@@ -9,6 +9,7 @@ import RelatedSection from '@/components/RelatedSection';
 import FloatingButton from '@/components/FloatingButton';
 import SectionTitle from '@/components/SectionTitle';
 import SvgIcon from '@/components/SvgIcon';
+import FilterDrawer from '@/components/drawers/FilterDrawer';
 import { getArticleTypeColor } from '@/constants/articleType';
 import styles from './page.module.css';
 import BackToTop from '@/components/BackToTop';
@@ -446,66 +447,44 @@ export default function ArticleV1Page() {
 
 
       {/* 更多信息抽屉 */}
-      <Popup
+      <FilterDrawer
         visible={drawerVisible}
-        onMaskClick={() => setDrawerVisible(false)}
-        position="right"
-        bodyStyle={{ width: '80vw' }}
+        onClose={() => setDrawerVisible(false)}
+        title="更多信息"
+        menus={structureMenus.filter((menu) => structureData[menu]?.length > 0)}
+        activeMenu={activeMenu}
+        onMenuChange={scrollToDrawerSection}
+        contentRef={drawerContentRef}
       >
-        <div className={styles.drawer}>
-          <div className={styles.drawerHeader}>
-            <span className={styles.drawerTitle}>更多信息</span>
-            <span className={styles.drawerClose} onClick={() => setDrawerVisible(false)}>×</span>
-          </div>
-          <div className={styles.drawerBody}>
-            {/* 顶部菜单标签 - 只显示有数据的分类 */}
-            <div className={styles.drawerMenu}>
-              {structureMenus
-                .filter((menu) => structureData[menu]?.length > 0)
-                .map((menu) => (
-                  <div
-                    key={menu}
-                    className={`${styles.drawerMenuItem} ${activeMenu === menu ? styles.drawerMenuItemActive : ''}`}
-                    onClick={() => scrollToDrawerSection(menu)}
-                  >
-                    {menu}
+        {structureMenus
+          .filter((menu) => structureData[menu]?.length > 0)
+          .map((menu) => (
+            <div key={menu} id={`drawer-section-${menu}`} className={styles.drawerCategorySection}>
+              <div className={styles.drawerCategoryTitle}>{menu}</div>
+              {structureData[menu].map((section, idx) => {
+                // 根据最长标签长度决定列数：<=6字符用3列，否则用2列
+                const maxLen = Math.max(...section.tags.map(tag => tag.length));
+                const cols = maxLen <= 6 ? 3 : 2;
+                return (
+                  <div key={idx} className={styles.drawerSection}>
+                    <div className={styles.drawerSectionTitle}>
+                      <span className={styles.drawerSectionBar}></span>
+                      <span>{section.title}</span>
+                    </div>
+                    <div
+                      className={styles.drawerTagList}
+                      style={{ '--tag-cols': cols } as React.CSSProperties}
+                    >
+                      {section.tags.map((tag, tagIdx) => (
+                        <span key={tagIdx} className={styles.drawerTagItem}>{tag}</span>
+                      ))}
+                    </div>
                   </div>
-                ))}
+                );
+              })}
             </div>
-            {/* 内容区域 - 只显示有数据的分类 */}
-            <div className={styles.drawerContent} ref={drawerContentRef}>
-              {structureMenus
-                .filter((menu) => structureData[menu]?.length > 0)
-                .map((menu) => (
-                  <div key={menu} id={`drawer-section-${menu}`} className={styles.drawerCategorySection}>
-                    <div className={styles.drawerCategoryTitle}>{menu}</div>
-                    {structureData[menu].map((section, idx) => {
-                      // 根据最长标签长度决定列数：<=6字符用3列，否则用2列
-                      const maxLen = Math.max(...section.tags.map(tag => tag.length));
-                      const cols = maxLen <= 6 ? 3 : 2;
-                      return (
-                        <div key={idx} className={styles.drawerSection}>
-                          <div className={styles.drawerSectionTitle}>
-                            <span className={styles.drawerSectionBar}></span>
-                            <span>{section.title}</span>
-                          </div>
-                          <div
-                            className={styles.drawerTagList}
-                            style={{ '--tag-cols': cols } as React.CSSProperties}
-                          >
-                            {section.tags.map((tag, tagIdx) => (
-                              <span key={tagIdx} className={styles.drawerTagItem}>{tag}</span>
-                            ))}
-                          </div>
-                        </div>
-                      );
-                    })}
-                  </div>
-                ))}
-            </div>
-          </div>
-        </div>
-      </Popup>
+          ))}
+      </FilterDrawer>
 
       {/* AI一键解读说明弹窗 */}
       <Dialog
