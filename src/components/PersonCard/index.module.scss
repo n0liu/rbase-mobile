@@ -1,0 +1,60 @@
+.personCard {
+  display: flex;
+  gap: var(--rbase-spacing-md);
+  padding: var(--rbase-spacing-md) var(--rbase-spacing-lg);
+  background: var(--rbase-color-background);
+  border-bottom: 1px solid var(--rbase-color-border);
+  cursor: pointer;
+  transition: background-color 0.2s;
+
+  &:active {
+    background-color: var(--rbase-color-background-secondary);
+  }
+}
+
+.avatar {
+  width: 60px;
+  height: 60px;
+  border-radius: var(--rbase-radius-circle);
+  object-fit: cover;
+  flex-shrink: 0;
+}
+
+.personInfo {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--rbase-spacing-xs);
+}
+
+.name {
+  font-size: var(--rbase-font-size-body);
+  font-weight: var(--rbase-font-weight-bold);
+  color: var(--rbase-color-text-primary);
+  margin: 0;
+}
+
+.title {
+  font-size: var(--rbase-font-size-body-small);
+  color: var(--rbase-color-text-secondary);
+  margin: 0;
+}
+
+.organization {
+  font-size: var(--rbase-font-size-caption);
+  color: var(--rbase-color-text-tertiary);
+  margin: 0;
+}
+
+.researchArea {
+  font-size: var(--rbase-font-size-caption);
+  color: var(--rbase-color-text-secondary);
+  margin: 0;
+}
+
+.articleCount {
+  font-size: var(--rbase-font-size-caption);
+  color: var(--rbase-color-primary);
+  margin: 0;
+}

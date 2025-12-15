@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useRef } from 'react';
+import { useRouter } from 'next/navigation';
 import { Tag, Popup, Tabs } from 'antd-mobile';
 import Image from 'next/image';
 import { FilterOutline } from 'antd-mobile-icons';
@@ -19,6 +20,7 @@ import styles from './page.module.css';
 import BackToTop from '@/components/BackToTop';
 
 export default function ArticleV2Page() {
+  const router = useRouter();
   const scrollRef = useRef<HTMLDivElement>(null);
   const [leftPanelVisible, setLeftPanelVisible] = useState(false);
   const [filterPanelVisible, setFilterPanelVisible] = useState(false);
@@ -404,7 +406,7 @@ export default function ArticleV2Page() {
     <div className={styles.container}>
       {/* 顶部导航 */}
       <TopNavigationBar
-        onSearchClick={() => {}}
+        onSearchClick={() => router.push('/search')}
         onListClick={() => {}}
       />
 
