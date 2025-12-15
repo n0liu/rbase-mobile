@@ -129,7 +129,8 @@ export default function SearchPage() {
     }
 
     try {
-      const response = await fetch(`https://rai-api.chinagut.cn/api/f/search/suggest?q=${encodeURIComponent(keyword)}`);
+      // 使用本地 API 代理路由，避免 CORS 问题
+      const response = await fetch(`/api/search/suggest?q=${encodeURIComponent(keyword)}`);
       const data = await response.json();
       console.log(data, "data")
       setSuggestions(data.data || []);
