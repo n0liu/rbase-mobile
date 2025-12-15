@@ -315,10 +315,9 @@
 }
 
 .aiItemTitle {
-  font-size: 16px;
-  font-weight: 800;
+  font-size: var(--rbase-font-size-body);
+  font-weight: 500;
   margin-bottom: 8px;
-  /* Color set by nth-child above */
 }
 
 .aiItemText {
@@ -439,18 +438,18 @@
 }
 
 .relatedType {
-  font-size: var(--rbase-font-size-caption);
+  font-size: var(--rbase-font-size-body-small);
   font-weight: var(--rbase-font-weight-bold);
   color: var(--rbase-color-primary);
 }
 
 .relatedArrow {
-  font-size: var(--rbase-font-size-caption);
+  font-size: var(--rbase-font-size-body-small);
   color: var(--rbase-color-text-quaternary);
 }
 
 .relatedJournal {
-  font-size: var(--rbase-font-size-caption);
+  font-size: var(--rbase-font-size-body-small);
   color: var(--rbase-color-primary);
 }
 

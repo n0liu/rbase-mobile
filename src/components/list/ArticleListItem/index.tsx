@@ -34,6 +34,7 @@ export default function ArticleListItem({
       {/* 左侧日期 */}
       <div className={styles.articleDate}>
         <span className={styles.articleDay}>{article.day}</span>
+        <span className={styles.dateSeparator}>/</span>
         <span className={styles.articleMonth}>{article.month}</span>
       </div>
 

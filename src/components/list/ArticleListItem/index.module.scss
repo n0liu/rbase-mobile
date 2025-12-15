@@ -1,10 +1,10 @@
 .articleItem {
   display: flex;
   padding: var(--rbase-spacing-md) var(--rbase-spacing-lg);
-  border-bottom: 1px solid var(--rbase-color-border);
   gap: var(--rbase-spacing-md);
   transition: background-color 0.2s;
   cursor: pointer;
+  position: relative;
 
   &:active {
     background-color: var(--rbase-color-background-secondary);
@@ -17,13 +17,31 @@
   align-items: center;
   flex-shrink: 0;
   width: 28px;
+  position: relative;
+  z-index: 1;
+
+  &::after {
+    content: '';
+    position: absolute;
+    transform: translateX(-50%);
+    width: 1px;
+    top: 45px;
+    bottom: 0;
+    background: var(--rbase-color-border-strong);
+  }
 }
 
 .articleDay {
   font-size: var(--rbase-font-size-h4);
   font-weight: var(--rbase-font-weight-bold);
-  color: var(--rbase-color-text-primary);
+  color: var(--rbase-color-text-secondary);
   line-height: 1;
+}
+
+.dateSeparator {
+  font-size: var(--rbase-font-size-caption);
+  color: var(--rbase-color-text-tertiary);
+  margin: 0 2px;
 }
 
 .articleMonth {
@@ -50,17 +68,17 @@
 }
 
 .articleJournal {
-  font-size: var(--rbase-font-size-caption);
+  font-size: var(--rbase-font-size-body-small);
   color: var(--rbase-color-text-primary);
 }
 
 .articleIF {
-  font-size: var(--rbase-font-size-caption);
+  font-size: var(--rbase-font-size-body-small);
   color: var(--rbase-color-success-light);
 }
 
 .articleType {
-  font-size: var(--rbase-font-size-caption);
+  font-size: var(--rbase-font-size-body-small);
   color: var(--rbase-color-primary);
 }
 
@@ -94,14 +112,12 @@
   font-size: var(--rbase-font-size-body);
   font-weight: var(--rbase-font-weight-bold);
   color: var(--rbase-color-text-primary);
-  line-height: var(--rbase-line-height-relaxed);
   margin: 0 0 var(--rbase-spacing-xs) 0;
 }
 
 .articleTitleEn {
   font-size: var(--rbase-font-size-caption);
   color: var(--rbase-color-text-tertiary);
-  line-height: var(--rbase-line-height-relaxed);
   margin: 0 0 var(--rbase-spacing-sm) 0;
   display: -webkit-box;
   -webkit-line-clamp: 2;
