@@ -99,7 +99,7 @@
 }
 
 .articleTitleEn {
-  font-size: var(--rbase-font-size-body-small);
+  font-size: var(--rbase-font-size-caption);
   color: var(--rbase-color-text-tertiary);
   line-height: var(--rbase-line-height-relaxed);
   margin: 0 0 var(--rbase-spacing-sm) 0;
@@ -110,7 +110,7 @@
 }
 
 .articleAuthors {
-  font-size: var(--rbase-font-size-caption);
+  font-size: var(--rbase-font-size-overline);
   color: var(--rbase-color-text-secondary);
   line-height: 1.5;
   margin-bottom: var(--rbase-spacing-sm);
@@ -134,7 +134,7 @@
   align-items: center;
   justify-content: space-between;
   gap: var(--rbase-spacing-sm);
-  font-size: var(--rbase-font-size-caption);
+  font-size: var(--rbase-font-size-overline);
   color: var(--rbase-color-text-tertiary);
   margin-bottom: var(--rbase-spacing-sm);
 }
