@@ -89,9 +89,9 @@
   color: var(--rbase-color-text-tertiary);
   line-height: 1.8;
   word-break: break-all;
-  margin-bottom: var(--rbase-spacing-lg);
   padding-bottom: var(--rbase-spacing-lg);
-  border-bottom: 1px dashed var(--rbase-color-border-light);
+  border-bottom: 1px solid var(--rbase-color-border);
+  margin-bottom: var(--rbase-spacing-lg)
 }
 
 .actionIcon {
