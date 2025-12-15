@@ -415,8 +415,8 @@ export default function ArticleV2Page() {
         <div className={styles.content}>
           {/* 期刊封面 */}
           <CoverBanner
-            title="全球益生菌/益生元循证知识库"
-            subtitle="The Global Evidence-based Database for Health Outcomes of Pro/PrEbiotics"
+            title="全球益生菌/益生元<br />循证数据库"
+            subtitle="The Global Evidence-based Database for<br /><strong>H</strong>ealth <strong>O</strong>utcomes of <strong>P</strong>ro/<strong>P</strong>rEbiotics"
             showSearchBox={true}
             searchPlaceholder="输入益生菌/益生元名称检索"
             onSearch={() => router.push('/search')}

@@ -19,14 +19,9 @@ export default function CoverBanner({
       {/* 内容 */}
       <div className={styles.coverContent}>
         <div className={styles.coverText}>
-          <h1 className={styles.coverTitle}>
-            全球益生菌/益生元<br />循证数据库
-          </h1>
+          <h1 className={styles.coverTitle} dangerouslySetInnerHTML={{ __html: title }} />
           {subtitle && (
-            <p className={styles.coverSubtitle}>
-              The Global Evidence-based Database for<br />
-              <strong>Health Outcomes</strong> of <strong>Pro</strong>/<strong>PrE</strong>biotics
-            </p>
+            <p className={styles.coverSubtitle} dangerouslySetInnerHTML={{ __html: subtitle }} />
           )}
         </div>
 
