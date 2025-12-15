@@ -248,12 +248,7 @@ export default function TestComponentsPage() {
         visible={drawerVisible}
         onClose={() => setDrawerVisible(false)}
         title="筛选条件"
-        menus={[
-          { key: '影响因子', label: '影响因子' },
-          { key: '发表日期', label: '发表日期' },
-          { key: '健康效应', label: '健康效应' },
-          { key: '菌株/原料', label: '菌株/原料' }
-        ]}
+        menus={['影响因子', '发表日期', '健康效应', '菌株/原料']}
         activeMenu={activeFilterMenu}
         onMenuChange={setActiveFilterMenu}
       >

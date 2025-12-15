@@ -11,6 +11,7 @@ export default function FilterDrawer({
   menus,
   activeMenu,
   onMenuChange,
+  contentRef,
   children,
   width = '80vw'
 }: FilterDrawerProps) {
@@ -32,23 +33,23 @@ export default function FilterDrawer({
 
         {/* 主体区域 */}
         <div className={styles.drawerBody}>
-          {/* 左侧菜单 */}
+          {/* 顶部菜单 */}
           <div className={styles.drawerMenu}>
             {menus.map((menu) => (
               <div
-                key={menu.key}
+                key={menu}
                 className={`${styles.drawerMenuItem} ${
-                  activeMenu === menu.key ? styles.drawerMenuItemActive : ''
+                  activeMenu === menu ? styles.drawerMenuItemActive : ''
                 }`}
-                onClick={() => onMenuChange(menu.key)}
+                onClick={() => onMenuChange(menu)}
               >
-                {menu.label}
+                {menu}
               </div>
             ))}
           </div>
 
-          {/* 右侧内容区 */}
-          <div className={styles.drawerContent}>{children}</div>
+          {/* 内容区 */}
+          <div className={styles.drawerContent} ref={contentRef}>{children}</div>
         </div>
       </div>
     </Popup>

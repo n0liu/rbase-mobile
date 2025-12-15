@@ -2,7 +2,7 @@
 
 import { useState, useRef } from 'react';
 import { useRouter } from 'next/navigation';
-import { Tag, Popup, Tabs } from 'antd-mobile';
+import { Popup } from 'antd-mobile';
 import Image from 'next/image';
 import { FilterOutline } from 'antd-mobile-icons';
 import TopNavigationBar from '@/components/layout/TopNavigationBar';
@@ -16,18 +16,17 @@ import TreeView from '@/components/list/TreeView';
 import { TreeNode } from '@/components/list/TreeView/types';
 import ArticleListItem from '@/components/list/ArticleListItem';
 import { Article } from '@/components/list/ArticleListItem/types';
+import FilterDrawer from '@/components/drawers/FilterDrawer';
 import styles from './page.module.css';
 import BackToTop from '@/components/BackToTop';
 
 export default function ArticleV2Page() {
   const router = useRouter();
   const scrollRef = useRef<HTMLDivElement>(null);
+  const drawerContentRef = useRef<HTMLDivElement>(null);
   const [leftPanelVisible, setLeftPanelVisible] = useState(false);
   const [filterPanelVisible, setFilterPanelVisible] = useState(false);
   const [activeFilterMenu, setActiveFilterMenu] = useState('影响因子');
-  const [aiPopupVisible, setAiPopupVisible] = useState(false);
-  const [aiPopupContent, setAiPopupContent] = useState({ title: '', content: '' });
-  const [aiTabKey, setAiTabKey] = useState('cn');
   const [activeFilters, setActiveFilters] = useState<string[]>(['0-5 (452)', '5-10 (311)', '10-15 (189)']);
   const [expandedNodes, setExpandedNodes] = useState<Set<string>>(new Set(['益生菌']));
   const [selectedPath, setSelectedPath] = useState<string[]>(['益生菌']);
@@ -97,6 +96,18 @@ export default function ArticleV2Page() {
     const path = buildNodePath(node.name, categoryTree);
     if (path) {
       setSelectedPath(path);
+    }
+  };
+
+  // 滚动到抽屉指定分类
+  const scrollToDrawerSection = (menu: string) => {
+    setActiveFilterMenu(menu);
+    const sectionId = `drawer-section-${menu}`;
+    const element = document.getElementById(sectionId);
+    if (element && drawerContentRef.current) {
+      const container = drawerContentRef.current;
+      const offsetTop = element.offsetTop - container.offsetTop;
+      container.scrollTo({ top: offsetTop, behavior: 'smooth' });
     }
   };
 
@@ -223,74 +234,49 @@ export default function ArticleV2Page() {
   ];
 
   // 筛选数据
-  const filterData = {
-    healthEffects: [
-      { label: '调节肠道菌群', count: 210 },
-      { label: '改善便秘', count: 150 },
-      { label: '预防腹泻', count: 121 },
-      { label: '增强免疫力', count: 101 },
-      { label: '缓解过敏症状', count: 95 },
-      { label: '体重管理', count: 88 },
-      { label: '降低胆固醇', count: 76 },
-      { label: '改善血糖', count: 65 },
-      { label: '女性私密健康', count: 54 },
-      { label: '改善皮肤状况', count: 43 },
-      { label: '缓解焦虑抑郁', count: 32 },
-      { label: '促进钙吸收', count: 21 },
-      { label: '抗氧化', count: 15 },
-      { label: '改善睡眠', count: 9 },
-      { label: '口腔健康', count: 5 },
+  // 筛选菜单配置
+  const filterMenus = ['影响因子', '发表日期', '健康效应', '菌株/原料', '实验材料', '临床试验'];
+
+  // 筛选数据 - 按照v1的结构组织
+  const filterData: Record<string, { title: string; tags: string[] }[]> = {
+    '影响因子': [
+      { title: '影响因子', tags: ['0-5 (452)', '5-10 (311)', '10-15 (189)', '15-20 (98)', '20-30 (45)', '30+ (12)'] },
     ],
-    strains: [
-      { label: '鼠李糖乳杆菌GG', count: 88 },
-      { label: '动物双歧杆菌Bb-12', count: 76 },
-      { label: '乳双歧杆菌HN019', count: 65 },
-      { label: '嗜酸乳杆菌NCFM', count: 54 },
-      { label: '植物乳杆菌299v', count: 51 },
-      { label: '罗伊氏乳杆菌DSM17938', count: 49 },
-      { label: '干酪乳杆菌代田株', count: 45 },
-      { label: '长双歧杆菌BB536', count: 41 },
-      { label: '菊粉', count: 95 },
-      { label: '低聚果糖(FOS)', count: 81 },
-      { label: '低聚半乳糖(GOS)', count: 72 },
-      { label: '抗性糊精', count: 60 },
-      { label: '母乳低聚糖(HMOs)', count: 58 },
-      { label: '益生菌组合', count: 25 },
-      { label: '后生元', count: 20 },
+    '发表日期': [
+      { title: '发表日期', tags: ['2025 (156)', '2024 (892)', '2023 (1205)', '2022 (980)', '2021 (756)', '更早 (5420)'] },
     ],
-    materials: [
-      { label: '健康成人', count: 210 },
-      { label: '婴幼儿', count: 155 },
-      { label: 'IBD患者', count: 88 },
-      { label: '过敏儿童', count: 72 },
-      { label: '肥胖人群', count: 61 },
-      { label: '老年人', count: 50 },
-      { label: '孕妇', count: 41 },
-      { label: 'C57BL/6J小鼠', count: 30 },
-      { label: 'BALB/c小鼠', count: 19 },
-      { label: 'Wistar大鼠', count: 15 },
-      { label: 'SD大鼠', count: 9 },
-      { label: '体外肠道模型', count: 5 },
-      { label: 'Caco-2细胞', count: 3 },
-      { label: 'HT-29细胞', count: 1 },
-      { label: '巨噬细胞RAW264.7', count: 1 },
+    '健康效应': [
+      { title: '健康效应', tags: [
+        '调节肠道菌群 (210)', '改善便秘 (150)', '预防腹泻 (121)', '增强免疫力 (101)',
+        '缓解过敏症状 (95)', '体重管理 (88)', '降低胆固醇 (76)', '改善血糖 (65)',
+        '女性私密健康 (54)', '改善皮肤状况 (43)', '缓解焦虑抑郁 (32)', '促进钙吸收 (21)',
+        '抗氧化 (15)', '改善睡眠 (9)', '口腔健康 (5)'
+      ]},
     ],
-    clinical: [
-      { label: '人体干预试验', count: 98 },
-      { label: '随机对照试验(RCT)', count: 81 },
-      { label: '双盲', count: 76 },
-      { label: '安慰剂对照', count: 72 },
-      { label: '交叉设计', count: 45 },
-      { label: '平行设计', count: 33 },
-      { label: '剂量效应研究', count: 21 },
-      { label: '安全性评估', count: 15 },
-      { label: '有效性评估', count: 12 },
-      { label: '长期跟踪', count: 8 },
-      { label: '招募中', count: 5 },
-      { label: '已完成', count: 101 },
-      { label: '单中心研究', count: 67 },
-      { label: '多中心研究', count: 81 },
-      { label: 'I期临床试验', count: 4 },
+    '菌株/原料': [
+      { title: '菌株/原料', tags: [
+        '鼠李糖乳杆菌GG (88)', '动物双歧杆菌Bb-12 (76)', '乳双歧杆菌HN019 (65)',
+        '嗜酸乳杆菌NCFM (54)', '植物乳杆菌299v (51)', '罗伊氏乳杆菌DSM17938 (49)',
+        '干酪乳杆菌代田株 (45)', '长双歧杆菌BB536 (41)', '菊粉 (95)',
+        '低聚果糖(FOS) (81)', '低聚半乳糖(GOS) (72)', '抗性糊精 (60)',
+        '母乳低聚糖(HMOs) (58)', '益生菌组合 (25)', '后生元 (20)'
+      ]},
+    ],
+    '实验材料': [
+      { title: '实验/试验材料和对象', tags: [
+        '健康成人 (210)', '婴幼儿 (155)', 'IBD患者 (88)', '过敏儿童 (72)',
+        '肥胖人群 (61)', '老年人 (50)', '孕妇 (41)', 'C57BL/6J小鼠 (30)',
+        'BALB/c小鼠 (19)', 'Wistar大鼠 (15)', 'SD大鼠 (9)', '体外肠道模型 (5)',
+        'Caco-2细胞 (3)', 'HT-29细胞 (1)', '巨噬细胞RAW264.7 (1)'
+      ]},
+    ],
+    '临床试验': [
+      { title: '临床试验信息', tags: [
+        '人体干预试验 (98)', '随机对照试验(RCT) (81)', '双盲 (76)', '安慰剂对照 (72)',
+        '交叉设计 (45)', '平行设计 (33)', '剂量效应研究 (21)', '安全性评估 (15)',
+        '有效性评估 (12)', '长期跟踪 (8)', '招募中 (5)', '已完成 (101)',
+        '单中心研究 (67)', '多中心研究 (81)', 'I期临床试验 (4)'
+      ]},
     ],
   };
 
@@ -482,28 +468,6 @@ export default function ArticleV2Page() {
         </div>
       </div>
 
-      {/* AI解读底部弹窗 */}
-      <Popup
-        visible={aiPopupVisible}
-        onMaskClick={() => setAiPopupVisible(false)}
-        position="bottom"
-        bodyStyle={{ height: '70vh', borderRadius: '16px 16px 0 0' }}
-      >
-        <div className={styles.aiPopup}>
-          <div className={styles.aiPopupHeader}>
-            <span className={styles.aiPopupTitle}>AI解读 - {aiPopupContent.title}</span>
-            <span className={styles.aiPopupClose} onClick={() => setAiPopupVisible(false)}>×</span>
-          </div>
-          <Tabs activeKey={aiTabKey} onChange={setAiTabKey} className={styles.aiPopupTabs}>
-            <Tabs.Tab title="中文" key="cn" />
-            <Tabs.Tab title="原文" key="en" />
-          </Tabs>
-          <div className={styles.aiPopupContent}>
-            {article.aiInterpretation.find(a => a.label === aiPopupContent.title)?.[aiTabKey === 'cn' ? 'cnContent' : 'enContent']}
-          </div>
-        </div>
-      </Popup>
-
       {/* 左侧分类树面板 */}
       <Popup
         visible={leftPanelVisible}
@@ -530,161 +494,57 @@ export default function ArticleV2Page() {
       </Popup>
 
       {/* 右侧筛选面板 */}
-      <Popup
+      <FilterDrawer
         visible={filterPanelVisible}
-        onMaskClick={() => setFilterPanelVisible(false)}
-        position="right"
-        bodyStyle={{ width: '80vw' }}
+        onClose={() => setFilterPanelVisible(false)}
+        title="更多查询"
+        menus={filterMenus}
+        activeMenu={activeFilterMenu}
+        onMenuChange={scrollToDrawerSection}
+        contentRef={drawerContentRef}
       >
-        <div className={styles.drawer}>
-          <div className={styles.drawerHeader}>
-            <span className={styles.drawerTitle}>结构化解读</span>
-            <span className={styles.drawerClose} onClick={() => setFilterPanelVisible(false)}>×</span>
-          </div>
-          <div className={styles.drawerBody}>
-            <div className={styles.drawerMenu}>
-              <div
-                className={`${styles.drawerMenuItem} ${activeFilterMenu === '影响因子' ? styles.drawerMenuItemActive : ''}`}
-                onClick={() => setActiveFilterMenu('影响因子')}
-              >
-                影响因子
-              </div>
-              <div
-                className={`${styles.drawerMenuItem} ${activeFilterMenu === '发表日期' ? styles.drawerMenuItemActive : ''}`}
-                onClick={() => setActiveFilterMenu('发表日期')}
-              >
-                发表日期
-              </div>
-              <div
-                className={`${styles.drawerMenuItem} ${activeFilterMenu === '健康效应' ? styles.drawerMenuItemActive : ''}`}
-                onClick={() => setActiveFilterMenu('健康效应')}
-              >
-                健康效应
-              </div>
-              <div
-                className={`${styles.drawerMenuItem} ${activeFilterMenu === '菌株/原料' ? styles.drawerMenuItemActive : ''}`}
-                onClick={() => setActiveFilterMenu('菌株/原料')}
-              >
-                菌株/原料
-              </div>
-              <div
-                className={`${styles.drawerMenuItem} ${activeFilterMenu === '实验材料' ? styles.drawerMenuItemActive : ''}`}
-                onClick={() => setActiveFilterMenu('实验材料')}
-              >
-                实验材料
-              </div>
-              <div
-                className={`${styles.drawerMenuItem} ${activeFilterMenu === '临床试验' ? styles.drawerMenuItemActive : ''}`}
-                onClick={() => setActiveFilterMenu('临床试验')}
-              >
-                临床试验
-              </div>
-            </div>
-            <div className={styles.drawerContent}>
-              {activeFilterMenu === '影响因子' && (
-                <div className={styles.drawerSection}>
-                  <div className={styles.kwGroup}>
-                    <span className={styles.kwGroupLabel}>影响因子</span>
-                    <div className={styles.kwGroupTags}>
-                      {['0-5 (452)', '5-10 (311)', '10-15 (189)', '15-20 (98)', '20-30 (45)', '30+ (12)'].map((option, idx) => (
-                        <Tag
-                          key={idx}
-                          color={activeFilters.includes(option) ? 'primary' : 'default'}
-                          fill={activeFilters.includes(option) ? 'solid' : 'outline'}
+        {filterMenus.map((menu) => (
+          <div key={menu} id={`drawer-section-${menu}`} className={styles.drawerCategorySection}>
+            <div className={styles.drawerCategoryTitle}>{menu}</div>
+            {filterData[menu].map((section, idx) => {
+              // 根据最长标签长度决定列数：<=6字符用3列，否则用2列
+              const maxLen = Math.max(...section.tags.map(tag => tag.length));
+              const cols = maxLen <= 6 ? 3 : 2;
+              return (
+                <div key={idx} className={styles.drawerSection}>
+                  <div className={styles.drawerSectionTitle}>
+                    <span className={styles.drawerSectionBar}></span>
+                    <span>{section.title}</span>
+                  </div>
+                  <div
+                    className={styles.drawerTagList}
+                    style={{ '--tag-cols': cols } as React.CSSProperties}
+                  >
+                    {section.tags.map((tag, tagIdx) => {
+                      const isSelected = activeFilters.includes(tag);
+                      return (
+                        <span
+                          key={tagIdx}
+                          className={`${styles.drawerTagItem} ${isSelected ? styles.drawerTagItemActive : ''}`}
                           onClick={() => {
-                            if (activeFilters.includes(option)) {
-                              setActiveFilters(activeFilters.filter(f => f !== option));
+                            if (isSelected) {
+                              setActiveFilters(activeFilters.filter(f => f !== tag));
                             } else {
-                              setActiveFilters([...activeFilters, option]);
+                              setActiveFilters([...activeFilters, tag]);
                             }
                           }}
                         >
-                          {option}
-                        </Tag>
-                      ))}
-                    </div>
+                          {tag}
+                        </span>
+                      );
+                    })}
                   </div>
                 </div>
-              )}
-
-              {activeFilterMenu === '发表日期' && (
-                <div className={styles.drawerSection}>
-                  <div className={styles.kwGroup}>
-                    <span className={styles.kwGroupLabel}>发表日期</span>
-                    <div className={styles.kwGroupTags}>
-                      {['2025 (156)', '2024 (892)', '2023 (1205)', '2022 (980)', '2021 (756)', '更早 (5420)'].map((option, idx) => (
-                        <Tag key={idx} color="default" fill="outline">
-                          {option}
-                        </Tag>
-                      ))}
-                    </div>
-                  </div>
-                </div>
-              )}
-
-              {activeFilterMenu === '健康效应' && (
-                <div className={styles.drawerSection}>
-                  <div className={styles.kwGroup}>
-                    <span className={styles.kwGroupLabel}>健康效应</span>
-                    <div className={styles.kwGroupTags}>
-                      {filterData.healthEffects.map((item, idx) => (
-                        <Tag key={idx} color="default" fill="outline">
-                          {item.label} ({item.count})
-                        </Tag>
-                      ))}
-                    </div>
-                  </div>
-                </div>
-              )}
-
-              {activeFilterMenu === '菌株/原料' && (
-                <div className={styles.drawerSection}>
-                  <div className={styles.kwGroup}>
-                    <span className={styles.kwGroupLabel}>菌株/原料</span>
-                    <div className={styles.kwGroupTags}>
-                      {filterData.strains.map((item, idx) => (
-                        <Tag key={idx} color="default" fill="outline">
-                          {item.label} ({item.count})
-                        </Tag>
-                      ))}
-                    </div>
-                  </div>
-                </div>
-              )}
-
-              {activeFilterMenu === '实验材料' && (
-                <div className={styles.drawerSection}>
-                  <div className={styles.kwGroup}>
-                    <span className={styles.kwGroupLabel}>实验/试验材料和对象</span>
-                    <div className={styles.kwGroupTags}>
-                      {filterData.materials.map((item, idx) => (
-                        <Tag key={idx} color="default" fill="outline">
-                          {item.label} ({item.count})
-                        </Tag>
-                      ))}
-                    </div>
-                  </div>
-                </div>
-              )}
-
-              {activeFilterMenu === '临床试验' && (
-                <div className={styles.drawerSection}>
-                  <div className={styles.kwGroup}>
-                    <span className={styles.kwGroupLabel}>临床试验信息</span>
-                    <div className={styles.kwGroupTags}>
-                      {filterData.clinical.map((item, idx) => (
-                        <Tag key={idx} color="default" fill="outline">
-                          {item.label} ({item.count})
-                        </Tag>
-                      ))}
-                    </div>
-                  </div>
-                </div>
-              )}
-            </div>
+              );
+            })}
           </div>
-        </div>
-      </Popup>
+        ))}
+      </FilterDrawer>
       <BackToTop scrollContainerRef={scrollRef} threshold={200}  />
     </div>
   );
