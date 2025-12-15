@@ -73,6 +73,11 @@
   font-size: 12px;
 }
 
+.filterIcon {
+  font-size: 18px;
+  color: var(--rbase-color-text-secondary);
+}
+
 /* 排序菜单遮罩层 */
 .sortMenuMask {
   position: fixed;
