@@ -277,7 +277,7 @@ export default function SearchPage() {
     return option ? option.label : '相关性排序';
   };
 
-  // 处理筛选标签点击
+  // 处理筛选标签点击（每个筛选项内只能选一个）
   const handleFilterTagClick = (menu: string, tag: string) => {
     setSelectedFilters(prev => {
       const currentSelected = prev[menu] || [];
@@ -285,9 +285,7 @@ export default function SearchPage() {
 
       return {
         ...prev,
-        [menu]: isSelected
-          ? currentSelected.filter(t => t !== tag)
-          : [...currentSelected, tag]
+        [menu]: isSelected ? [] : [tag]  // 如果已选中则取消选择，否则只选中这一个
       };
     });
   };

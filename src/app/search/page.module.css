@@ -381,8 +381,8 @@
 }
 
 .drawerTagList {
-  display: flex;
-  flex-wrap: wrap;
+  display: grid;
+  grid-template-columns: repeat(var(--tag-cols, 3), 1fr);
   gap: var(--rbase-spacing-sm);
 }
 
@@ -396,6 +396,10 @@
   border: 1px solid transparent;
   transition: all 0.2s;
   user-select: none;
+  text-align: center;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .drawerTagItem:active {
