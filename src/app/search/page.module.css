@@ -166,7 +166,7 @@
 }
 
 .hotTagHighlight {
-  color: var(--rbase-color-error);
+  color: var(--rbase-color-danger);
   border-color: transparent;
   background: var(--rbase-color-background-secondary);
 }

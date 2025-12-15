@@ -1,72 +1,30 @@
 :root {
-  /* ==================== R·base Design System Tokens ==================== */
-  
-  /* --- Brand Colors (Tech/Scientific) --- */
-  --rbase-color-primary: #1677ff;       /* Tech Blue */
-  --rbase-color-primary-light: #e6f4ff; /* Light Blue Bg */
-  --rbase-color-accent: #faad14;        /* Warm Orange (Contrast) */
-  --rbase-color-success: #52c41a;       /* Green */
-  --rbase-color-success-light: #f6ffed;
-  --rbase-color-danger: #ff4d4f;        /* Red */
-  --rbase-color-warning: #faad14;
+  /* ==================== 补充 Theme 系统中未定义的变量 ==================== */
 
-  /* --- Neutral Colors --- */
-  --rbase-color-text-primary: #1f1f1f;   /* Main Text */
-  --rbase-color-text-secondary: #595959; /* Secondary Text */
-  --rbase-color-text-tertiary: #8c8c8c;  /* Meta/Disabled */
-  
-  --rbase-color-border: #f0f0f0;         /* Light Border */
-  --rbase-color-border-strong: #d9d9d9;  /* Darker Border */
-  
-  /* --- Backgrounds --- */
-  --rbase-color-background: #ffffff;           /* Main Page Bg */
-  --rbase-color-background-secondary: #f5f7fa; /* Section Separators / Blocks */
-  --rbase-color-background-tertiary: #f0f2f5;
+  /* theme 中没有的颜色变量 */
+  --rbase-color-primary-light: #e6f4ff;
+  --rbase-color-cyan: #87faf8;
 
-  /* --- Typography --- */
-  --rbase-font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Helvetica Neue", Arial, sans-serif;
-  
-  --rbase-font-size-h4: 18px;
-  --rbase-font-size-body: 16px;
-  --rbase-font-size-body-small: 14px;
-  --rbase-font-size-caption: 12px;
-  
-  --rbase-font-weight-regular: 400;
-  --rbase-font-weight-medium: 500;
-  --rbase-font-weight-bold: 600;
-
-  /* --- Spacing --- */
-  --rbase-spacing-xs: 4px;
-  --rbase-spacing-sm: 8px;
-  --rbase-spacing-md: 12px;
-  --rbase-spacing-lg: 16px;
-  --rbase-spacing-xl: 24px;
-
-  /* --- Radius --- */
-  --rbase-radius-sm: 4px;
-  --rbase-radius-md: 8px;
-  --rbase-radius-lg: 12px;
-  --rbase-radius-card: 12px;
-  --rbase-radius-button: 20px;
-
-  /* --- Default Next.js Variables Mapping --- */
+  /* --- Next.js 需要的变量映射 --- */
   --background: var(--rbase-color-background);
   --foreground: var(--rbase-color-text-primary);
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    /* Dark Mode Defaults (can be refined later) */
+    /* 暗黑模式颜色覆盖（暂时保留，后续由 ThemeContext 统一管理） */
     --rbase-color-background: #0a0a0a;
     --rbase-color-background-secondary: #141414;
     --rbase-color-text-primary: #e8e8e8;
     --rbase-color-text-secondary: #a6a6a6;
     --rbase-color-border: #303030;
-    
+
     --background: #0a0a0a;
     --foreground: #ededed;
   }
 }
+
+/* ==================== 基础样式 ==================== */
 
 html,
 body {
@@ -77,7 +35,7 @@ body {
 body {
   color: var(--foreground);
   background: var(--background);
-  font-family: var(--rbase-font-family);
+  font-family: var(--rbase-font-family-base);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }

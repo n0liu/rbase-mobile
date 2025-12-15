@@ -415,13 +415,11 @@ export default function ArticleV2Page() {
         <div className={styles.content}>
           {/* 期刊封面 */}
           <CoverBanner
-            imageUrl={article.coverImage}
             title="全球益生菌/益生元循证知识库"
             subtitle="The Global Evidence-based Database for Health Outcomes of Pro/PrEbiotics"
-            showFollowBtn={true}
-            followBtnText="+ 关注"
-            onFollow={() => {}}
-            height="200px"
+            showSearchBox={true}
+            searchPlaceholder="输入益生菌/益生元名称检索"
+            onSearch={() => router.push('/search')}
           />
 
           {/* 两行宫格菜单 */}
