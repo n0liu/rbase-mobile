@@ -1,22 +1,39 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useRouter } from 'next/navigation';
-import { Tabs } from 'antd-mobile';
-import { DeleteOutline } from 'antd-mobile-icons';
+import { DeleteOutline, DownOutline, UpOutline } from 'antd-mobile-icons';
+import Image from 'next/image';
 import SearchBar from '@/components/SearchBar';
 import PersonCard from '@/components/PersonCard';
 import { Person } from '@/components/PersonCard/types';
 import ArticleListItem from '@/components/list/ArticleListItem';
 import { Article } from '@/components/list/ArticleListItem/types';
+import FilterDrawer from '@/components/drawers/FilterDrawer';
 import styles from './page.module.css';
 
 export default function SearchPage() {
   const router = useRouter();
   const [searchValue, setSearchValue] = useState('');
-  const [activeTab, setActiveTab] = useState('all');
   const [recentSearches, setRecentSearches] = useState<string[]>(['益生菌', '肠道菌群']);
   const [hotSearchesVisible, setHotSearchesVisible] = useState(true);
+  const [suggestions, setSuggestions] = useState<string[]>([]);
+  const [showSuggestions, setShowSuggestions] = useState(false);
+  const [hasSearched, setHasSearched] = useState(false); // 是否已执行搜索
+  const debounceTimer = useRef<NodeJS.Timeout | null>(null);
+  const skipFetchRef = useRef(false); // 标记是否跳过获取建议
+  const [sortMenuVisible, setSortMenuVisible] = useState(false); // 排序菜单是否显示
+  const [sortType, setSortType] = useState('relevance'); // 当前排序类型
+  const [filterDrawerVisible, setFilterDrawerVisible] = useState(false); // 筛选抽屉是否显示
+  const [activeFilterMenu, setActiveFilterMenu] = useState('影响因子');
+  const [selectedFilters, setSelectedFilters] = useState<Record<string, string[]>>({
+    '影响因子': [],
+    '类型': [],
+    '作者': [],
+    '发表时间': [],
+    '关键词': [],
+  });
+  const drawerContentRef = useRef<HTMLDivElement>(null);
 
   // 热门搜索数据，部分标记为热门
   const hotSearches = [
@@ -103,37 +120,198 @@ export default function SearchPage() {
     router.back();
   };
 
+  // 获取搜索建议
+  const fetchSuggestions = async (keyword: string) => {
+    if (!keyword.trim()) {
+      setSuggestions([]);
+      setShowSuggestions(false);
+      return;
+    }
+
+    try {
+      const response = await fetch(`https://rai-api.chinagut.cn/api/f/search/suggest?q=${encodeURIComponent(keyword)}`);
+      const data = await response.json();
+      console.log(data, "data")
+      setSuggestions(data.data || []);
+      setShowSuggestions(true);
+    } catch (error) {
+      console.error('获取搜索建议失败:', error);
+      setSuggestions([]);
+    }
+  };
+
+  // 监听搜索值变化，使用防抖
+  useEffect(() => {
+    // 如果标记为跳过，则不获取建议
+    if (skipFetchRef.current) {
+      skipFetchRef.current = false;
+      return;
+    }
+
+    if (debounceTimer.current) {
+      clearTimeout(debounceTimer.current);
+    }
+
+    debounceTimer.current = setTimeout(() => {
+      fetchSuggestions(searchValue);
+    }, 300);
+
+    return () => {
+      if (debounceTimer.current) {
+        clearTimeout(debounceTimer.current);
+      }
+    };
+  }, [searchValue]);
+
+  // 阻止排序菜单打开时的滚动
+  useEffect(() => {
+    if (sortMenuVisible) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
+    }
+
+    return () => {
+      document.body.style.overflow = '';
+    };
+  }, [sortMenuVisible]);
+
   const handleSearch = () => {
     if (searchValue.trim()) {
       // 添加到最近搜索
       const newRecent = [searchValue, ...recentSearches.filter(s => s !== searchValue)].slice(0, 10);
       setRecentSearches(newRecent);
+      // 隐藏建议列表
+      setShowSuggestions(false);
+      // 标记为已搜索
+      setHasSearched(true);
       // 实际项目中这里应该调用 API 进行搜索
       console.log('搜索:', searchValue);
     }
   };
 
+  const handleClickSuggestion = (suggestion: string) => {
+    // 标记跳过下一次建议获取
+    skipFetchRef.current = true;
+    setSearchValue(suggestion);
+    setShowSuggestions(false);
+    // 标记为已搜索
+    setHasSearched(true);
+    // 添加到最近搜索
+    const newRecent = [suggestion, ...recentSearches.filter(s => s !== suggestion)].slice(0, 10);
+    setRecentSearches(newRecent);
+    // 实际项目中这里应该调用 API 进行搜索
+    console.log('搜索:', suggestion);
+  };
+
+  const handleSearchValueChange = (value: string) => {
+    setSearchValue(value);
+    // 重置搜索状态
+    setHasSearched(false);
+  };
+
+  // 高亮匹配文本
+  const highlightText = (text: string, query: string) => {
+    if (!query) return text;
+
+    const parts = text.split(new RegExp(`(${query})`, 'gi'));
+    return parts.map((part, index) =>
+      part.toLowerCase() === query.toLowerCase()
+        ? <span key={index} className={styles.highlight}>{part}</span>
+        : part
+    );
+  };
+
   const handleClickTag = (keyword: string) => {
+    // 标记跳过下一次建议获取
+    skipFetchRef.current = true;
     setSearchValue(keyword);
+    setHasSearched(true);
     // 自动执行搜索
     const newRecent = [keyword, ...recentSearches.filter(s => s !== keyword)].slice(0, 10);
     setRecentSearches(newRecent);
+    // 实际项目中这里应该调用 API 进行搜索
+    console.log('搜索:', keyword);
   };
 
   const clearRecentSearches = () => {
     setRecentSearches([]);
   };
 
+  // 筛选菜单
+  const filterMenus = ['影响因子', '类型', '作者', '发表时间', '关键词'];
+
+  // 筛选数据
+  const filterData: Record<string, { title: string; tags: string[] }[]> = {
+    '影响因子': [
+      { title: '影响因子', tags: ['0~10', '10~20', '40~50', '30~40', '50~300', '20~30'] },
+    ],
+    '类型': [
+      { title: '类型', tags: ['智库专家动态', '榜单', 'Article', '活动资讯', '研究院动态', '肠道演讲', '热心肠先生原创', 'Review', '中国肠道大会新闻', 'Other', '智库新闻', '其他'] },
+    ],
+    '作者': [
+      { title: '作者', tags: ['热心肠小伙伴们', 'Changtao Jiang', 'Kai Wang', 'Lulu Sun', 'Qing Wu', 'Yanli Pang', 'Chuyu Yun', 'Qixing Nie', 'Xi Luo', 'Xuemei Wang', 'Chuan Ye', 'Yingying Zhuo', 'Yong Ding', '热心肠先生', 'Huiying Liu', 'Jia Liu', 'Jialin Xia', 'Jun Lin', 'Meng Li', 'Yi Zhang'] },
+    ],
+    '发表时间': [
+      { title: '发表时间', tags: ['2024', '2019', '2025', '2023', '2021', '2020', '2022', '2018', '1970'] },
+    ],
+    '关键词': [
+      { title: '关键词', tags: ['肠道菌群', '胆汁酸', 'FXR', 'Gut microbiota', 'bile acid', 'obesity', '神经酰胺', '糖尿病', '肥胖', '胆汁酸代谢'] },
+    ],
+  };
+
+  // 排序选项
+  const sortOptions = [
+    { key: 'relevance', label: '相关性排序' },
+    { key: 'impact', label: '影响因子  ↓' },
+    { key: 'time', label: '发表时间  ↓' },
+  ];
+
+  const handleSortChange = (key: string) => {
+    setSortType(key);
+    setSortMenuVisible(false);
+  };
+
+  const getSortLabel = () => {
+    const option = sortOptions.find(opt => opt.key === sortType);
+    return option ? option.label : '相关性排序';
+  };
+
+  // 处理筛选标签点击
+  const handleFilterTagClick = (menu: string, tag: string) => {
+    setSelectedFilters(prev => {
+      const currentSelected = prev[menu] || [];
+      const isSelected = currentSelected.includes(tag);
+
+      return {
+        ...prev,
+        [menu]: isSelected
+          ? currentSelected.filter(t => t !== tag)
+          : [...currentSelected, tag]
+      };
+    });
+  };
+
+  // 滚动到抽屉的指定section
+  const scrollToDrawerSection = (menu: string) => {
+    setActiveFilterMenu(menu);
+    const sectionId = `drawer-section-${menu}`;
+    const element = document.getElementById(sectionId);
+    if (element && drawerContentRef.current) {
+      const container = drawerContentRef.current;
+      const offsetTop = element.offsetTop - container.offsetTop;
+      container.scrollTo({ top: offsetTop, behavior: 'smooth' });
+    }
+  };
+
   const allResults = [...peopleResults, ...articleResults];
-  const displayPeople = activeTab === 'all' || activeTab === 'people' ? peopleResults : [];
-  const displayArticles = activeTab === 'all' || activeTab === 'articles' ? articleResults : [];
 
   return (
     <div className={styles.container}>
       <div className={styles.searchBarFixed}>
         <SearchBar
           value={searchValue}
-          onChange={setSearchValue}
+          onChange={handleSearchValueChange}
           onSearch={handleSearch}
           onCancel={handleCancel}
           showCancel={true}
@@ -141,27 +319,90 @@ export default function SearchPage() {
         />
       </div>
 
-      <div className={styles.content}>
-        {searchValue && (
+      {/* 搜索建议列表 */}
+      {showSuggestions && (
+        <div className={styles.suggestions}>
+          {suggestions.length > 0 ? (
+            suggestions.map((suggestion, index) => (
+              <div
+                key={index}
+                className={styles.suggestionItem}
+                onClick={() => handleClickSuggestion(suggestion)}
+              >
+                {highlightText(suggestion, searchValue)}
+              </div>
+            ))
+          ) : (
+            <div className={styles.emptySuggestions}>
+              <div className={styles.emptyIcon}>
+                <Image
+                  src="https://pics-xldkp-com.oss-cn-qingdao.aliyuncs.com/images/rbase/none.png"
+                  alt="无结果"
+                  width={200}
+                  height={200}
+                  className={styles.emptyImage}
+                />
+              </div>
+              <div className={styles.emptyText}>未找到相关建议</div>
+            </div>
+          )}
+        </div>
+      )}
+
+      <div className={styles.content} onClick={() => setShowSuggestions(false)}>
+        {searchValue && hasSearched && (
           <>
-            <Tabs
-              activeKey={activeTab}
-              onChange={setActiveTab}
-              className={styles.tabs}
-            >
-              <Tabs.Tab title={`全部 (${allResults.length})`} key="all" />
-              <Tabs.Tab title={`文章 (${articleResults.length})`} key="articles" />
-              <Tabs.Tab title={`人物 (${peopleResults.length})`} key="people" />
-            </Tabs>
+            {/* 搜索结果统计和排序栏 */}
+            <div className={styles.resultHeader}>
+              <span className={styles.resultCount}>找到{allResults.length}条结果</span>
+              <div className={styles.sortActions}>
+                <span
+                  className={styles.filterBtn}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setFilterDrawerVisible(!filterDrawerVisible);
+                  }}
+                >
+                  筛选
+                  {filterDrawerVisible ? <UpOutline className={styles.downIcon} /> : <DownOutline className={styles.downIcon} />}
+                </span>
+                <span
+                  className={styles.sortBtn}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setSortMenuVisible(!sortMenuVisible);
+                  }}
+                >
+                  {getSortLabel()}
+                  {sortMenuVisible ? <UpOutline className={styles.downIcon} /> : <DownOutline className={styles.downIcon} />}
+                </span>
+              </div>
+            </div>
+
+            {/* 排序菜单 */}
+            {sortMenuVisible && (
+              <>
+                <div className={styles.sortMenuMask} onClick={() => setSortMenuVisible(false)} />
+                <div className={styles.sortMenu}>
+                  {sortOptions.map((option) => (
+                    <div
+                      key={option.key}
+                      className={`${styles.sortMenuItem} ${sortType === option.key ? styles.sortMenuItemActive : ''}`}
+                      onClick={() => handleSortChange(option.key)}
+                    >
+                      {option.label}
+                    </div>
+                  ))}
+                </div>
+              </>
+            )}
 
           <div className={styles.results}>
             {/* 人物结果 */}
-            {displayPeople.length > 0 && (
+            {peopleResults.length > 0 && (
               <div className={styles.section}>
-                {activeTab === 'all' && (
-                  <h3 className={styles.sectionTitle}>人物</h3>
-                )}
-                {displayPeople.map((person) => (
+                <h3 className={styles.sectionTitle}>人物</h3>
+                {peopleResults.map((person) => (
                   <PersonCard
                     key={person.id}
                     person={person}
@@ -172,12 +413,10 @@ export default function SearchPage() {
             )}
 
             {/* 文章结果 */}
-            {displayArticles.length > 0 && (
+            {articleResults.length > 0 && (
               <div className={styles.section}>
-                {activeTab === 'all' && (
-                  <h3 className={styles.sectionTitle}>文章</h3>
-                )}
-                {displayArticles.map((article) => (
+                <h3 className={styles.sectionTitle}>文章</h3>
+                {articleResults.map((article) => (
                   <ArticleListItem
                     key={article.id}
                     article={article}
@@ -250,6 +489,48 @@ export default function SearchPage() {
         </div>
         )}
       </div>
+
+      {/* 筛选抽屉 */}
+      <FilterDrawer
+        visible={filterDrawerVisible}
+        onClose={() => setFilterDrawerVisible(false)}
+        title="筛选"
+        menus={filterMenus}
+        activeMenu={activeFilterMenu}
+        onMenuChange={scrollToDrawerSection}
+        contentRef={drawerContentRef}
+      >
+        {filterMenus.map((menu) => (
+          <div key={menu} id={`drawer-section-${menu}`} className={styles.drawerCategorySection}>
+            <div className={styles.drawerCategoryTitle}>{menu}</div>
+            {filterData[menu].map((section, idx) => {
+              const maxLen = Math.max(...section.tags.map(tag => tag.length));
+              const cols = maxLen <= 6 ? 3 : 2;
+              return (
+                <div key={idx} className={styles.drawerSection}>
+                  <div
+                    className={styles.drawerTagList}
+                    style={{ '--tag-cols': cols } as React.CSSProperties}
+                  >
+                    {section.tags.map((tag, tagIdx) => {
+                      const isSelected = selectedFilters[menu]?.includes(tag);
+                      return (
+                        <span
+                          key={tagIdx}
+                          className={`${styles.drawerTagItem} ${isSelected ? styles.drawerTagItemSelected : ''}`}
+                          onClick={() => handleFilterTagClick(menu, tag)}
+                        >
+                          {tag}
+                        </span>
+                      );
+                    })}
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        ))}
+      </FilterDrawer>
     </div>
   );
 }

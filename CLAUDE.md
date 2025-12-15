@@ -1,5 +1,8 @@
 ## ⚠️⚠️⚠️ 强制工作流程 - 每次编辑代码前必须执行 ⚠️⚠️⚠️
 
+### UI 样式使用提醒
+使用 Ant Design Mobile 组件库，请查看：`https://mobile.ant.design/`, 交互和组件尽量都采用 Ant Design Mobile 的样式，避免重复造轮子。
+
 **你（Claude）在使用 Write、Edit、NotebookEdit 等工具前，必须：**
 
 ### 第 1 步：在文本回复中明确声明
