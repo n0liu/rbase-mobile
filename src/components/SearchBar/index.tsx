@@ -34,7 +34,7 @@ export default function SearchBar({
         <SearchOutline className={styles.searchIcon} />
         <input
           ref={inputRef}
-          type="search"
+          type="text"
           className={styles.searchInput}
           placeholder={placeholder}
           value={value}
