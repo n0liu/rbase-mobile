@@ -115,6 +115,7 @@ export function generateCSSVariables(
     '--rbase-radius-lg': radius.lg,
     '--rbase-radius-button': radius.button,
     '--rbase-radius-card': radius.card,
+    '--rbase-radius-circle': radius.avatar,
 
     // 间距变量（统一基于 375px 转换为 vw）
     '--rbase-spacing-xs': pxToVw(spacing.xs),

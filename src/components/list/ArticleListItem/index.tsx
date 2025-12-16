@@ -10,7 +10,9 @@ export default function ArticleListItem({
   article,
   showMoreIcon = true,
   onClick,
-  onMoreClick
+  onMoreClick,
+  renderTitle,
+  renderAuthorName
 }: ArticleListItemProps) {
   const [keywordsExpanded, setKeywordsExpanded] = useState(false);
   const [hasOverflow, setHasOverflow] = useState(false);
@@ -74,7 +76,9 @@ export default function ArticleListItem({
         </div>
 
         {/* 中文标题 */}
-        <h3 className={styles.articleTitleCn}>{article.titleCn}</h3>
+        <h3 className={styles.articleTitleCn}>
+          {renderTitle ? renderTitle(article.titleCn) : article.titleCn}
+        </h3>
 
         {/* 英文标题 */}
         <p className={styles.articleTitleEn}>{article.titleEn}</p>
@@ -83,7 +87,7 @@ export default function ArticleListItem({
         <div className={styles.articleAuthors}>
           {article.authors.map((author, idx) => (
             <span key={idx} className={styles.authorItem}>
-              {author.name}
+              {renderAuthorName ? renderAuthorName(author.name) : author.name}
               {author.isCorresponding && (
                 <svg
                   viewBox="0 0 8 8"

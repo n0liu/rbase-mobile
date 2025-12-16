@@ -41,4 +41,8 @@ export interface ArticleListItemProps {
   onClick?: () => void;
   /** 更多按钮点击回调 */
   onMoreClick?: () => void;
+  /** 自定义标题渲染函数 */
+  renderTitle?: (title: string) => React.ReactNode;
+  /** 自定义作者名称渲染函数 */
+  renderAuthorName?: (name: string) => React.ReactNode;
 }

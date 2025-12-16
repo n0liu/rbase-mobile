@@ -416,3 +416,30 @@
   color: var(--rbase-color-primary);
   border-color: var(--rbase-color-primary);
 }
+
+/* 加载状态 */
+.loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: var(--rbase-spacing-xxl);
+  gap: var(--rbase-spacing-md);
+  margin-top: 80px;
+}
+
+.loadingText {
+  font-size: var(--rbase-font-size-body);
+  color: var(--rbase-color-text-secondary);
+}
+
+/* 空结果 */
+.emptyResults {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: var(--rbase-spacing-xxl);
+  gap: var(--rbase-spacing-md);
+  margin-top: 80px;
+}

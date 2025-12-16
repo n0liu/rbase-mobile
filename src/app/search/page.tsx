@@ -2,13 +2,12 @@
 
 import { useState, useEffect, useRef } from 'react';
 import { useRouter } from 'next/navigation';
-import { DeleteOutline, DownOutline, UpOutline, FilterOutline } from 'antd-mobile-icons';
+import { DeleteOutline, DownOutline, UpOutline } from 'antd-mobile-icons';
+import { SpinLoading } from 'antd-mobile';
 import Image from 'next/image';
 import SearchBar from '@/components/SearchBar';
 import PersonCard from '@/components/PersonCard';
-import { Person } from '@/components/PersonCard/types';
 import ArticleListItem from '@/components/list/ArticleListItem';
-import { Article } from '@/components/list/ArticleListItem/types';
 import FilterDrawer from '@/components/drawers/FilterDrawer';
 import styles from './page.module.css';
 
@@ -34,6 +33,8 @@ export default function SearchPage() {
     '关键词': [],
   });
   const drawerContentRef = useRef<HTMLDivElement>(null);
+  const [searchResults, setSearchResults] = useState<any[]>([]);
+  const [isSearching, setIsSearching] = useState(false);
 
   // 热门搜索数据，部分标记为热门
   const hotSearches = [
@@ -46,75 +47,6 @@ export default function SearchPage() {
     { keyword: '炎症', isHot: true },
   ];
 
-  // 模拟搜索结果数据 - 人物
-  const peopleResults: Person[] = [
-    {
-      id: 1,
-      name: '张和平',
-      avatar: 'https://pics-xldkp-com.oss-cn-qingdao.aliyuncs.com/users/default_avatar.png',
-      title: '教授、博士生导师',
-      organization: '江南大学食品学院',
-      researchArea: '益生菌、肠道微生态',
-      articleCount: 156,
-    },
-    {
-      id: 2,
-      name: '陈卫',
-      avatar: 'https://pics-xldkp-com.oss-cn-qingdao.aliyuncs.com/users/default_avatar.png',
-      title: '中国工程院院士',
-      organization: '江南大学',
-      researchArea: '食品微生物学、益生菌',
-      articleCount: 203,
-    },
-    {
-      id: 3,
-      name: 'Jun-Yao Xu',
-      avatar: 'https://pics-xldkp-com.oss-cn-qingdao.aliyuncs.com/users/default_avatar.png',
-      title: '副研究员',
-      organization: 'Stanford University',
-      researchArea: '肠道菌群、代谢组学',
-      articleCount: 45,
-    },
-  ];
-
-  // 模拟搜索结果数据 - 文章
-  const articleResults: Article[] = [
-    {
-      id: 1,
-      day: '15',
-      month: '10',
-      journal: 'Gut Microbes',
-      impactFactor: '12.2',
-      titleCn: 'Bifidobacterium longum BB536 对改善老年人肠道健康和免疫功能的随机对照试验',
-      titleEn: 'A Randomized, Controlled Trial of Bifidobacterium longum BB536 for Improving Gut Health and Immune Function in the Elderly',
-      type: 'Article',
-      date: '2025-10-15',
-      doi: '10.1080/19490976.2025.2345678',
-      authors: [
-        { name: 'Jun-Yao Xu', isCorresponding: false },
-        { name: '陈欢', isCorresponding: false },
-        { name: '张和平', isCorresponding: true },
-      ],
-      keywords: ['益生菌', '长双歧杆菌BB536', '肠道健康'],
-    },
-    {
-      id: 2,
-      day: '08',
-      month: '10',
-      journal: 'Microbiome',
-      impactFactor: '16.6',
-      titleCn: '菊粉型益生元对调节肥胖个体肠道菌群结构和代谢产物的宏基因组学研究',
-      titleEn: 'Metagenomic analysis reveals the effects of inulin-type prebiotics on gut microbial structure and metabolites',
-      type: 'Article',
-      date: '2025-10-08',
-      doi: '10.1186/s40168-025-01234-5',
-      authors: [
-        { name: '汪芳宏', isCorresponding: false },
-        { name: '陈卫', isCorresponding: true },
-      ],
-      keywords: ['益生元', '菊粉', '肠道菌群'],
-    },
-  ];
 
   const handleCancel = () => {
     router.back();
@@ -177,6 +109,32 @@ export default function SearchPage() {
     };
   }, [sortMenuVisible]);
 
+  // 执行搜索
+  const performSearch = async (keyword: string) => {
+    if (!keyword.trim()) return;
+
+    setIsSearching(true);
+    try {
+      const response = await fetch(`/api/search/simple?q=${encodeURIComponent(keyword)}`);
+      const data = await response.json();
+
+      if (data.code === 200 && data.data?.searchResults) {
+        // 合并文章结果和作者结果
+        const allItems = data.data.searchResults.all?.items || [];
+        const authorItems = data.data.searchResults.z?.items || [];
+
+        // 将作者结果放在前面
+        setSearchResults([...authorItems, ...allItems]);
+        setHasSearched(true);
+      }
+    } catch (error) {
+      console.error('搜索失败:', error);
+      setSearchResults([]);
+    } finally {
+      setIsSearching(false);
+    }
+  };
+
   const handleSearch = () => {
     if (searchValue.trim()) {
       // 添加到最近搜索
@@ -184,10 +142,8 @@ export default function SearchPage() {
       setRecentSearches(newRecent);
       // 隐藏建议列表
       setShowSuggestions(false);
-      // 标记为已搜索
-      setHasSearched(true);
-      // 实际项目中这里应该调用 API 进行搜索
-      console.log('搜索:', searchValue);
+      // 执行搜索
+      performSearch(searchValue);
     }
   };
 
@@ -196,13 +152,11 @@ export default function SearchPage() {
     skipFetchRef.current = true;
     setSearchValue(suggestion);
     setShowSuggestions(false);
-    // 标记为已搜索
-    setHasSearched(true);
     // 添加到最近搜索
     const newRecent = [suggestion, ...recentSearches.filter(s => s !== suggestion)].slice(0, 10);
     setRecentSearches(newRecent);
-    // 实际项目中这里应该调用 API 进行搜索
-    console.log('搜索:', suggestion);
+    // 执行搜索
+    performSearch(suggestion);
   };
 
   const handleSearchValueChange = (value: string) => {
@@ -227,16 +181,120 @@ export default function SearchPage() {
     // 标记跳过下一次建议获取
     skipFetchRef.current = true;
     setSearchValue(keyword);
-    setHasSearched(true);
-    // 自动执行搜索
+    // 添加到最近搜索
     const newRecent = [keyword, ...recentSearches.filter(s => s !== keyword)].slice(0, 10);
     setRecentSearches(newRecent);
-    // 实际项目中这里应该调用 API 进行搜索
-    console.log('搜索:', keyword);
+    // 执行搜索
+    performSearch(keyword);
   };
 
   const clearRecentSearches = () => {
     setRecentSearches([]);
+  };
+
+  // 解码 HTML 实体
+  const decodeHTMLEntities = (text: string) => {
+    const textarea = document.createElement('textarea');
+    textarea.innerHTML = text;
+    return textarea.value;
+  };
+
+  // 解析含有 <em> 标签的文本，返回 React 元素
+  const parseHighlightedText = (text: string) => {
+    if (!text) return text;
+
+    // 先解码 HTML 实体（除了 <em> 标签）
+    const decodedText = decodeHTMLEntities(text);
+
+    const parts = [];
+    let lastIndex = 0;
+    const regex = /<em>(.*?)<\/em>/g;
+    let match;
+    let key = 0;
+
+    while ((match = regex.exec(decodedText)) !== null) {
+      // 添加普通文本
+      if (match.index > lastIndex) {
+        parts.push(decodedText.substring(lastIndex, match.index));
+      }
+      // 添加高亮文本
+      parts.push(
+        <span key={key++} style={{ color: 'var(--rbase-color-danger)' }}>
+          {match[1]}
+        </span>
+      );
+      lastIndex = regex.lastIndex;
+    }
+
+    // 添加剩余的普通文本
+    if (lastIndex < decodedText.length) {
+      parts.push(decodedText.substring(lastIndex));
+    }
+
+    return parts.length > 0 ? parts : decodedText;
+  };
+
+  // 渲染搜索结果项
+  const renderSearchResultItem = (item: any, index: number) => {
+    // 根据 asso_model 判断类型
+    if (item.asso_model === 'Zhikus') {
+      // 专家类型
+      return (
+        <div key={`person-${item.id || index}`}>
+          <PersonCard
+            person={{
+              id: item.id,
+              name: item.name,
+              avatar: item.image || 'https://pics-xldkp-com.oss-cn-qingdao.aliyuncs.com/users/default_avatar.png',
+              title: item.titleList?.[0] || item.title || '',
+              researchArea: '',
+            }}
+            onClick={() => {
+              if (item.defaultUrl) {
+                window.location.href = `https://www.mr-gut.cn${item.defaultUrl}`;
+              }
+            }}
+            renderName={(name) => parseHighlightedText(name)}
+            renderTitle={(title) => parseHighlightedText(title)}
+          />
+        </div>
+      );
+    } else {
+      // 文章/论文类型 (Papers 或 MrgutArticles)
+      const date = item.time || '';
+      const [, month, day] = date.split('-');
+
+      return (
+        <div key={`article-${item.id || item.uuid || index}`}>
+          <ArticleListItem
+            article={{
+              id: item.id,
+              day: day || '01',
+              month: month || '01',
+              journal: item.periodical || item.typeStr || '',
+              impactFactor: item.impact_factor || '0',
+              titleCn: item.title,
+              titleEn: '',
+              type: item.type || 'Article',
+              date: date,
+              doi: '',
+              authors: item.author ? [{
+                name: item.author,
+                isCorresponding: false
+              }] : [],
+              keywords: [],
+            }}
+            onClick={() => {
+              if (item.defaultUrl) {
+                window.location.href = `https://www.mr-gut.cn${item.defaultUrl}`;
+              }
+            }}
+            renderTitle={(title) => parseHighlightedText(title)}
+            renderAuthorName={(name) => parseHighlightedText(name)}
+          />
+        </div>
+      );
+    }
   };
 
   // 筛选菜单
@@ -303,8 +361,6 @@ export default function SearchPage() {
     }
   };
 
-  const allResults = [...peopleResults, ...articleResults];
-
   return (
     <div className={styles.container}>
       <div className={styles.searchBarFixed}>
@@ -353,8 +409,18 @@ export default function SearchPage() {
           <>
             {/* 搜索结果统计和排序栏 */}
             <div className={styles.resultHeader}>
-              <span className={styles.resultCount}>找到{allResults.length}条结果</span>
+              <span className={styles.resultCount}>找到{searchResults.length}条结果</span>
               <div className={styles.sortActions}>
+                <span
+                  className={styles.filterBtn}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setFilterDrawerVisible(!filterDrawerVisible);
+                  }}
+                >
+                  筛选
+                  {filterDrawerVisible ? <UpOutline className={styles.downIcon} /> : <DownOutline className={styles.downIcon} />}
+                </span>
                 <span
                   className={styles.sortBtn}
                   onClick={(e) => {
@@ -364,15 +430,6 @@ export default function SearchPage() {
                 >
                   {getSortLabel()}
                   {sortMenuVisible ? <UpOutline className={styles.downIcon} /> : <DownOutline className={styles.downIcon} />}
-                </span>
-                <span
-                  className={styles.filterBtn}
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    setFilterDrawerVisible(!filterDrawerVisible);
-                  }}
-                >
-                  <FilterOutline className={styles.filterIcon} />
                 </span>
               </div>
             </div>
@@ -396,33 +453,25 @@ export default function SearchPage() {
             )}
 
           <div className={styles.results}>
-            {/* 人物结果 */}
-            {peopleResults.length > 0 && (
-              <div className={styles.section}>
-                <h3 className={styles.sectionTitle}>人物</h3>
-                {peopleResults.map((person) => (
-                  <PersonCard
-                    key={person.id}
-                    person={person}
-                    onClick={() => console.log('查看人物:', person.name)}
-                  />
-                ))}
+            {isSearching ? (
+              <div className={styles.loading}>
+                <SpinLoading color="primary" />
+                <span className={styles.loadingText}>搜索中...</span>
               </div>
-            )}
-
-            {/* 文章结果 */}
-            {articleResults.length > 0 && (
-              <div className={styles.section}>
-                <h3 className={styles.sectionTitle}>文章</h3>
-                {articleResults.map((article) => (
-                  <ArticleListItem
-                    key={article.id}
-                    article={article}
-                    showMoreIcon={true}
-                    onClick={() => console.log('查看文章:', article.titleCn)}
-                    onMoreClick={() => console.log('更多操作:', article.titleCn)}
+            ) : searchResults.length > 0 ? (
+              searchResults.map((item, index) => renderSearchResultItem(item, index))
+            ) : (
+              <div className={styles.emptyResults}>
+                <div className={styles.emptyIcon}>
+                  <Image
+                    src="https://pics-xldkp-com.oss-cn-qingdao.aliyuncs.com/images/rbase/none.png"
+                    alt="无结果"
+                    width={200}
+                    height={200}
+                    className={styles.emptyImage}
                   />
-                ))}
+                </div>
+                <div className={styles.emptyText}>未找到相关结果</div>
               </div>
             )}
             </div>

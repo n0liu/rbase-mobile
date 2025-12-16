@@ -1,5 +1,6 @@
 'use client';
 
+import { useRef } from 'react';
 import { SearchOutline, CloseCircleFill } from 'antd-mobile-icons';
 import styles from './index.module.scss';
 import { SearchBarProps } from './types';
@@ -13,9 +14,13 @@ export default function SearchBar({
   showCancel = true,
   autoFocus = true,
 }: SearchBarProps) {
+  const inputRef = useRef<HTMLInputElement>(null);
+
   const handleKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter' && onSearch) {
       onSearch();
+      // 隐藏键盘
+      inputRef.current?.blur();
     }
   };
 
@@ -28,13 +33,15 @@ export default function SearchBar({
       <div className={styles.searchInputWrapper}>
         <SearchOutline className={styles.searchIcon} />
         <input
-          type="text"
+          ref={inputRef}
+          type="search"
           className={styles.searchInput}
           placeholder={placeholder}
           value={value}
           onChange={(e) => onChange(e.target.value)}
           onKeyPress={handleKeyPress}
           autoFocus={autoFocus}
+          enterKeyHint="search"
         />
         {value && (
           <CloseCircleFill

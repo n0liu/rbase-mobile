@@ -16,6 +16,7 @@
   width: 60px;
   height: 60px;
   border-radius: var(--rbase-radius-circle);
+  border: 1px solid var(--rbase-color-border);
   object-fit: cover;
   flex-shrink: 0;
 }
@@ -41,20 +42,8 @@
   margin: 0;
 }
 
-.organization {
-  font-size: var(--rbase-font-size-caption);
-  color: var(--rbase-color-text-tertiary);
-  margin: 0;
-}
-
 .researchArea {
   font-size: var(--rbase-font-size-caption);
   color: var(--rbase-color-text-secondary);
-  margin: 0;
-}
-
-.articleCount {
-  font-size: var(--rbase-font-size-caption);
-  color: var(--rbase-color-primary);
   margin: 0;
 }

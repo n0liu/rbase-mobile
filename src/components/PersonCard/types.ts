@@ -20,4 +20,8 @@ export interface PersonCardProps {
   person: Person;
   /** 点击事件 */
   onClick?: () => void;
+  /** 自定义姓名渲染函数 */
+  renderName?: (name: string) => React.ReactNode;
+  /** 自定义职位渲染函数 */
+  renderTitle?: (title: string) => React.ReactNode;
 }
