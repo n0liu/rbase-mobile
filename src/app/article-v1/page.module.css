@@ -765,3 +765,49 @@
   color: var(--rbase-color-text-secondary);
   line-height: 1.8;
 }
+
+/* ==================== 临床试验信息样式 ==================== */
+.clinicalTrialGrid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--rbase-spacing-sm);
+}
+
+.clinicalTrialItem {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.clinicalTrialLabel {
+  font-size: var(--rbase-font-size-caption);
+  color: var(--rbase-color-text-tertiary);
+}
+
+.clinicalTrialValue {
+  font-size: var(--rbase-font-size-body-small);
+  color: var(--rbase-color-text-primary);
+  word-break: break-word;
+  padding: var(--rbase-spacing-xs) 0;
+}
+
+.clinicalTrialValue::before {
+  content: '';
+  display: inline-block;
+  width: 4px;
+  height: 4px;
+  background: var(--rbase-color-text-quaternary);
+  border-radius: 50%;
+  margin-right: var(--rbase-spacing-sm);
+  vertical-align: middle;
+}
+
+.clinicalTrialFullItem {
+  grid-column: 1 / -1;
+}
+
+.clinicalTrialTags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--rbase-spacing-xs) var(--rbase-spacing-sm);
+}

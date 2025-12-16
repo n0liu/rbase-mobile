@@ -143,6 +143,40 @@ export default function ArticleV1Page() {
     ],
   };
 
+  // 临床试验信息
+  const clinicalTrialInfo = {
+    basicInfo: [
+      { label: '发起/责任方', value: 'IIT' },
+      { label: '分组', value: '交叉设计' },
+      { label: '研究阶段', value: 'III期临床试验' },
+      { label: '人群', value: '婴幼儿' },
+      { label: '参与机构', value: '单中心' },
+      { label: '随机化', value: '随机, 随机1, 随机2, 随机3' },
+      { label: '盲法', value: '双盲' },
+      { label: '对照组', value: '安慰剂对照' },
+      { label: '研究目的', value: '治疗性, 治疗性1, 治疗性2' },
+      { label: '统计学目标', value: '非劣效试验' },
+    ],
+    intervention: [
+      { label: '干预类型', value: '药物试验' },
+      { label: '制剂类型', value: '胶囊' },
+      { label: '应用方式', value: '口服' },
+      { label: '疗程', value: '7天' },
+      { label: '给药频率', value: '一日三次' },
+      { label: '单次剂量', value: '2X10^8CFU' },
+    ],
+    endpoints: [
+      { label: '主要终点', value: '日均排便次数' },
+      { label: '次要终点', value: ['粪便微生物多样性', '血液免疫指标'] },
+      { label: '不良事件', value: ['恶心', '轻微腹部不适'] },
+    ],
+    registration: [
+      { label: '注册信息', value: 'ChiCTR2500109434' },
+      { label: '人体伦理', value: '斯坦福大学露西尔·帕卡德儿童医院 (批准号: IRB#58646)' },
+      { label: '动物伦理', value: '斯坦福大学动物关怀和使用委员会 (批准号: APLAC-34186)' },
+    ],
+  };
+
   const structureMenus = ['关键词', '临床试验', '治疗措施', '文章属性', '实验材料', '实验方法', '分析软件', '分子通路', '产出转化', '收录频道', '贡献者'];
 
   const structureData: Record<string, { title: string; tags: string[] }[]> = {
@@ -153,7 +187,9 @@ export default function ArticleV1Page() {
       { title: '人工', tags: ['菌群移植', '产酸拟杆菌', '益菌素', '甘氨酸'] },
       { title: 'MeSH', tags: ['Fructose', 'Inulin', 'Fatty Liver', 'Probiotics'] },
     ],
-    '临床试验': [],
+    '临床试验': [
+      { title: '', tags: [] }, // 临床试验使用特殊渲染，这里占位
+    ],
     '治疗措施': [
       { title: '治疗与干预措施', tags: ['菊粉', '脂肪肝', '动物实验', '阳性', '抗生素', '便秘', '人体临床试验', '阴性'] },
     ],
@@ -461,27 +497,122 @@ export default function ArticleV1Page() {
           .map((menu) => (
             <div key={menu} id={`drawer-section-${menu}`} className={styles.drawerCategorySection}>
               <div className={styles.drawerCategoryTitle}>{menu}</div>
-              {structureData[menu].map((section, idx) => {
-                // 根据最长标签长度决定列数：<=6字符用3列，否则用2列
-                const maxLen = Math.max(...section.tags.map(tag => tag.length));
-                const cols = maxLen <= 6 ? 3 : 2;
-                return (
-                  <div key={idx} className={styles.drawerSection}>
-                    <div className={styles.drawerSectionTitle}>
-                      <span className={styles.drawerSectionBar}></span>
-                      <span>{section.title}</span>
+              {menu === '临床试验' ? (
+                // 临床试验特殊渲染
+                <>
+                  {clinicalTrialInfo.basicInfo.length > 0 && (
+                    <div className={styles.drawerSection}>
+                      <div className={styles.drawerSectionTitle}>
+                        <span className={styles.drawerSectionBar}></span>
+                        <span>基本信息</span>
+                      </div>
+                      <div className={styles.clinicalTrialGrid}>
+                        {clinicalTrialInfo.basicInfo.map((item, idx) => (
+                          <div key={idx} className={styles.clinicalTrialItem}>
+                            <div className={styles.clinicalTrialLabel}>{item.label}</div>
+                            <div className={styles.clinicalTrialTags}>
+                              {Array.isArray(item.value) ? (
+                                item.value.map((val, valIdx) => (
+                                  <div key={valIdx} className={styles.clinicalTrialValue}>{val}</div>
+                                ))
+                              ) : (
+                                <div className={styles.clinicalTrialValue}>{item.value}</div>
+                              )}
+                            </div>
+                          </div>
+                        ))}
+                      </div>
                     </div>
-                    <div
-                      className={styles.drawerTagList}
-                      style={{ '--tag-cols': cols } as React.CSSProperties}
-                    >
-                      {section.tags.map((tag, tagIdx) => (
-                        <span key={tagIdx} className={styles.drawerTagItem}>{tag}</span>
-                      ))}
+                  )}
+                  {clinicalTrialInfo.intervention.length > 0 && (
+                    <div className={styles.drawerSection}>
+                      <div className={styles.drawerSectionTitle}>
+                        <span className={styles.drawerSectionBar}></span>
+                        <span>干预措施</span>
+                      </div>
+                      <div className={styles.clinicalTrialGrid}>
+                        {clinicalTrialInfo.intervention.map((item, idx) => (
+                          <div key={idx} className={styles.clinicalTrialItem}>
+                            <div className={styles.clinicalTrialLabel}>{item.label}</div>
+                            <div className={styles.clinicalTrialTags}>
+                              {Array.isArray(item.value) ? (
+                                item.value.map((val, valIdx) => (
+                                  <div key={valIdx} className={styles.clinicalTrialValue}>{val}</div>
+                                ))
+                              ) : (
+                                <div className={styles.clinicalTrialValue}>{item.value}</div>
+                              )}
+                            </div>
+                          </div>
+                        ))}
+                      </div>
                     </div>
-                  </div>
-                );
-              })}
+                  )}
+                  {clinicalTrialInfo.endpoints.length > 0 && (
+                    <div className={styles.drawerSection}>
+                      <div className={styles.drawerSectionTitle}>
+                        <span className={styles.drawerSectionBar}></span>
+                        <span>研究终点</span>
+                      </div>
+                      <div className={styles.clinicalTrialGrid}>
+                        {clinicalTrialInfo.endpoints.map((item, idx) => (
+                          <div key={idx} className={`${styles.clinicalTrialItem} ${styles.clinicalTrialFullItem}`}>
+                            <div className={styles.clinicalTrialLabel}>{item.label}</div>
+                            <div className={styles.clinicalTrialTags}>
+                              {Array.isArray(item.value) ? (
+                                item.value.map((val, valIdx) => (
+                                  <div key={valIdx} className={styles.clinicalTrialValue}>{val}</div>
+                                ))
+                              ) : (
+                                <div className={styles.clinicalTrialValue}>{item.value}</div>
+                              )}
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+                  {clinicalTrialInfo.registration.length > 0 && (
+                    <div className={styles.drawerSection}>
+                      <div className={styles.drawerSectionTitle}>
+                        <span className={styles.drawerSectionBar}></span>
+                        <span>注册与伦理</span>
+                      </div>
+                      <div className={styles.clinicalTrialGrid}>
+                        {clinicalTrialInfo.registration.map((item, idx) => (
+                          <div key={idx} className={`${styles.clinicalTrialItem} ${styles.clinicalTrialFullItem}`}>
+                            <div className={styles.clinicalTrialLabel}>{item.label}</div>
+                            <div className={styles.clinicalTrialValue}>{item.value}</div>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+                </>
+              ) : (
+                // 其他菜单的标签渲染
+                structureData[menu].map((section, idx) => {
+                  // 根据最长标签长度决定列数：<=6字符用3列，否则用2列
+                  const maxLen = Math.max(...section.tags.map(tag => tag.length));
+                  const cols = maxLen <= 6 ? 3 : 2;
+                  return (
+                    <div key={idx} className={styles.drawerSection}>
+                      <div className={styles.drawerSectionTitle}>
+                        <span className={styles.drawerSectionBar}></span>
+                        <span>{section.title}</span>
+                      </div>
+                      <div
+                        className={styles.drawerTagList}
+                        style={{ '--tag-cols': cols } as React.CSSProperties}
+                      >
+                        {section.tags.map((tag, tagIdx) => (
+                          <span key={tagIdx} className={styles.drawerTagItem}>{tag}</span>
+                        ))}
+                      </div>
+                    </div>
+                  );
+                })
+              )}
             </div>
           ))}
       </FilterDrawer>
