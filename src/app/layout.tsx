@@ -38,12 +38,12 @@ function AppContent({ children }: { children: React.ReactNode }) {
   }, []);
 
   // 动态注入 CSS 变量到 :root
-  useEffect(() => {
-    const root = document.documentElement;
-    Object.entries(themeConfig).forEach(([key, value]) => {
-      root.style.setProperty(key, value);
-    });
-  }, [themeConfig]);
+  // useEffect(() => {
+  //   const root = document.documentElement;
+  //   Object.entries(themeConfig).forEach(([key, value]) => {
+  //     root.style.setProperty(key, value);
+  //   });
+  // }, [themeConfig]);
 
   return (
     <ConfigProvider>
