@@ -14,7 +14,7 @@ import styles from './page.module.css';
 export default function SearchPage() {
   const router = useRouter();
   const [searchValue, setSearchValue] = useState('');
-  const [recentSearches, setRecentSearches] = useState<string[]>(['益生菌', '肠道菌群']);
+  const [recentSearches, setRecentSearches] = useState<string[]>([]);
   const [hotSearchesVisible, setHotSearchesVisible] = useState(true);
   const [suggestions, setSuggestions] = useState<string[]>([]);
   const [showSuggestions, setShowSuggestions] = useState(false);
@@ -36,6 +36,21 @@ export default function SearchPage() {
   const [searchResults, setSearchResults] = useState<any[]>([]);
   const [isSearching, setIsSearching] = useState(false);
 
+  // 从 localStorage 加载最近搜索
+  useEffect(() => {
+    const stored = localStorage.getItem('recentSearches');
+    if (stored) {
+      try {
+        const parsed = JSON.parse(stored);
+        if (Array.isArray(parsed)) {
+          setRecentSearches(parsed);
+        }
+      } catch (error) {
+        console.error('加载最近搜索失败:', error);
+      }
+    }
+  }, []);
+
   // 热门搜索数据，部分标记为热门
   const hotSearches = [
     { keyword: '益生菌', isHot: true },
@@ -47,6 +62,13 @@ export default function SearchPage() {
     { keyword: '炎症', isHot: true },
   ];
 
+
+  // 更新最近搜索并保存到 localStorage
+  const updateRecentSearches = (keyword: string) => {
+    const newRecent = [keyword, ...recentSearches.filter(s => s !== keyword)].slice(0, 10);
+    setRecentSearches(newRecent);
+    localStorage.setItem('recentSearches', JSON.stringify(newRecent));
+  };
 
   const handleCancel = () => {
     router.back();
@@ -65,11 +87,14 @@ export default function SearchPage() {
       const response = await fetch(`/api/search/suggest?q=${encodeURIComponent(keyword)}`);
       const data = await response.json();
       console.log(data, "data")
-      setSuggestions(data.data || []);
-      setShowSuggestions(true);
+      const suggestionsList = data.data || [];
+      setSuggestions(suggestionsList);
+      // 只有当有建议数据时才显示建议列表
+      setShowSuggestions(suggestionsList.length > 0);
     } catch (error) {
       console.error('获取搜索建议失败:', error);
       setSuggestions([]);
+      setShowSuggestions(false);
     }
   };
 
@@ -78,6 +103,11 @@ export default function SearchPage() {
     // 如果标记为跳过，则不获取建议
     if (skipFetchRef.current) {
       skipFetchRef.current = false;
+      return;
+    }
+
+    // 如果已经执行过搜索或正在搜索，不获取建议
+    if (hasSearched || isSearching) {
       return;
     }
 
@@ -94,7 +124,7 @@ export default function SearchPage() {
         clearTimeout(debounceTimer.current);
       }
     };
-  }, [searchValue]);
+  }, [searchValue, hasSearched, isSearching]);
 
   // 阻止排序菜单打开时的滚动
   useEffect(() => {
@@ -138,8 +168,7 @@ export default function SearchPage() {
   const handleSearch = () => {
     if (searchValue.trim()) {
       // 添加到最近搜索
-      const newRecent = [searchValue, ...recentSearches.filter(s => s !== searchValue)].slice(0, 10);
-      setRecentSearches(newRecent);
+      updateRecentSearches(searchValue);
       // 隐藏建议列表
       setShowSuggestions(false);
       // 执行搜索
@@ -153,8 +182,9 @@ export default function SearchPage() {
     setSearchValue(suggestion);
     setShowSuggestions(false);
     // 添加到最近搜索
-    const newRecent = [suggestion, ...recentSearches.filter(s => s !== suggestion)].slice(0, 10);
-    setRecentSearches(newRecent);
+    updateRecentSearches(suggestion);
+    // 设置已搜索状态，这样可以立即显示加载区域
+    setHasSearched(true);
     // 执行搜索
     performSearch(suggestion);
   };
@@ -181,15 +211,19 @@ export default function SearchPage() {
     // 标记跳过下一次建议获取
     skipFetchRef.current = true;
     setSearchValue(keyword);
+    // 隐藏建议列表
+    setShowSuggestions(false);
     // 添加到最近搜索
-    const newRecent = [keyword, ...recentSearches.filter(s => s !== keyword)].slice(0, 10);
-    setRecentSearches(newRecent);
+    updateRecentSearches(keyword);
+    // 设置已搜索状态，这样可以立即显示加载区域
+    setHasSearched(true);
     // 执行搜索
     performSearch(keyword);
   };
 
   const clearRecentSearches = () => {
     setRecentSearches([]);
+    localStorage.removeItem('recentSearches');
   };
 
   // 解码 HTML 实体
