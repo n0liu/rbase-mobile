@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useRef } from 'react';
 import { useRouter } from 'next/navigation';
-import { DeleteOutline, DownOutline, UpOutline } from 'antd-mobile-icons';
+import { DeleteOutline, DownOutline, UpOutline, FilterOutline } from 'antd-mobile-icons';
 import { SpinLoading } from 'antd-mobile';
 import Image from 'next/image';
 import SearchBar from '@/components/SearchBar';
@@ -412,16 +412,6 @@ export default function SearchPage() {
               <span className={styles.resultCount}>找到{searchResults.length}条结果</span>
               <div className={styles.sortActions}>
                 <span
-                  className={styles.filterBtn}
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    setFilterDrawerVisible(!filterDrawerVisible);
-                  }}
-                >
-                  筛选
-                  {filterDrawerVisible ? <UpOutline className={styles.downIcon} /> : <DownOutline className={styles.downIcon} />}
-                </span>
-                <span
                   className={styles.sortBtn}
                   onClick={(e) => {
                     e.stopPropagation();
@@ -430,6 +420,15 @@ export default function SearchPage() {
                 >
                   {getSortLabel()}
                   {sortMenuVisible ? <UpOutline className={styles.downIcon} /> : <DownOutline className={styles.downIcon} />}
+                </span>
+                <span
+                  className={styles.filterBtn}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setFilterDrawerVisible(!filterDrawerVisible);
+                  }}
+                >
+                  <FilterOutline className={styles.filterIcon} />
                 </span>
               </div>
             </div>

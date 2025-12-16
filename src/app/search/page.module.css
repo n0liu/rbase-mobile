@@ -52,11 +52,10 @@
 .filterBtn {
   display: flex;
   align-items: center;
-  gap: 2px;
-  font-size: var(--rbase-font-size-body-small);
-  color: var(--rbase-color-text-secondary);
+  justify-content: center;
   cursor: pointer;
   user-select: none;
+  padding: var(--rbase-spacing-xs);
 }
 
 .sortBtn {
@@ -74,7 +73,7 @@
 }
 
 .filterIcon {
-  font-size: 18px;
+  font-size: 20px;
   color: var(--rbase-color-text-secondary);
 }
 
