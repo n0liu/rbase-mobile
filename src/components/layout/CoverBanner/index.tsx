@@ -58,7 +58,7 @@ export default function CoverBanner({
             </div>
 
             {/* 搜索框 */}
-            {showSearchBox && (
+            {/* {showSearchBox && (
               <div className={styles.searchBox}>
                 <input
                   type="text"
@@ -72,7 +72,7 @@ export default function CoverBanner({
                   <span>搜索</span>
                 </button>
               </div>
-            )}
+            )} */}
           </>
         )}
       </div>

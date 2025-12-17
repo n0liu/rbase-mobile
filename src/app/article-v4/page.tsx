@@ -2,7 +2,6 @@
 
 import { useState, useRef } from 'react';
 import { useRouter } from 'next/navigation';
-import { Popup } from 'antd-mobile';
 import Image from 'next/image';
 import { FilterOutline } from 'antd-mobile-icons';
 import TopNavigationBar from '@/components/layout/TopNavigationBar';
@@ -17,14 +16,18 @@ import { TreeNode } from '@/components/list/TreeView/types';
 import ArticleListItem from '@/components/list/ArticleListItem';
 import { Article } from '@/components/list/ArticleListItem/types';
 import FilterDrawer from '@/components/drawers/FilterDrawer';
+import LeftSidePanel from '@/components/drawers/LeftSidePanel';
 import styles from './page.module.css';
 import BackToTop from '@/components/BackToTop';
+
+type LeftDrawerContentType = 'profile' | 'team' | 'scholars' | 'institutions';
 
 export default function ArticleV4Page() {
   const router = useRouter();
   const scrollRef = useRef<HTMLDivElement>(null);
   const drawerContentRef = useRef<HTMLDivElement>(null);
   const [leftPanelVisible, setLeftPanelVisible] = useState(false);
+  const [leftDrawerContent, setLeftDrawerContent] = useState<LeftDrawerContentType>('profile');
   const [filterPanelVisible, setFilterPanelVisible] = useState(false);
   const [activeFilterMenu, setActiveFilterMenu] = useState('发表时间');
   const [activeFilters, setActiveFilters] = useState<string[]>([]);
@@ -102,6 +105,65 @@ export default function ArticleV4Page() {
     { id: 'scholars', label: '合作学者', count: 0, icon: 'https://pics-xldkp-com.oss-cn-qingdao.aliyuncs.com/images/rbase/icons/87.svg?20230511' },
     { id: 'institutions', label: '合作机构', count: 0, icon: 'https://pics-xldkp-com.oss-cn-qingdao.aliyuncs.com/images/rbase/icons/5.svg?20230511' },
   ];
+
+  // 个人简介数据
+  const profileData = {
+    content: '于君教授长期致力于消化系统肿瘤机制和防治研究，包括肠道微生态和肝癌的研究20年。发表SCI论文400余篇，影响因子10以上85篇。获奖30余项。主编英文专著2部，参与编写英文专著12部。国内外专利30多项。'
+  };
+
+  // 合作机构数据
+  const institutionsData = [
+    '香港中文大学深圳研究院',
+    '中山大学附属第一医院',
+    '香港中文大学李嘉诚健康科学研究所',
+    '香港中文大学',
+    '香港中文大学消化疾病研究所',
+    '中国科学院大学',
+    '香港中文大学内科学系',
+    '中山大学附属第一医院精准医学研究所',
+  ];
+
+  // 左侧抽屉标题映射
+  const drawerTitleMap: Record<LeftDrawerContentType, string> = {
+    profile: '于君',
+    team: '团队成员',
+    scholars: '合作学者',
+    institutions: '合作机构',
+  };
+
+  // 处理菜单项点击
+  const handleCategoryClick = (item: CategoryItem) => {
+    setLeftDrawerContent(item.id as LeftDrawerContentType);
+    setLeftPanelVisible(true);
+  };
+
+  // 渲染左侧抽屉内容
+  const renderLeftDrawerContent = () => {
+    switch (leftDrawerContent) {
+      case 'profile':
+        return (
+          <div className={styles.drawerTextContent}>
+            <p>{profileData.content}</p>
+          </div>
+        );
+      case 'team':
+        return <div>团队成员内容待实现</div>;
+      case 'scholars':
+        return <div>合作学者内容待实现</div>;
+      case 'institutions':
+        return (
+          <div className={styles.drawerListContent}>
+            {institutionsData.map((institution, index) => (
+              <div key={index} className={styles.listItem}>
+                {institution}
+              </div>
+            ))}
+          </div>
+        );
+      default:
+        return null;
+    }
+  };
 
   // 筛选菜单配置 - 文献筛选
   const filterMenus = ['发表时间', '文献类型', '期刊分区', '作者角色', '机构'];
@@ -229,7 +291,7 @@ export default function ArticleV4Page() {
           {/* 分类菜单 */}
           <CategoryGrid
             items={categoryMenus}
-            onItemClick={() => setLeftPanelVisible(true)}
+            onItemClick={handleCategoryClick}
             scrollContainerRef={scrollRef}
           />
 
@@ -286,30 +348,14 @@ export default function ArticleV4Page() {
         </div>
       </div>
 
-      {/* 左侧分类树面板 */}
-      <Popup
+      {/* 左侧抽屉 */}
+      <LeftSidePanel
         visible={leftPanelVisible}
-        onMaskClick={() => setLeftPanelVisible(false)}
-        position="left"
-        bodyStyle={{ width: '75vw' }}
+        onClose={() => setLeftPanelVisible(false)}
+        title={drawerTitleMap[leftDrawerContent]}
       >
-        <div className={styles.leftPanel}>
-          <div className={styles.leftPanelHeader}>
-            <span className={styles.leftPanelTitle}>学术头衔</span>
-            <span className={styles.leftPanelClose} onClick={() => setLeftPanelVisible(false)}>×</span>
-          </div>
-          <div className={styles.leftPanelBody}>
-            <TreeView
-              data={categoryTree}
-              expandedNodes={expandedNodes}
-              selectedNode={selectedNode}
-              onToggle={toggleNode}
-              onNodeClick={handleNodeClick}
-              levelIndent={16}
-            />
-          </div>
-        </div>
-      </Popup>
+        {renderLeftDrawerContent()}
+      </LeftSidePanel>
 
       {/* 右侧筛选面板 */}
       <FilterDrawer
